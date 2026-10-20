@@ -1,0 +1,85 @@
+{
+  "ok": true,
+  "verdict": "pass",
+  "confidence": 0.86,
+  "estimatedFidelity": 0.86,
+  "targetThreshold": 0.7,
+  "materialId": "glass",
+  "sourceImage": "D:\\Tourism\\docs\\design\\three\\material-crops\\glass.png",
+  "outDir": "D:\\Tourism\\docs\\design\\three\\material-evidence\\glass",
+  "palette": [
+    "#111515",
+    "#182021",
+    "#293335",
+    "#B9BCB4",
+    "#4C5754"
+  ],
+  "maps": {
+    "albedo": {
+      "path": "D:\\Tourism\\docs\\design\\three\\material-evidence\\glass\\glass_albedo.png",
+      "url": "glass_albedo.png",
+      "channel": "albedo",
+      "source": "reference-pixel-extraction"
+    },
+    "roughness": {
+      "path": "D:\\Tourism\\docs\\design\\three\\material-evidence\\glass\\glass_roughness.png",
+      "url": "glass_roughness.png",
+      "channel": "roughness",
+      "source": "reference-pixel-extraction"
+    },
+    "height": {
+      "path": "D:\\Tourism\\docs\\design\\three\\material-evidence\\glass\\glass_height.png",
+      "url": "glass_height.png",
+      "channel": "height",
+      "source": "reference-pixel-extraction"
+    },
+    "normal": {
+      "path": "D:\\Tourism\\docs\\design\\three\\material-evidence\\glass\\glass_normal.png",
+      "url": "glass_normal.png",
+      "channel": "normal",
+      "source": "reference-pixel-extraction"
+    },
+    "ao": {
+      "path": "D:\\Tourism\\docs\\design\\three\\material-evidence\\glass\\glass_ao.png",
+      "url": "glass_ao.png",
+      "channel": "ao",
+      "source": "reference-pixel-extraction"
+    }
+  },
+  "diagnostics": {
+    "sourceWidth": 200,
+    "sourceHeight": 180,
+    "mapSize": 256,
+    "cropBBoxPixels": {
+      "x": 0,
+      "y": 0,
+      "width": 200,
+      "height": 180
+    },
+    "mask": {
+      "backgroundColor": "#2C2D2B",
+      "backgroundNoise": 64.101,
+      "transparentPixelFraction": 0.0,
+      "foregroundCoverage": 0.3986
+    },
+    "mapStats": {
+      "valueRange": 0.6202,
+      "heightP90Gradient": 0.03982,
+      "roughnessBase": 0.689,
+      "roughnessVariation": 0.073,
+      "normalStrength": 0.203,
+      "blurRadius": 5
+    },
+    "palette": [
+      "#111515",
+      "#182021",
+      "#293335",
+      "#B9BCB4",
+      "#4C5754"
+    ]
+  },
+  "warnings": [
+    "single-image inverse rendering cannot prove true physical PBR; confidence is capped"
+  ],
+  "limitation": "single-image PBR extraction is an estimate; 70%+ extraction confidence still needs render screenshot review"
+}

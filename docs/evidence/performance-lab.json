@@ -1,0 +1,75 @@
+{
+  "at": "2026-10-20T17:48:39.191Z",
+  "browser": "156.0.8078.4",
+  "conditions": {
+    "cpuSlowdown": 4,
+    "latencyMs": 150,
+    "downloadBytesPerSecond": 200000,
+    "uploadBytesPerSecond": 93750,
+    "cacheDisabled": true,
+    "postLoadObservationMs": 2500
+  },
+  "samples": [
+    {
+      "route": "/en",
+      "width": 1440,
+      "lcpMs": 2392,
+      "lcpElement": "photo ",
+      "cls": 0,
+      "shifts": [],
+      "longTaskBlockingMs": 270,
+      "ttfbMs": 22.099999994039536,
+      "scriptEncodedBytes": 155633,
+      "scriptDecodedBytes": 522521,
+      "imageEncodedBytes": 285912,
+      "externalOrigins": [],
+      "threeLoaded": false
+    },
+    {
+      "route": "/en/booking/request?service=boat-tours",
+      "width": 1440,
+      "lcpMs": 1120,
+      "lcpElement": "",
+      "cls": 0,
+      "shifts": [],
+      "longTaskBlockingMs": 164,
+      "ttfbMs": 12.700000002980232,
+      "scriptEncodedBytes": 155633,
+      "scriptDecodedBytes": 522521,
+      "imageEncodedBytes": 0,
+      "externalOrigins": [],
+      "threeLoaded": false
+    },
+    {
+      "route": "/en",
+      "width": 390,
+      "lcpMs": 1320,
+      "lcpElement": "photo ",
+      "cls": 0,
+      "shifts": [],
+      "longTaskBlockingMs": 279,
+      "ttfbMs": 13,
+      "scriptEncodedBytes": 155633,
+      "scriptDecodedBytes": 522521,
+      "imageEncodedBytes": 76884,
+      "externalOrigins": [],
+      "threeLoaded": false
+    },
+    {
+      "route": "/en/booking/request?service=boat-tours",
+      "width": 390,
+      "lcpMs": 1072,
+      "lcpElement": "",
+      "cls": 0,
+      "shifts": [],
+      "longTaskBlockingMs": 155,
+      "ttfbMs": 10.400000005960464,
+      "scriptEncodedBytes": 155633,
+      "scriptDecodedBytes": 522521,
+      "imageEncodedBytes": 0,
+      "externalOrigins": [],
+      "threeLoaded": false
+    }
+  ],
+  "limitations": "One cold synthetic lab observation per route/viewport on a shared Windows host. Long-task blocking is an observation-window diagnostic, not a Lighthouse TBT score. No field p75, INP or production capacity claim; repeat in designated staging and collect consented aggregate field metrics."
+}

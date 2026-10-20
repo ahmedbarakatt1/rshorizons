@@ -1,0 +1,10 @@
+usage: next.py [-h] [--state STATE] [spec]
+
+Report the exact next sculpt pipeline command
+
+positional arguments:
+  spec
+
+options:
+  -h, --help     show this help message and exit
+  --state STATE  local checklist state created by forge/state.py init

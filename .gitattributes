@@ -1,0 +1,15 @@
+* text=auto eol=lf
+
+# Preserve exact acquired/source bytes used by provenance hashes.
+.agents/** -text
+CODEX_TOURISM_PRODUCTION_HANDOFF.md -text
+docs/design/references/** -text
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.ico binary
+*.glb binary
+*.woff binary
+*.woff2 binary

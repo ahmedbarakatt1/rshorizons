@@ -1,0 +1,75 @@
+{
+  "version": "4.7.0",
+  "name": "impeccable",
+  "repository": {
+    "url": "git+https://github.com/pbakaus/impeccable.git",
+    "type": "git"
+  },
+  "engines": {
+    "node": ">=18.19.0"
+  },
+  "scripts": {
+    "test": "node scripts/run-tests.mjs default",
+    "audit": "bun audit --audit-level=moderate",
+    "build": "bun run build:skills && mkdir -p build/_data && rm -rf build/_data/dist && cp -R dist build/_data/dist",
+    "clean": "rm -rf dist build",
+    "prepack": "cp README.md README.repo.md && cp README.npm.md README.md",
+    "rebuild": "bun run clean && bun run build",
+    "postpack": "cp README.repo.md README.md && rm README.repo.md",
+    "test:core": "node scripts/run-tests.mjs core",
+    "test:live": "node scripts/run-tests.mjs live",
+    "release:cli": "node scripts/release.mjs cli",
+    "release:ext": "node scripts/release.mjs extension",
+    "smoke:hooks": "node scripts/smoke-provider-hooks.mjs",
+    "test:oracle": "node scripts/run-tests.mjs oracle",
+    "build:skills": "bun run scripts/build.js --skip-root-sync",
+    "fetch:engine": "node scripts/fetch-engine.mjs",
+    "test:cleanup": "node scripts/run-tests.mjs --cleanup",
+    "build:release": "bun run build:skills:release && mkdir -p build/_data && rm -rf build/_data/dist && cp -R dist build/_data/dist",
+    "release:skill": "node scripts/release.mjs skill",
+    "test:detector": "node scripts/run-tests.mjs detector",
+    "test:live-e2e": "node scripts/run-tests.mjs live-e2e",
+    "package:vscode": "bun run build:skills && cd dist/vscode && bunx --package @vscode/vsce@3.9.2 vsce package --no-dependencies",
+    "release:engine": "node scripts/release.mjs engine",
+    "test:framework": "node scripts/run-tests.mjs framework",
+    "build:extension": "node scripts/build-extension.js",
+    "rebuild:release": "bun run clean && bun run build:release",
+    "test:plugin-e2e": "node scripts/run-tests.mjs plugin-e2e",
+    "test:new-work-e2e": "node scripts/run-tests.mjs new-work-e2e",
+    "test:rust-changed": "node scripts/test-rust-changed.mjs",
+    "test:cli-remote-e2e": "node scripts/run-tests.mjs cli-remote-e2e",
+    "test:live-e2e-agent": "node scripts/run-tests.mjs live-e2e-agent",
+    "test:skill-behavior": "node scripts/run-tests.mjs skill-behavior",
+    "test:skill-workflow": "node scripts/run-tests.mjs skill-workflow",
+    "build:skills:release": "bun run scripts/build.js",
+    "check:engine-release": "node scripts/check-engine-release.mjs",
+    "test:skill-activation": "node scripts/run-tests.mjs skill-activation",
+    "build:component-review": "bun scripts/build-component-review.mjs",
+    "release:platform-packages": "node scripts/publish-platform-packages.mjs",
+    "test:live-e2e-accept-cleanup": "node scripts/run-tests.mjs live-e2e-accept-cleanup",
+    "test:live-svelte-adapter-deepseek": "node scripts/run-tests.mjs live-svelte-adapter-deepseek"
+  },
+  "bin": {
+    "impeccable": "cli/bin/cli.js"
+  },
+  "dist": {
+    "shasum": "f064b49f57a89b96567d19d737fd65e66105277e",
+    "tarball": "https://registry.npmjs.org/impeccable/-/impeccable-4.7.0.tgz",
+    "fileCount": 6,
+    "integrity": "sha512-Xxiw8MukndrmkU+ueCzrjNO3Q2fO0Hr84oxOYfShugVbET2pdPgZEJiqWLuNp1YyBAGKODBQL2QTEqTXulHSdQ==",
+    "signatures": [
+      {
+        "sig": "MEUCIGgCqj994v692C5bt8nnrQGzObGRPoNEUkW0nMaUjFChAiEA6M1u1HxNYxluTb6czbWU5CKSjEnlzsX7AxH3JCZ7hLA=",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+      },
+      {
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+        "sig": "MEQCIFHt1QRptumYuh0FrtXb+LLYzR/x5TN6hfVsATe9p0c/AiAV7KwA63DKfP+YKm3hIlJ05kHzcnd/3RMw4kGMME5pyA=="
+      }
+    ],
+    "unpackedSize": 56670
+  },
+  "maintainers": [
+    "paulbakaus <paul.bakaus@gmail.com>"
+  ]
+}

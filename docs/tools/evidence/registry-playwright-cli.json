@@ -1,0 +1,47 @@
+{
+  "version": "0.1.22",
+  "name": "@playwright/cli",
+  "repository": {
+    "url": "git+https://github.com/microsoft/playwright-cli.git",
+    "type": "git"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "test": "playwright test"
+  },
+  "bin": {
+    "playwright-cli": "playwright-cli.js"
+  },
+  "dist": {
+    "shasum": "8f4bb69e84084f1fabcb4ba08f491f7e16894a06",
+    "tarball": "https://registry.npmjs.org/@playwright/cli/-/cli-0.1.22.tgz",
+    "fileCount": 16,
+    "integrity": "sha512-6WMkQNM4VEzqMkdr/l60X9Cr7i+tI/arK87IWz2K7pB6j8I2ZJ8KN+1JfhJDLnK+SXnab6Op8xGt4adcGLsyfA==",
+    "signatures": [
+      {
+        "sig": "MEQCICf91qoglj49brLavQ5LMa73XROXwmdJAhMuHk1T1Dd4AiBQQajz6HHaeWK8AwQhM3efTAvjcTpaIyxcNIcOlZcpZA==",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+      },
+      {
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+        "sig": "MEUCICzAm6HGPz7cgvQdVl6tS2pDNjb7NIEQ5r51z6ctG/J6AiEA1xE8YAsc9M5Q+bi24FyJ99ikKZbS8v3trrroAllrifM="
+      }
+    ],
+    "attestations": {
+      "url": "https://registry.npmjs.org/-/npm/v1/attestations/@playwright%2fcli@0.1.22",
+      "provenance": {
+        "predicateType": "https://slsa.dev/provenance/v1"
+      }
+    },
+    "unpackedSize": 112386
+  },
+  "maintainers": [
+    "pavelfeldman <pavel.feldman@gmail.com>",
+    "yurys <yury.semikhatsky@gmail.com>",
+    "dgozman-ms <dgozman@microsoft.com>",
+    "microsoft-oss-releases <microsoft-oss-publishing@microsoft.com>",
+    "microsoft1es <npmjs@microsoft.com>"
+  ]
+}

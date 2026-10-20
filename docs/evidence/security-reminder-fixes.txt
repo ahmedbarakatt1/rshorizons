@@ -1,0 +1,9 @@
+
+ RUN  v5.0.5 D:/Tourism
+
+
+ Test Files  2 passed (2)
+      Tests  7 passed (7)
+   Start at  19:47:41
+   Duration  2.68s (tests 54%, import 34%, transform 11%, worker 1%)
+

@@ -1,0 +1,61 @@
+{
+  "passed": false,
+  "checks": {
+    "silhouetteIoU": 0.7235,
+    "aspectRatioDelta": 0.1344,
+    "scaleDelta": 0.1959,
+    "bilateralSymmetryError": 0.146,
+    "colorDelta": {
+      "checked": 9,
+      "maxDeltaE": 37.57,
+      "perComponent": [
+        {
+          "componentId": null,
+          "deltaE": 6.56
+        },
+        {
+          "componentId": null,
+          "deltaE": 8.03
+        },
+        {
+          "componentId": null,
+          "deltaE": 11.73
+        },
+        {
+          "componentId": null,
+          "deltaE": 6.56
+        },
+        {
+          "componentId": null,
+          "deltaE": 17.8
+        },
+        {
+          "componentId": null,
+          "deltaE": 37.57
+        },
+        {
+          "componentId": null,
+          "deltaE": 37.57
+        },
+        {
+          "componentId": null,
+          "deltaE": 37.57
+        },
+        {
+          "componentId": null,
+          "deltaE": 37.57
+        }
+      ],
+      "gated": false
+    }
+  },
+  "failures": [
+    "silhouette IoU 0.724 is below threshold 0.85",
+    "aspect-ratio delta 0.134 exceeds threshold 0.05",
+    "scale delta 0.196 exceeds threshold 0.08"
+  ],
+  "maskWarnings": [],
+  "renderHash": "387771853b02d3c9",
+  "passId": "blockout",
+  "mapStrippedRender": "docs\\design\\three\\blockout-stripped.png"
+}

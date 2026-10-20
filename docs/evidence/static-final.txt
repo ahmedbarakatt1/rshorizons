@@ -1,0 +1,9 @@
+Execution record — 2026-10-20, Africa/Cairo
+This is a concise record of inspected tool results, not a captured shell transcript.
+
+npm run lint — exit 0 after the final performance budget verifier was added.
+npm run typecheck — exit 0 after the final application/test edits.
+npm run i18n:check — exit 0; PASS: 10 locales, 149 keys each. Human approval remains a launch gate.
+npm run db:drift — exit 0; Types match 117 tables.
+node scripts/verify-performance-budgets.mjs — exit 0; 4 route/viewport samples meet recorded payload, layout and dependency budgets. Evidence timestamp: 2026-10-20T17:48:39.191Z. This command does not collect fresh browser evidence.
+Playwright Agent CLI tourism-release console error — exit 0; total messages 1, Errors 0, Warnings 0, returning 0 errors.

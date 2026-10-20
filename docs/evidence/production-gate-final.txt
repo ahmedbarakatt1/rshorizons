@@ -1,0 +1,54 @@
+
+> red-sea-tourism@0.1.0 verify:production
+> tsx scripts/verify-production-config.ts
+
+Configuration rejected:
+APP_ENV must be production
+DEMO_MODE must be false
+PAYMOB_MODE must be live
+APP_BASE_URL requires HTTPS
+AGENCY_IDENTITY_APPROVED requires recorded owner approval
+BUSINESS_CONTENT_APPROVED requires recorded owner approval
+POLICIES_APPROVED requires recorded owner approval
+TRANSLATIONS_APPROVED requires recorded owner approval
+RETENTION_POLICY_APPROVED requires recorded owner approval
+NEXT_PUBLIC_SUPABASE_URL is required
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY is required
+SUPABASE_SECRET_KEY is required
+PAYMOB_API_BASE_URL is required
+PAYMOB_SECRET_KEY is required
+PAYMOB_HMAC_SECRET is required
+PAYMOB_PUBLIC_KEY is required
+PAYMOB_ACCOUNT_ID is required
+PAYMOB_INTEGRATION_IDS is required
+WHATSAPP_TOKEN is required
+WHATSAPP_PHONE_NUMBER_ID is required
+META_APP_SECRET is required
+WHATSAPP_VERIFY_TOKEN is required
+META_GRAPH_API_VERSION is required
+EMAIL_API_KEY is required
+EMAIL_FROM is required
+EMAIL_WEBHOOK_SECRET is required
+SENSITIVE_DATA_KEY_REFERENCE is required
+VIDEO_API_TOKEN is required
+VIDEO_WEBHOOK_SECRET is required
+MONITORING_ALERT_URL is required
+PAYMOB_API_KEY is required
+VIDEO_API_TOKEN_ID is required
+VIDEO_ENVIRONMENT_ID is required
+VIDEO_SIGNING_KEY_ID is required
+VIDEO_SIGNING_PRIVATE_KEY is required
+RESEND_ACCOUNT_ID is required
+WHATSAPP_BUSINESS_ACCOUNT_ID is required
+STAFF_NOTIFICATION_EMAIL is required
+STAFF_NOTIFICATION_LOCALE is required
+EMAIL_PROVIDER cannot use a local adapter
+VIDEO_PROVIDER cannot use a local adapter
+DATABASE_URL cannot use a local database in production
+STORAGE_PROVIDER must be supabase
+EMAIL_PROVIDER must be resend
+VIDEO_PROVIDER must be mux
+MESSAGING_ACCOUNT_VERIFIED requires provider verification
+PAYMOB_REFUNDS_ENABLED requires merchant refund verification
+At least one approved payment method integration is required
+MEDIA_RETENTION_DAYS requires an approved integer between 1 and 3650

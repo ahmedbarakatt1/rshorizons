@@ -1,0 +1,16 @@
+{
+  "name": "red-sea-tourism-design-tooling",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Pinned development-only resource installers; never imported by the application.",
+  "engines": {
+    "node": ">=22.20.0 <23"
+  },
+  "dependencies": {
+    "@playwright/cli": "0.1.22",
+    "getdesign": "0.6.26",
+    "img2threejs": "0.1.1",
+    "impeccable": "4.7.0",
+    "skills": "1.7.4"
+  }
+}

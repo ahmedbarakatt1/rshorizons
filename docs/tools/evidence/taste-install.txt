@@ -1,0 +1,38 @@
+
+|
+•   codex  Agent detected — installing non-interactively
+[?25l|
+o  Source: D:\Tourism\.tooling\sources\taste-skill
+[?25h[?25l|
+o  Local path validated
+[?25h[?25l|
+o  Found 1 skill
+[?25h|
+•  Selected 1 skill: design-taste-frontend
+
+|
+o  Installation Summary -------------------+
+|                                          |
+|                                          |
+|  Taste Skill                             |
+|                                          |
+|  .\.agents\skills\design-taste-frontend  |
+|    copy → Codex                          |
+|                                          |
++------------------------------------------+
+[?25l|
+•  Installing skills…[1G[Jo  Installation complete
+[?25h
+|
+o  Installed 1 skill --------------------------+
+|                                              |
+|                                              |
+|  Taste Skill                                 |
+|  ✓ design-taste-frontend (copied)            |
+|    → .\.agents\skills\design-taste-frontend  |
+|                                              |
++----------------------------------------------+
+
+|
+—  Done!  Review skills before use; they run with full agent permissions.
+

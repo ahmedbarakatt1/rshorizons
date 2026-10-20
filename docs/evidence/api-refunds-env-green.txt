@@ -1,0 +1,12 @@
+
+ RUN  v5.0.5 D:/Tourism
+
+
+ Test Files  3 passed (3)
+      Tests  16 passed (16)
+   Start at  19:38:19
+   Duration  6.62s (import 71%, tests 19%, transform 9%)
+
+    Isolate  3 workers spawned · ~246ms startup each (spawn + environment, per file)
+             at least ~491ms faster with isolate: false — reuses workers across files instead of one per file
+

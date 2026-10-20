@@ -1,0 +1,20 @@
+{
+  "referenceAreaFraction": 0.529565175374349,
+  "angles": [
+    {
+      "path": "docs\\design\\three\\structural-correction1-90.png",
+      "areaFraction": 0.23689142862955728,
+      "ratio": 0.44733196147593923,
+      "degenerate": false
+    },
+    {
+      "path": "docs\\design\\three\\structural-correction1-180.png",
+      "areaFraction": 0.5335013071695963,
+      "ratio": 1.0074327617794445,
+      "degenerate": false
+    }
+  ],
+  "degenerate": false,
+  "collapseRatio": 0.15,
+  "note": "deterministic; zero token; a flat-plane-faking-a-volume collapses in silhouette area when orbited"
+}

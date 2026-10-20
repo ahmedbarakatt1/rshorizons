@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "kind": "interior-difference",
+  "baseline": ".local\\private\\three\\camera-reference.png",
+  "render": "docs\\design\\three\\form-15.png",
+  "band": {
+    "from": 0.0,
+    "to": 1.0
+  },
+  "grid": 192,
+  "cellsCompared": 28256,
+  "warnings": [],
+  "interiorDifference": 0.14005854811409954,
+  "status": "measured"
+}

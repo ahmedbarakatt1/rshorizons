@@ -1,0 +1,41 @@
+{
+  "version": "0.6.26",
+  "name": "getdesign",
+  "repository": {
+    "url": "git+https://github.com/VoltAgent/awesome-design-md.git",
+    "type": "git",
+    "directory": "cli"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "dev": "node ./src/cli.mjs",
+    "prepack": "node ./scripts/sync-templates.mjs",
+    "sync-templates": "node ./scripts/sync-templates.mjs"
+  },
+  "bin": {
+    "getdesign": "bin/cli.mjs"
+  },
+  "dist": {
+    "shasum": "064fcf53e9555ee0b657ff920803157107cc85d6",
+    "tarball": "https://registry.npmjs.org/getdesign/-/getdesign-0.6.26.tgz",
+    "fileCount": 123,
+    "integrity": "sha512-ZEUEXUL8aBGVQgZ5RJrfEAfQKfpV4bPe+fpYNnHaCknLcF3xr6WegbizUW9bkGMZMrgLPr0bV1al+vwqWiTlRA==",
+    "signatures": [
+      {
+        "sig": "MEQCIDUDFfUcSVWhe5w5UuHuoNx23gotGGJzKh3DeOvCNcUmAiB9ZWMNgrskDa66CNlg/EOe5/SvZOefV3dadGIlNrYPPw==",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+      },
+      {
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+        "sig": "MEUCIDF6FOgbKLLXzu9akMzSAjaa2FdN50+aPDD2APJ8wemiAiEAtXClU8+0IpvdZ/RUh3S4RNm+PMYscq2UXN0woQFcpaY="
+      }
+    ],
+    "unpackedSize": 3396477
+  },
+  "maintainers": [
+    "omerfarukaplak <omeraplak@gmail.com>",
+    "necatiozmen <necatiozmn@gmail.com>"
+  ]
+}

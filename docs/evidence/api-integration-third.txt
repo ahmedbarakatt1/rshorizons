@@ -1,0 +1,33 @@
+
+ RUN  v5.0.5 D:/Tourism
+
+ ❯ tests/integration/api.test.ts (5 tests | 1 failed) 761ms
+   × guest_request_staff_approval_real_runtime_boundary 357ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/integration/api.test.ts > guest_request_staff_approval_real_runtime_boundary
+AssertionError: {"error":{"code":"FORBIDDEN","message":"This action is not permitted.","fields":{}},"meta":{"requestId":"534a45d9-8201-487e-8be7-f611da334d36"}}: expected 403 to be 201 // Object.is equality
+
+- Expected
++ Received
+
+- 201
++ 403
+
+ ❯ tests/integration/api.test.ts:38:64
+     36|   expect(approval.response.status,JSON.stringify(approval.json)).toBe(…
+     37|   const changed=await call(`bookings/${reference}/change-requests`,"PO…
+     38|   expect(changed.response.status,JSON.stringify(changed.json)).toBe(20…
+       |                                                                ^
+     39|   const still=await call(`bookings/${reference}`,"GET",undefined,guest…
+     40|   expect(still.json.data.status).toBe("confirmed");expect(still.json.d…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 4 passed (5)
+   Start at  19:14:38
+   Duration  1.38s (tests 66%, import 27%, transform 7%, worker 1%)
+

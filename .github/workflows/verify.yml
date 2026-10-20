@@ -1,0 +1,86 @@
+name: Verify isolated tourism application
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      APP_ENV: test
+      DEMO_MODE: "true"
+      STORAGE_PROVIDER: local
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.22.2
+          cache: npm
+      - name: Install exact lockfile
+        run: npm ci
+      - name: Install bounded local media test runtime
+        run: sudo apt-get update && sudo apt-get install --yes ffmpeg
+      - name: Start patched isolated PostgreSQL
+        shell: bash
+        run: |
+          MIGRATION_PASSWORD="$(openssl rand -hex 32)"
+          echo "::add-mask::$MIGRATION_PASSWORD"
+          docker run --detach --name tourism-postgres \
+            --publish 127.0.0.1:55432:5432 \
+            --env POSTGRES_USER=tourism_migrator \
+            --env POSTGRES_PASSWORD="$MIGRATION_PASSWORD" \
+            --env POSTGRES_DB=tourism_ci \
+            postgres:17.11
+          for attempt in $(seq 1 30); do
+            if docker exec tourism-postgres pg_isready -U tourism_migrator -d tourism_ci; then break; fi
+            sleep 1
+          done
+          echo "MIGRATION_DATABASE_URL=postgresql://tourism_migrator:$MIGRATION_PASSWORD@127.0.0.1:55432/tourism_ci" >> "$GITHUB_ENV"
+      - name: Separate restricted runtime credentials
+        run: node scripts/db-ci-bootstrap.mjs
+      - name: Clean migrations, synthetic fixtures and generated type drift
+        run: |
+          npm run db:migrate
+          npm run db:seed
+          npm run db:drift
+      - name: Static and domain checks
+        run: |
+          npm run lint
+          npm run typecheck
+          npm run test:unit
+          npm run test:db
+          npm run test:concurrency
+          npm run test:integration
+          npm run test:contract
+          npm run test:security
+          npm run i18n:check
+      - name: Local storage recovery evidence
+        run: node --import tsx scripts/db-storage-rehearse.mjs
+      - name: Production artifact with synthetic local dependencies
+        run: npm run build
+      - name: Scan source and deployment traces for configured secrets and private paths
+        run: node scripts/verify-source-artifact.mjs
+      - name: Install browser revisions from locked Playwright
+        run: npx --no-install playwright install --with-deps chromium firefox webkit
+      - name: Browser and accessibility regression
+        env:
+          E2E_LOCAL_STAFF: "1"
+        run: |
+          node scripts/prepare-ci-media.mjs
+          node scripts/bootstrap-local-operator.mjs
+          npm run test:e2e
+      - name: Keep safe test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tourism-verification
+          path: |
+            docs/evidence/*-restore.json
+            playwright-report
+            test-results
+          retention-days: 7
+      - name: Stop isolated database
+        if: always()
+        run: docker stop tourism-postgres

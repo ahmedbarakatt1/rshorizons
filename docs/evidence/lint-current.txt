@@ -1,0 +1,10 @@
+
+> red-sea-tourism@0.1.0 lint
+> eslint src tests scripts next.config.ts playwright.config.ts vitest.config.ts
+
+
+D:\Tourism\src\integrations\storage\prepare-owner-media.mjs
+  23:1  error  'console' is not defined  no-undef
+
+✖ 1 problem (1 error, 0 warnings)
+

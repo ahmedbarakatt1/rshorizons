@@ -1,0 +1,190 @@
+{
+  "at": "2026-10-20T17:49:28.697Z",
+  "environment": "Local production build, Chromium, no CPU/network throttle; lab diagnostics only, not field Core Web Vitals.",
+  "measurements": [
+    {
+      "path": "/en",
+      "navigation": [
+        {
+          "duration": 184.79999999701977
+        }
+      ],
+      "resources": [
+        {
+          "name": "1tcyj5wq8orwq.js",
+          "bytes": 48345
+        },
+        {
+          "name": "turbopack-2c3mg3r-05n1w.js",
+          "bytes": 4390
+        },
+        {
+          "name": "2gvu8dyrhibpa.js",
+          "bytes": 71899
+        },
+        {
+          "name": "0hmxqyfoj_2jg.js",
+          "bytes": 5254
+        },
+        {
+          "name": "0umf92h1sb77c.js",
+          "bytes": 3514
+        },
+        {
+          "name": "0_v_2027x3jgl.js",
+          "bytes": 12107
+        },
+        {
+          "name": "219ac038vw_4z.js",
+          "bytes": 2470
+        },
+        {
+          "name": "0ajc4qd6vlfv7.js",
+          "bytes": 415
+        },
+        {
+          "name": "2mpsg5d1bm6tt.js",
+          "bytes": 7239
+        }
+      ]
+    },
+    {
+      "path": "/ar/contact",
+      "navigation": [
+        {
+          "duration": 118.1000000089407
+        }
+      ],
+      "resources": [
+        {
+          "name": "1tcyj5wq8orwq.js",
+          "bytes": 48345
+        },
+        {
+          "name": "2gvu8dyrhibpa.js",
+          "bytes": 71899
+        },
+        {
+          "name": "turbopack-2c3mg3r-05n1w.js",
+          "bytes": 4390
+        },
+        {
+          "name": "0umf92h1sb77c.js",
+          "bytes": 3514
+        },
+        {
+          "name": "0hmxqyfoj_2jg.js",
+          "bytes": 5254
+        },
+        {
+          "name": "0_v_2027x3jgl.js",
+          "bytes": 12107
+        },
+        {
+          "name": "219ac038vw_4z.js",
+          "bytes": 2470
+        },
+        {
+          "name": "2mpsg5d1bm6tt.js",
+          "bytes": 7239
+        },
+        {
+          "name": "0ajc4qd6vlfv7.js",
+          "bytes": 415
+        }
+      ]
+    },
+    {
+      "path": "/en/experiences/boat-tours",
+      "navigation": [
+        {
+          "duration": 93.40000000596046
+        }
+      ],
+      "resources": [
+        {
+          "name": "1tcyj5wq8orwq.js",
+          "bytes": 48345
+        },
+        {
+          "name": "2gvu8dyrhibpa.js",
+          "bytes": 71899
+        },
+        {
+          "name": "turbopack-2c3mg3r-05n1w.js",
+          "bytes": 4390
+        },
+        {
+          "name": "0umf92h1sb77c.js",
+          "bytes": 3514
+        },
+        {
+          "name": "0hmxqyfoj_2jg.js",
+          "bytes": 5254
+        },
+        {
+          "name": "0_v_2027x3jgl.js",
+          "bytes": 12107
+        },
+        {
+          "name": "219ac038vw_4z.js",
+          "bytes": 2470
+        },
+        {
+          "name": "2mpsg5d1bm6tt.js",
+          "bytes": 7239
+        },
+        {
+          "name": "0ajc4qd6vlfv7.js",
+          "bytes": 415
+        }
+      ]
+    },
+    {
+      "path": "/en/booking/request?service=boat-tours",
+      "navigation": [
+        {
+          "duration": 68.29999999701977
+        }
+      ],
+      "resources": [
+        {
+          "name": "1tcyj5wq8orwq.js",
+          "bytes": 48345
+        },
+        {
+          "name": "2gvu8dyrhibpa.js",
+          "bytes": 71899
+        },
+        {
+          "name": "turbopack-2c3mg3r-05n1w.js",
+          "bytes": 4390
+        },
+        {
+          "name": "0umf92h1sb77c.js",
+          "bytes": 3514
+        },
+        {
+          "name": "0hmxqyfoj_2jg.js",
+          "bytes": 5254
+        },
+        {
+          "name": "0_v_2027x3jgl.js",
+          "bytes": 12107
+        },
+        {
+          "name": "219ac038vw_4z.js",
+          "bytes": 2470
+        },
+        {
+          "name": "2mpsg5d1bm6tt.js",
+          "bytes": 7239
+        },
+        {
+          "name": "0ajc4qd6vlfv7.js",
+          "bytes": 415
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+
+> red-sea-tourism@0.1.0 build
+> next build
+
+▲ Next.js 16.4.2 (Turbopack)
+- Environments: .env.local
+✓ Running next.config.ts took 157ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 30.8s
+  Running TypeScript ...
+
+  We detected TypeScript in your project and reconfigured your tsconfig.json file for you.
+  The following suggested values were added to your tsconfig.json. These values can be changed to fit your project's needs:
+
+  	- include was updated to add '.next-release/types/**/*.ts'
+  	- include was updated to add '.next-release/dev/types/**/*.ts'
+
+  Finished TypeScript in 22.6s ...
+  Collecting page data using 11 workers ...
+  Generating static pages using 11 workers (0/5) ...
+  Generating static pages using 11 workers (1/5) 
+  Generating static pages using 11 workers (2/5) 
+  Generating static pages using 11 workers (3/5) 
+✓ Generating static pages using 11 workers (5/5) in 1196ms
+  Finalizing page optimization ...
+Turbopack build encountered 2 warnings:
+./src/integrations/storage/index.ts:19:201
+Warning: Dynamic filesystem access causes tracing of the whole project
+  17 | ...
+  18 | ...;};
+> 19 | ...:0o600});},async read(key){return readFile(path(key));},
+     |                                      ^^^^^^^^^^^^^^^^^^^
+  20 | ...
+  21 | ...
+  22 | ...
+
+Static analysis determined that this filesystem access causes the whole project to be traced and included in the output.
+This is usually unintentional and leads to all source files (including the public folder) to be deployed as part of the server code.
+This can slow down deployments or lead to failures when size limits are exceeded.
+To resolve this, you can
+- make sure the path is statically scoped to some subfolder, for example path.join(process.cwd(), 'data', bar), or
+- only use them in development, or
+- opt out by adding an ignore comment to the highlighted call: fs.readFile(/*turbopackIgnore: true*/ ...), or
+- remove them.
+
+Import trace:
+  App Route:
+    ./src/integrations/storage/index.ts
+    ./src/modules/photography/service.ts
+    ./src/modules/jobs/worker.ts
+    ./src/app/api/internal/worker/route.ts
+
+
+./src/integrations/storage/index.ts:17:14
+Warning: Dynamic filesystem access causes tracing of the whole project
+  15 | export function localStorage(root=resolve(process.cwd(),".local/private/media")):PrivateSt...
+  16 |   if(process.env.APP_ENV==="production"||process.env.APP_ENV==="staging")throw new MediaEr...
+> 17 |   const base=resolve(root);
+     |              ^^^^^^^^^^^^^
+  18 |   const path=(key:string)=>{checkKey(key);const target=resolve(base,key);if(!target.starts...
+  19 |   return {mode:"local-isolated",async put(key,bytes){const target=path(key);await mkdir(di...
+  20 |     async remove(key){try{await unlink(path(key));}catch(error){if((error as NodeJS.ErrnoE...
+
+Static analysis determined that this filesystem access causes the whole project to be traced and included in the output.
+This is usually unintentional and leads to all source files (including the public folder) to be deployed as part of the server code.
+This can slow down deployments or lead to failures when size limits are exceeded.
+To resolve this, you can
+- make sure the path is statically scoped to some subfolder, for example path.join(process.cwd(), 'data', bar), or
+- only use them in development, or
+- opt out by adding an ignore comment to the highlighted call: path.resolve(/*turbopackIgnore: true*/ ...), or
+- remove them.
+
+Import trace:
+  App Route:
+    ./src/integrations/storage/index.ts
+    ./src/modules/photography/service.ts
+    ./src/modules/jobs/worker.ts
+    ./src/app/api/internal/worker/route.ts
+
+
+
+Route (app)
+┌ ƒ /
+├ ƒ /_not-found
+├ ƒ /[locale]/[[...path]]
+├ ƒ /[locale]/photography
+├ ƒ /admin/[[...path]]
+├ ƒ /api/internal/monitor
+├ ƒ /api/internal/worker
+├ ƒ /api/v1/[...path]
+├ ○ /robots.txt
+└ ○ /sitemap.xml
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

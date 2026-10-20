@@ -1,0 +1,46 @@
+[
+  {
+    "name": "design-taste-frontend",
+    "path": "D:\\Tourism\\.agents\\skills\\design-taste-frontend",
+    "scope": "project",
+    "agents": [
+      "Codex"
+    ],
+    "source": "D:\\Tourism\\.tooling\\sources\\taste-skill",
+    "sourceUrl": null,
+    "sourceType": "local"
+  },
+  {
+    "name": "img2threejs",
+    "path": "D:\\Tourism\\.agents\\skills\\img2threejs",
+    "scope": "project",
+    "agents": [
+      "Codex"
+    ],
+    "source": null,
+    "sourceUrl": null,
+    "sourceType": null
+  },
+  {
+    "name": "impeccable",
+    "path": "D:\\Tourism\\.agents\\skills\\impeccable",
+    "scope": "project",
+    "agents": [
+      "Codex"
+    ],
+    "source": null,
+    "sourceUrl": null,
+    "sourceType": null
+  },
+  {
+    "name": "playwright-cli",
+    "path": "D:\\Tourism\\.agents\\skills\\playwright-cli",
+    "scope": "project",
+    "agents": [
+      "Codex"
+    ],
+    "source": null,
+    "sourceUrl": null,
+    "sourceType": null
+  }
+]

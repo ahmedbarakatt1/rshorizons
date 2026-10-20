@@ -1,0 +1,23 @@
+{
+  "createdAt": "2026-10-20T17:27:02.234Z",
+  "database": "tourism_rehearsal_1792517211277",
+  "restoredDatabase": "tourism_rehearsal_1792517211277_restored",
+  "checks": {
+    "source": {
+      "bookings": 44,
+      "ledger": 20,
+      "outbox": 116,
+      "tables": 117
+    },
+    "destination": {
+      "bookings": 44,
+      "ledger": 20,
+      "outbox": 116,
+      "tables": 117
+    },
+    "postgres": "PostgreSQL 17.11 on x86_64-windows, compiled by msvc-19.44.35229, 64-bit"
+  },
+  "testsExitCode": 0,
+  "storageRestore": "BLOCKED_EXTERNAL: no external object store provisioned",
+  "note": "Only isolated synthetic databases created; main tourism DB was not reset or dropped."
+}

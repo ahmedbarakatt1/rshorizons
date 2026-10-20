@@ -1,0 +1,88 @@
+{
+  "ok": true,
+  "verdict": "pass",
+  "confidence": 0.751,
+  "estimatedFidelity": 0.751,
+  "targetThreshold": 0.7,
+  "materialId": "housing",
+  "sourceImage": "D:\\Tourism\\docs\\design\\three\\material-crops\\housing.png",
+  "outDir": "D:\\Tourism\\docs\\design\\three\\material-evidence\\housing",
+  "palette": [
+    "#2C3C52",
+    "#2A3950",
+    "#2F3F55",
+    "#27364D",
+    "#334459"
+  ],
+  "maps": {
+    "albedo": {
+      "path": "D:\\Tourism\\docs\\design\\three\\material-evidence\\housing\\housing_albedo.png",
+      "url": "housing_albedo.png",
+      "channel": "albedo",
+      "source": "reference-pixel-extraction"
+    },
+    "roughness": {
+      "path": "D:\\Tourism\\docs\\design\\three\\material-evidence\\housing\\housing_roughness.png",
+      "url": "housing_roughness.png",
+      "channel": "roughness",
+      "source": "reference-pixel-extraction"
+    },
+    "height": {
+      "path": "D:\\Tourism\\docs\\design\\three\\material-evidence\\housing\\housing_height.png",
+      "url": "housing_height.png",
+      "channel": "height",
+      "source": "reference-pixel-extraction"
+    },
+    "normal": {
+      "path": "D:\\Tourism\\docs\\design\\three\\material-evidence\\housing\\housing_normal.png",
+      "url": "housing_normal.png",
+      "channel": "normal",
+      "source": "reference-pixel-extraction"
+    },
+    "ao": {
+      "path": "D:\\Tourism\\docs\\design\\three\\material-evidence\\housing\\housing_ao.png",
+      "url": "housing_ao.png",
+      "channel": "ao",
+      "source": "reference-pixel-extraction"
+    }
+  },
+  "diagnostics": {
+    "sourceWidth": 120,
+    "sourceHeight": 240,
+    "mapSize": 256,
+    "cropBBoxPixels": {
+      "x": 0,
+      "y": 0,
+      "width": 120,
+      "height": 240
+    },
+    "mask": {
+      "backgroundColor": "#2D3C52",
+      "backgroundNoise": 11.091,
+      "transparentPixelFraction": 0.0,
+      "foregroundCoverage": 1.0
+    },
+    "mapStats": {
+      "valueRange": 0.08,
+      "heightP90Gradient": 0.17592,
+      "roughnessBase": 0.89,
+      "roughnessVariation": 0.115,
+      "normalStrength": 0.362,
+      "blurRadius": 5
+    },
+    "palette": [
+      "#2C3C52",
+      "#2A3950",
+      "#2F3F55",
+      "#27364D",
+      "#334459"
+    ]
+  },
+  "warnings": [
+    "image is not clearly isolated from background; using most pixels as material evidence",
+    "object/background separation is weak",
+    "single-image inverse rendering cannot prove true physical PBR; confidence is capped",
+    "low value range weakens height/roughness inference"
+  ],
+  "limitation": "single-image PBR extraction is an estimate; 70%+ extraction confidence still needs render screenshot review"
+}

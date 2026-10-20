@@ -1,0 +1,51 @@
+
+Running 39 tests using 1 worker
+
+(node:27096) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 [chromium] › tests\e2e\accessibility.spec.ts:3:1 › @a11y responsive reading, image loading and keyboard navigation (2.9s)
+  ok  2 [chromium] › tests\e2e\accessibility.spec.ts:27:1 › @a11y private fragments require deliberate redemption and leave the address bar (420ms)
+  ok  3 [chromium] › tests\e2e\booking-kinds.spec.ts:4:3 › stay submits a complete request awaiting staff approval (1.5s)
+  ok  4 [chromium] › tests\e2e\booking-kinds.spec.ts:4:3 › transfer submits a complete request awaiting staff approval (1.8s)
+  ok  5 [chromium] › tests\e2e\booking-kinds.spec.ts:4:3 › shared-transfer submits a complete request awaiting staff approval (1.7s)
+  ok  6 [chromium] › tests\e2e\booking-kinds.spec.ts:4:3 › photography submits a complete request awaiting staff approval (2.0s)
+  ok  7 [chromium] › tests\e2e\booking-kinds.spec.ts:4:3 › tour-addon submits a complete request awaiting staff approval (1.4s)
+  ok  8 [chromium] › tests\e2e\operations.spec.ts:4:1 › staff operates a real resource and reviews a pending request (3.5s)
+  ok  9 [chromium] › tests\e2e\operations.spec.ts:76:1 › apartment dates and transfer requests quote on the server (1.4s)
+  ok 10 [chromium] › tests\e2e\public.spec.ts:3:1 › ten locale navigation and private access boundary (3.0s)
+  ok 11 [chromium] › tests\e2e\public.spec.ts:13:1 › arabic_form_keyboard_flow (368ms)
+  ok 12 [chromium] › tests\e2e\public.spec.ts:24:1 › request_does_not_confirm and checkout_no_threejs (1.3s)
+  ok 13 [chromium] › tests\e2e\release.spec.ts:5:1 › @a11y release pages have no automated WCAG A/AA violations and private responses reject caching (5.7s)
+(node:19756) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 14 [firefox] › tests\e2e\accessibility.spec.ts:3:1 › @a11y responsive reading, image loading and keyboard navigation (6.5s)
+  ok 15 [firefox] › tests\e2e\accessibility.spec.ts:27:1 › @a11y private fragments require deliberate redemption and leave the address bar (794ms)
+  -  16 [firefox] › tests\e2e\booking-kinds.spec.ts:4:3 › stay submits a complete request awaiting staff approval
+  -  17 [firefox] › tests\e2e\booking-kinds.spec.ts:4:3 › transfer submits a complete request awaiting staff approval
+  -  18 [firefox] › tests\e2e\booking-kinds.spec.ts:4:3 › shared-transfer submits a complete request awaiting staff approval
+  -  19 [firefox] › tests\e2e\booking-kinds.spec.ts:4:3 › photography submits a complete request awaiting staff approval
+  -  20 [firefox] › tests\e2e\booking-kinds.spec.ts:4:3 › tour-addon submits a complete request awaiting staff approval
+  -  21 [firefox] › tests\e2e\operations.spec.ts:4:1 › staff operates a real resource and reviews a pending request
+  ok 22 [firefox] › tests\e2e\operations.spec.ts:76:1 › apartment dates and transfer requests quote on the server (2.9s)
+  ok 23 [firefox] › tests\e2e\public.spec.ts:3:1 › ten locale navigation and private access boundary (4.1s)
+  ok 24 [firefox] › tests\e2e\public.spec.ts:13:1 › arabic_form_keyboard_flow (799ms)
+  ok 25 [firefox] › tests\e2e\public.spec.ts:24:1 › request_does_not_confirm and checkout_no_threejs (2.5s)
+  -  26 [firefox] › tests\e2e\release.spec.ts:5:1 › @a11y release pages have no automated WCAG A/AA violations and private responses reject caching
+(node:20228) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 27 [webkit] › tests\e2e\accessibility.spec.ts:3:1 › @a11y responsive reading, image loading and keyboard navigation (6.5s)
+  ok 28 [webkit] › tests\e2e\accessibility.spec.ts:27:1 › @a11y private fragments require deliberate redemption and leave the address bar (1.5s)
+  -  29 [webkit] › tests\e2e\booking-kinds.spec.ts:4:3 › stay submits a complete request awaiting staff approval
+  -  30 [webkit] › tests\e2e\booking-kinds.spec.ts:4:3 › transfer submits a complete request awaiting staff approval
+  -  31 [webkit] › tests\e2e\booking-kinds.spec.ts:4:3 › shared-transfer submits a complete request awaiting staff approval
+  -  32 [webkit] › tests\e2e\booking-kinds.spec.ts:4:3 › photography submits a complete request awaiting staff approval
+  -  33 [webkit] › tests\e2e\booking-kinds.spec.ts:4:3 › tour-addon submits a complete request awaiting staff approval
+  -  34 [webkit] › tests\e2e\operations.spec.ts:4:1 › staff operates a real resource and reviews a pending request
+  ok 35 [webkit] › tests\e2e\operations.spec.ts:76:1 › apartment dates and transfer requests quote on the server (4.3s)
+  ok 36 [webkit] › tests\e2e\public.spec.ts:3:1 › ten locale navigation and private access boundary (5.5s)
+  ok 37 [webkit] › tests\e2e\public.spec.ts:13:1 › arabic_form_keyboard_flow (805ms)
+  ok 38 [webkit] › tests\e2e\public.spec.ts:24:1 › request_does_not_confirm and checkout_no_threejs (2.6s)
+  -  39 [webkit] › tests\e2e\release.spec.ts:5:1 › @a11y release pages have no automated WCAG A/AA violations and private responses reject caching
+
+  14 skipped
+  25 passed (1.3m)

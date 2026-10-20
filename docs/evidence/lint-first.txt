@@ -1,0 +1,40 @@
+
+> red-sea-tourism@0.1.0 lint
+> eslint src tests scripts next.config.ts playwright.config.ts vitest.config.ts
+
+
+D:\Tourism\scripts\db-migrate.mjs
+  5:48  error  Empty block statement  no-empty
+
+D:\Tourism\scripts\db-refresh-functions.mjs
+  4:45  error  Empty block statement  no-empty
+
+D:\Tourism\scripts\db-rehearse.mjs
+  6:45  error  Empty block statement  no-empty
+
+D:\Tourism\scripts\db-seed.mjs
+  3:48  error  Empty block statement  no-empty
+
+D:\Tourism\scripts\db-sql.mjs
+  3:48  error  Empty block statement  no-empty
+
+D:\Tourism\scripts\db-types.mjs
+  4:45  error  Empty block statement  no-empty
+
+D:\Tourism\src\components\AdminApp.tsx
+  79:567  warning  React Hook useEffect has a missing dependency: 'screen'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+D:\Tourism\src\modules\photography\three\createCameraModel.ts
+  26:42  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\Tourism\tests\database\helpers.ts
+  3:48  error  Empty block statement  no-empty
+
+D:\Tourism\tests\database\media.test.ts
+  5:50  error  Empty block statement  no-empty
+
+D:\Tourism\tests\database\schema.test.ts
+  3:45  error  Empty block statement  no-empty
+
+✖ 11 problems (10 errors, 1 warning)
+

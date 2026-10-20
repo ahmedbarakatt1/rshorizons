@@ -1,0 +1,65 @@
+{
+  "passed": true,
+  "checks": {
+    "silhouetteIoU": 0.879,
+    "aspectRatioDelta": 0.039,
+    "scaleDelta": 0.0266,
+    "bilateralSymmetryError": 0.1203,
+    "colorDelta": {
+      "checked": 11,
+      "maxDeltaE": 37.58,
+      "perComponent": [
+        {
+          "componentId": null,
+          "deltaE": 5.67
+        },
+        {
+          "componentId": null,
+          "deltaE": 8.01
+        },
+        {
+          "componentId": null,
+          "deltaE": 14.47
+        },
+        {
+          "componentId": null,
+          "deltaE": 5.67
+        },
+        {
+          "componentId": null,
+          "deltaE": 16.84
+        },
+        {
+          "componentId": null,
+          "deltaE": 37.58
+        },
+        {
+          "componentId": null,
+          "deltaE": 37.58
+        },
+        {
+          "componentId": null,
+          "deltaE": 14.47
+        },
+        {
+          "componentId": null,
+          "deltaE": 37.58
+        },
+        {
+          "componentId": null,
+          "deltaE": 37.58
+        },
+        {
+          "componentId": null,
+          "deltaE": 37.58
+        }
+      ],
+      "gated": false
+    }
+  },
+  "failures": [],
+  "maskWarnings": [],
+  "renderHash": "66cc59f68c0c7215",
+  "passId": "blockout",
+  "mapStrippedRender": "docs\\design\\three\\blockout-rounded-stripped.png"
+}

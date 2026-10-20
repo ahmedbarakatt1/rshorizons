@@ -1,0 +1,65 @@
+{
+  "passed": true,
+  "checks": {
+    "silhouetteIoU": 0.8583,
+    "aspectRatioDelta": 0.0338,
+    "scaleDelta": 0.0118,
+    "bilateralSymmetryError": 0.1187,
+    "colorDelta": {
+      "checked": 11,
+      "maxDeltaE": 37.5,
+      "perComponent": [
+        {
+          "componentId": null,
+          "deltaE": 6.54
+        },
+        {
+          "componentId": null,
+          "deltaE": 8.07
+        },
+        {
+          "componentId": null,
+          "deltaE": 14.42
+        },
+        {
+          "componentId": null,
+          "deltaE": 6.54
+        },
+        {
+          "componentId": null,
+          "deltaE": 17.75
+        },
+        {
+          "componentId": null,
+          "deltaE": 37.5
+        },
+        {
+          "componentId": null,
+          "deltaE": 37.5
+        },
+        {
+          "componentId": null,
+          "deltaE": 14.42
+        },
+        {
+          "componentId": null,
+          "deltaE": 37.5
+        },
+        {
+          "componentId": null,
+          "deltaE": 37.5
+        },
+        {
+          "componentId": null,
+          "deltaE": 37.5
+        }
+      ],
+      "gated": false
+    }
+  },
+  "failures": [],
+  "maskWarnings": [],
+  "renderHash": "d5442b7b24fe2f7d",
+  "passId": "blockout",
+  "mapStrippedRender": "docs\\design\\three\\blockout-correction2-stripped.png"
+}

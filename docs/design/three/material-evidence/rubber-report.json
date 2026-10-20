@@ -1,0 +1,89 @@
+{
+  "ok": true,
+  "verdict": "pass",
+  "confidence": 0.716,
+  "estimatedFidelity": 0.716,
+  "targetThreshold": 0.7,
+  "materialId": "rubber",
+  "sourceImage": "D:\\Tourism\\docs\\design\\three\\material-crops\\rubber.png",
+  "outDir": "D:\\Tourism\\docs\\design\\three\\material-evidence\\rubber",
+  "palette": [
+    "#424242",
+    "#3D3C3D",
+    "#2E2E2E",
+    "#363636",
+    "#494949"
+  ],
+  "maps": {
+    "albedo": {
+      "path": "D:\\Tourism\\docs\\design\\three\\material-evidence\\rubber\\rubber_albedo.png",
+      "url": "rubber_albedo.png",
+      "channel": "albedo",
+      "source": "reference-pixel-extraction"
+    },
+    "roughness": {
+      "path": "D:\\Tourism\\docs\\design\\three\\material-evidence\\rubber\\rubber_roughness.png",
+      "url": "rubber_roughness.png",
+      "channel": "roughness",
+      "source": "reference-pixel-extraction"
+    },
+    "height": {
+      "path": "D:\\Tourism\\docs\\design\\three\\material-evidence\\rubber\\rubber_height.png",
+      "url": "rubber_height.png",
+      "channel": "height",
+      "source": "reference-pixel-extraction"
+    },
+    "normal": {
+      "path": "D:\\Tourism\\docs\\design\\three\\material-evidence\\rubber\\rubber_normal.png",
+      "url": "rubber_normal.png",
+      "channel": "normal",
+      "source": "reference-pixel-extraction"
+    },
+    "ao": {
+      "path": "D:\\Tourism\\docs\\design\\three\\material-evidence\\rubber\\rubber_ao.png",
+      "url": "rubber_ao.png",
+      "channel": "ao",
+      "source": "reference-pixel-extraction"
+    }
+  },
+  "diagnostics": {
+    "sourceWidth": 60,
+    "sourceHeight": 180,
+    "mapSize": 256,
+    "cropBBoxPixels": {
+      "x": 0,
+      "y": 0,
+      "width": 60,
+      "height": 180
+    },
+    "mask": {
+      "backgroundColor": "#3A383A",
+      "backgroundNoise": 20.421,
+      "transparentPixelFraction": 0.0,
+      "foregroundCoverage": 1.0
+    },
+    "mapStats": {
+      "valueRange": 0.1157,
+      "heightP90Gradient": 0.18335,
+      "roughnessBase": 0.883,
+      "roughnessVariation": 0.132,
+      "normalStrength": 0.371,
+      "blurRadius": 5
+    },
+    "palette": [
+      "#424242",
+      "#3D3C3D",
+      "#2E2E2E",
+      "#363636",
+      "#494949"
+    ]
+  },
+  "warnings": [
+    "foreground mask is tiny; material extraction is likely unreliable",
+    "image is not clearly isolated from background; using most pixels as material evidence",
+    "object/background separation is weak",
+    "single-image inverse rendering cannot prove true physical PBR; confidence is capped",
+    "low value range weakens height/roughness inference"
+  ],
+  "limitation": "single-image PBR extraction is an estimate; 70%+ extraction confidence still needs render screenshot review"
+}

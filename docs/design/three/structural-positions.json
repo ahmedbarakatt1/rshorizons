@@ -1,0 +1,107 @@
+{
+  "Conceptual underwater camera": [
+    0,
+    0,
+    0
+  ],
+  "root__pivot": [
+    0,
+    0,
+    0
+  ],
+  "root": [
+    0,
+    0,
+    0
+  ],
+  "lens mount__pivot": [
+    0,
+    0,
+    0.4
+  ],
+  "lens mount": [
+    0,
+    0,
+    0.4
+  ],
+  "grip__pivot": [
+    1.39,
+    -0.02,
+    0
+  ],
+  "grip": [
+    1.39,
+    -0.02,
+    0
+  ],
+  "front panel__pivot": [
+    0,
+    0,
+    0.355
+  ],
+  "front panel": [
+    0,
+    0,
+    0.355
+  ],
+  "glass dome__pivot": [
+    0,
+    0,
+    0.51
+  ],
+  "glass dome": [
+    0,
+    0,
+    0.51
+  ],
+  "control main__pivot": [
+    -0.65,
+    0.96,
+    0
+  ],
+  "control main": [
+    -0.65,
+    0.96,
+    0
+  ],
+  "control secondary__pivot": [
+    0.03,
+    0.93,
+    0
+  ],
+  "control secondary": [
+    0.03,
+    0.93,
+    0
+  ],
+  "lens sleeve__pivot": [
+    0,
+    0,
+    0.5
+  ],
+  "lens sleeve": [
+    0,
+    0,
+    0.5
+  ],
+  "optical collar__pivot": [
+    0,
+    0,
+    0.59
+  ],
+  "optical collar": [
+    0,
+    0,
+    0.59
+  ],
+  "corner-screws": [
+    0,
+    0,
+    0
+  ],
+  "lens-screws": [
+    0,
+    0,
+    0
+  ]
+}

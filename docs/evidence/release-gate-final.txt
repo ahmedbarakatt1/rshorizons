@@ -1,0 +1,5 @@
+
+> red-sea-tourism@0.1.0 verify:release
+> tsx scripts/verify-release-config.ts
+
+Deployment requires an explicitly designated staging or production environment.

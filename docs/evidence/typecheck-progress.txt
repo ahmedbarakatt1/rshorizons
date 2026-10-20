@@ -1,0 +1,6 @@
+
+> red-sea-tourism@0.1.0 typecheck
+> tsc --noEmit
+
+src/server/api/public.ts(61,41): error TS2339: Property 'status' does not exist on type '{ balanceAmountMinor: string; guest: { locale: any; email?: any; phoneE164?: any; fullName: any; }; items: QueryResultRow[]; timeline: QueryResultRow[]; obligations: QueryResultRow[]; payments: QueryResultRow[]; requests: QueryResultRow[]; pickups: QueryResultRow[]; }'.
+src/server/api/public.ts(61,159): error TS2339: Property 'currency' does not exist on type '{ balanceAmountMinor: string; guest: { locale: any; email?: any; phoneE164?: any; fullName: any; }; items: QueryResultRow[]; timeline: QueryResultRow[]; obligations: QueryResultRow[]; payments: QueryResultRow[]; requests: QueryResultRow[]; pickups: QueryResultRow[]; }'.

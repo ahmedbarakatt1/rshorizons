@@ -1,0 +1,44 @@
+{
+  "version": "0.1.1",
+  "name": "img2threejs",
+  "repository": {
+    "url": "git+https://github.com/img2threejs/img2threejs.git",
+    "type": "git"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "test": "node --test bin/img2threejs.mjs-test.mjs",
+    "package:check": "npm pack --dry-run"
+  },
+  "bin": {
+    "img2threejs": "bin/img2threejs.mjs"
+  },
+  "dist": {
+    "shasum": "6bbddd6bda52777fed38c5f0794cdfb8f3772ecc",
+    "tarball": "https://registry.npmjs.org/img2threejs/-/img2threejs-0.1.1.tgz",
+    "fileCount": 4,
+    "integrity": "sha512-wSI5U8jq5BkmUPP3j/MD1difBARI48rUSG+3qh6wOnqZ3vGxh1SoGcd7BnziauSPIv3nxnjGhn5bc7vjwNOrKA==",
+    "signatures": [
+      {
+        "sig": "MEUCIGlDKm5yLL4C/TdeE0b0gn61ELpqBmd6m+XOnRCA4Ok4AiEA8kWh+v6HISuas8siDmKlL4vYo0xyslOvfRcrlcixtVc=",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+      },
+      {
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+        "sig": "MEQCIAoG40jLBxlfbBSgqfE5NscYXpcXzAfr/ClkixMn5rYKAiAP/21bQxE2NfVw30c5Qvx3bo3W/EUQa3o7lojKvAs18g=="
+      }
+    ],
+    "attestations": {
+      "url": "https://registry.npmjs.org/-/npm/v1/attestations/img2threejs@0.1.1",
+      "provenance": {
+        "predicateType": "https://slsa.dev/provenance/v1"
+      }
+    },
+    "unpackedSize": 68049
+  },
+  "maintainers": [
+    "nhonh <hoainho.work@gmail.com>"
+  ]
+}

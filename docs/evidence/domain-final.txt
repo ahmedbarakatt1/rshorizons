@@ -1,0 +1,16 @@
+
+> red-sea-tourism@0.1.0 test
+> vitest run
+
+
+ RUN  v5.0.5 D:/Tourism
+
+
+ Test Files  32 passed (32)
+      Tests  162 passed (162)
+   Start at  20:47:26
+   Duration  22.09s (tests 69%, import 29%, worker 1%, transform 1%)
+
+    Isolate  32 workers spawned · ~160ms startup each (spawn + environment, per file)
+             at least ~4.96s faster with isolate: false — reuses workers across files instead of one per file
+

@@ -1,0 +1,10 @@
+{
+  "createdAt": "2026-10-20T17:27:02.876Z",
+  "mode": "local-isolated",
+  "bytes": 16384,
+  "sha256": "c5898b3c69af09ada298c1c88ce3b7251f6c804a51529c8e7e00e1c2cec77d79",
+  "restoredSha256": "c5898b3c69af09ada298c1c88ce3b7251f6c804a51529c8e7e00e1c2cec77d79",
+  "traversalDenied": true,
+  "productionStorageRestore": "BLOCKED_EXTERNAL",
+  "note": "Synthetic object exercised through actual localStorage adapter; no real guest objects read, copied, or published."
+}

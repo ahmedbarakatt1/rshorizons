@@ -1,0 +1,17 @@
+
+╔═════════════════════════════════════════════════════════════════╗
+║ ATTENTION: "msedge" is already installed on the system!         ║
+║                                                                 ║
+║ "msedge" installation is not hermetic; installing newer version ║
+║ requires *removal* of a current installation first.             ║
+║                                                                 ║
+║ To *uninstall* current version and re-install latest "msedge":  ║
+║                                                                 ║
+║ - Close all running instances of "msedge", if any               ║
+║ - Use "--force" to install browser:                             ║
+║                                                                 ║
+║     npx playwright install --force msedge                       ║
+║                                                                 ║
+║ <3 Playwright Team                                              ║
+╚═════════════════════════════════════════════════════════════════╝
+

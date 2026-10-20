@@ -1,0 +1,66 @@
+{
+  "version": "0.1.0",
+  "name": "red-sea-tourism-design-tooling",
+  "dependencies": {
+    "@playwright/cli": {
+      "version": "0.1.22",
+      "resolved": "https://registry.npmjs.org/@playwright/cli/-/cli-0.1.22.tgz",
+      "overridden": false,
+      "dependencies": {
+        "playwright-core": {
+          "version": "1.64.0-alpha-1790635538000",
+          "resolved": "https://registry.npmjs.org/playwright-core/-/playwright-core-1.64.0-alpha-1790635538000.tgz",
+          "overridden": false
+        },
+        "playwright": {
+          "version": "1.64.0-alpha-1790635538000",
+          "resolved": "https://registry.npmjs.org/playwright/-/playwright-1.64.0-alpha-1790635538000.tgz",
+          "overridden": false
+        }
+      }
+    },
+    "getdesign": {
+      "version": "0.6.26",
+      "resolved": "https://registry.npmjs.org/getdesign/-/getdesign-0.6.26.tgz",
+      "overridden": false
+    },
+    "img2threejs": {
+      "version": "0.1.1",
+      "resolved": "https://registry.npmjs.org/img2threejs/-/img2threejs-0.1.1.tgz",
+      "overridden": false
+    },
+    "impeccable": {
+      "version": "4.7.0",
+      "resolved": "https://registry.npmjs.org/impeccable/-/impeccable-4.7.0.tgz",
+      "overridden": false,
+      "dependencies": {
+        "@impeccable/cli-darwin-arm64": {},
+        "@impeccable/cli-darwin-x64": {},
+        "@impeccable/cli-linux-arm64": {},
+        "@impeccable/cli-linux-x64": {},
+        "@impeccable/cli-windows-x64": {
+          "version": "0.1.16",
+          "resolved": "https://registry.npmjs.org/@impeccable/cli-windows-x64/-/cli-windows-x64-0.1.16.tgz",
+          "overridden": false
+        }
+      }
+    },
+    "skills": {
+      "version": "1.7.4",
+      "resolved": "https://registry.npmjs.org/skills/-/skills-1.7.4.tgz",
+      "overridden": false,
+      "dependencies": {
+        "tar": {
+          "version": "7.5.22",
+          "resolved": "https://registry.npmjs.org/tar/-/tar-7.5.22.tgz",
+          "overridden": false
+        },
+        "yaml": {
+          "version": "2.9.1",
+          "resolved": "https://registry.npmjs.org/yaml/-/yaml-2.9.1.tgz",
+          "overridden": false
+        }
+      }
+    }
+  }
+}

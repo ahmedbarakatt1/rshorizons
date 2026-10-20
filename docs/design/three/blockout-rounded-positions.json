@@ -1,0 +1,57 @@
+{
+  "Conceptual underwater camera": [
+    0,
+    0,
+    0
+  ],
+  "root__pivot": [
+    0,
+    0,
+    0
+  ],
+  "root": [
+    0,
+    0,
+    0
+  ],
+  "lens mount__pivot": [
+    0,
+    0,
+    0.4
+  ],
+  "lens mount": [
+    0,
+    0,
+    0.4
+  ],
+  "grip__pivot": [
+    1.39,
+    -0.02,
+    0
+  ],
+  "grip": [
+    1.39,
+    -0.02,
+    0
+  ],
+  "control main__pivot": [
+    -0.65,
+    0.96,
+    0
+  ],
+  "control main": [
+    -0.65,
+    0.96,
+    0
+  ],
+  "control secondary__pivot": [
+    0.03,
+    0.93,
+    0
+  ],
+  "control secondary": [
+    0.03,
+    0.93,
+    0
+  ]
+}

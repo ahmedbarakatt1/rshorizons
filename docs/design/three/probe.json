@@ -1,0 +1,11 @@
+{
+  "path": "D:\\Tourism\\.local\\private\\three\\camera-reference.png",
+  "type": "png",
+  "bytes": 1956346,
+  "width": 1536,
+  "height": 1024,
+  "aspectRatio": 1.5,
+  "technicalSuitability": "pass",
+  "warnings": [],
+  "note": "This is only technical image probing. Semantic object suitability still requires visual inspection."
+}

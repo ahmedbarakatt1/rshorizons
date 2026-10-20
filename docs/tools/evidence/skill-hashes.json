@@ -1,0 +1,22 @@
+[
+  {
+    "Algorithm": "SHA256",
+    "Hash": "3B3B99BFA39A3C8872AC397BE7944CFD8D2A7B80D752BFDED6C96BB25D41CF5E",
+    "Path": "D:\\Tourism\\.agents\\skills\\design-taste-frontend\\SKILL.md"
+  },
+  {
+    "Algorithm": "SHA256",
+    "Hash": "88E9A46A91B6DDD1059F03F578BD0F9BBE6D212D6A395124379B9BB5C97C5CF2",
+    "Path": "D:\\Tourism\\.agents\\skills\\impeccable\\SKILL.md"
+  },
+  {
+    "Algorithm": "SHA256",
+    "Hash": "8A4F075A1309B32D3B6010309978DC483B3826C357351F748118D2C960F08E17",
+    "Path": "D:\\Tourism\\.agents\\skills\\img2threejs\\SKILL.md"
+  },
+  {
+    "Algorithm": "SHA256",
+    "Hash": "9BBA755285A4C9AD72A4A41B9C7BAEF6FB516D329C0B44ED0573715F4479B906",
+    "Path": "D:\\Tourism\\.agents\\skills\\playwright-cli\\SKILL.md"
+  }
+]

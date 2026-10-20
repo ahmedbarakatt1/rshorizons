@@ -1,0 +1,18 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Concept camera review</title>
+<style>html,body{margin:0;width:100%;height:100%;background:#fcf6eb}canvas{display:block}</style>
+<script type="importmap">{"imports":{"three":"/three/build/three.module.js","three/":"/three/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import {createConceptualUnderwaterCameraModel} from '/camera.js';
+const scene=new THREE.Scene(); scene.background=new THREE.Color('#fcf6eb');
+const camera=new THREE.PerspectiveCamera(35,innerWidth/innerHeight,.1,100);
+const renderer=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(1);renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1;document.body.append(renderer.domElement);
+scene.add(new THREE.HemisphereLight(0xfbf1df,0x64717c,2));
+for(const [position,power,color] of [[[-3,5,4],4,0xfff4df],[[4,1,2],2,0xdceef7],[[1,3,-3],3,0xffffff]]){const l=new THREE.DirectionalLight(color,power);l.position.set(...position);scene.add(l);}
+THREE.DefaultLoadingManager.onLoad=()=>{window.setAngle(Number(new URLSearchParams(location.search).get('angle')??15));window.reviewReady=true;};
+const model=createConceptualUnderwaterCameraModel({textureSize:128,castShadow:false});scene.add(model);
+if(new URLSearchParams(location.search).has('stripped'))model.traverse(node=>{if(node.isMesh){for(const m of [node.material].flat()){for(const k of ['map','roughnessMap','metalnessMap','normalMap','bumpMap','aoMap','displacementMap'])m[k]=null;m.needsUpdate=true;}}});
+window.model=model;window.scene=scene;window.renderer=renderer;window.camera=camera;
+window.setAngle=(degrees)=>{const angle=degrees*Math.PI/180;camera.position.set(Math.sin(angle)*4.15,0.6,Math.cos(angle)*4.15);camera.lookAt(.1,.08,0);renderer.render(scene,camera);};
+camera.position.set(1.6,.9,5.7);camera.lookAt(.1,.08,0);
+</script></html>

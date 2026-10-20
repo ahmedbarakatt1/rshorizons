@@ -1,0 +1,20 @@
+
+ RUN  v5.0.5 D:/Tourism
+
+ ❯ tests/contract/refunds.test.ts (0 test)
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/contract/refunds.test.ts [ tests/contract/refunds.test.ts ]
+Error: Cannot find package '@/integrations/paymob/refunds' imported from D:/Tourism/tests/contract/refunds.test.ts
+ ❯ tests/contract/refunds.test.ts:2:1
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  no tests
+   Start at  19:36:38
+   Duration  808ms (worker 99%, environment 1%)
+

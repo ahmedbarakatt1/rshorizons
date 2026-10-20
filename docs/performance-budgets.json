@@ -1,0 +1,14 @@
+{
+  "scope": "Initial cold lab loads; byte values are decimal bytes.",
+  "common": {
+    "scriptEncodedBytes": 190000,
+    "scriptDecodedBytes": 600000,
+    "cls": 0.1
+  },
+  "routes": [
+    {"route": "/en", "width": 1440, "imageEncodedBytes": 350000},
+    {"route": "/en", "width": 390, "imageEncodedBytes": 100000},
+    {"route": "/en/booking/request?service=boat-tours", "width": 1440, "imageEncodedBytes": 0},
+    {"route": "/en/booking/request?service=boat-tours", "width": 390, "imageEncodedBytes": 0}
+  ]
+}

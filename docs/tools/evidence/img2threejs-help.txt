@@ -1,0 +1,21 @@
+img2threejs — install the img2threejs skill into agent hosts
+
+Usage:
+  img2threejs install [--host <host>] [--ref <tag|sha>] [--dry-run]
+  img2threejs update   [--host <host>] [--ref <tag|sha>] [--dry-run]
+  img2threejs doctor
+  img2threejs version
+
+Hosts:
+  hermes, claude, codex, opencode, all (default: auto-detect all installed)
+
+Ref:
+  Semantic tag (vX.Y.Z, optionally prerelease) or 40-char commit SHA.
+  Branches and short SHAs are refused. Requires Git and network access.
+  --dry-run prints the plan without downloads or filesystem changes.
+
+Examples:
+  img2threejs install
+  img2threejs install --host hermes --ref v2.0.0
+  img2threejs install --ref 6e60b5e22419464b4853e01ddb6c0e6f6659a733
+  img2threejs install --dry-run

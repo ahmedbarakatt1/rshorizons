@@ -1,0 +1,34 @@
+
+ RUN  v5.0.5 D:/Tourism
+
+ ❯ tests/integration/video.test.ts (2 tests | 2 failed) 107ms
+   × video_decodes_and_transcodes_real_bytes_with_private_poster 105ms
+   × mux_webhook_rejects_invalid_signature_and_replay_timestamp 1ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/integration/video.test.ts > video_decodes_and_transcodes_real_bytes_with_private_poster
+TypeError: transcodeLocalVideo is not a function
+ ❯ tests/integration/video.test.ts:12:22
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/integration/video.test.ts > mux_webhook_rejects_invalid_signature_and_replay_timestamp
+TypeError: verifyMuxSignature is not a function
+ ❯ tests/integration/video.test.ts:20:10
+     18|   const raw='{"id":"synthetic","type":"video.asset.ready"}',timestamp=…
+     19|   const hash=createHmac("sha256","test-secret").update(`${timestamp}.$…
+     20|   expect(verifyMuxSignature(raw,`t=${timestamp},v1=${hash}`,"test-secr…
+       |          ^
+     21|   expect(verifyMuxSignature(raw+" ",`t=${timestamp},v1=${hash}`,"test-…
+     22|   expect(verifyMuxSignature(raw,`t=${timestamp-400},v1=${hash}`,"test-…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed (2)
+   Start at  19:23:40
+   Duration  510ms (import 55%, tests 33%, transform 10%, worker 2%)
+

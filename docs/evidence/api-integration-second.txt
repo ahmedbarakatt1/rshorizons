@@ -1,0 +1,43 @@
+
+ RUN  v5.0.5 D:/Tourism
+
+ ❯ tests/integration/api.test.ts (5 tests | 2 failed) 646ms
+   × guest_request_staff_approval_real_runtime_boundary 97ms
+   × guest_access_idor_and_csrf_are_rejected 3ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/integration/api.test.ts > guest_request_staff_approval_real_runtime_boundary
+AssertionError: {"error":{"code":"VALIDATION_ERROR","message":"Please check the highlighted fields.","fields":{"consents.whatsappBookingUpdates":"Invalid input: expected boolean, received undefined","consents.marketing":"Invalid input: expected boolean, received undefined","consents.publicMediaUse":"Invalid input: expected boolean, received undefined"}},"meta":{"requestId":"9d87cd66-9af8-45a3-811e-7cb76951405c"}}: expected 400 to be 201 // Object.is equality
+
+- Expected
++ Received
+
+
+- 201
++ 400
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 3 passed (5)
+   Start at  19:14:29
+   Duration  1.54s (tests 51%, import 36%, transform 13%, worker 1%)
+
+ ❯ tests/integration/api.test.ts:31:68
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/integration/api.test.ts > guest_access_idor_and_csrf_are_rejected
+AssertionError: expected 401 to be 404 // Object.is equality
+
+- Expected
++ Received
+
+- 404
++ 401
+
+ ❯ tests/integration/api.test.ts:46:110
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+

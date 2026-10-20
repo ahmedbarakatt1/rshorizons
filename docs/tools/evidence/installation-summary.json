@@ -1,0 +1,53 @@
+{
+  "recordedAt": "2026-10-20T18:46:00.3042604+03:00",
+  "workspace": "D:\\Tourism",
+  "node": "v22.22.2",
+  "npm": "10.9.7",
+  "python": "Python 3.11.1",
+  "git": "git version 2.47.1.windows.1",
+  "codex": "codex-cli 0.159.0",
+  "browser": {
+    "path": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
+    "name": "Microsoft Edge",
+    "version": "155.0.4283.62"
+  },
+  "taste": {
+    "method": "local inspected checkout via skills --agent codex --copy --yes",
+    "source": "https://github.com/Leonxlnx/taste-skill",
+    "commit": "63aba5f43b5056758b15bbe7d683da8c86a7a7ad",
+    "installer": "skills@1.7.4"
+  },
+  "impeccable": {
+    "source": "https://github.com/pbakaus/impeccable",
+    "inspectedSourceCommit": "dad8dbb3aac21ad1fa236c110315ef4abece23e8",
+    "skill": "4.7.0",
+    "cli": "4.7.0",
+    "engine": "0.1.16",
+    "hooksInstalled": false
+  },
+  "img2threejs": {
+    "tag": "v2.0.0",
+    "method": "git archive extracted to .agents/skills/img2threejs",
+    "skill": "2.0.0",
+    "cli": "0.1.1",
+    "globalInstall": false,
+    "optionalHarnessInstalled": false,
+    "commit": "a669e9a97cea4452b1c2310c5cca6aa0f6657c1f"
+  },
+  "getdesign": {
+    "cli": "0.6.26",
+    "telemetryEnabled": false,
+    "registryGitHead": "870e8f286519f850edf5be1e0e37024878f8f6fd",
+    "licenseRepositoryHead": "3b605329240ce735b510037cca322f1831fdd7f8"
+  },
+  "playwright": {
+    "cli": "0.1.22",
+    "core": "1.64.0-alpha-1790635538000",
+    "browserInstallExit": 0,
+    "browserInstallResult": "Existing msedge accepted; no forced replacement"
+  },
+  "discovery": "skills list --agent codex --json sees all four project skill paths. Fresh Codex session runtime catalog not independently exercised.",
+  "installExit": 0,
+  "installCommand": "npm.cmd install --ignore-scripts --no-fund (cwd .tooling)",
+  "auditReportedVulnerabilities": 0
+}

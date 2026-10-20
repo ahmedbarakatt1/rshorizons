@@ -1,0 +1,24 @@
+{
+  "at": "2026-10-20T17:27:49.971Z",
+  "environment": "isolated loopback PostgreSQL17.11 with synthetic records",
+  "workload": {
+    "independentConnections": 32,
+    "approvalRequests": 32,
+    "departureSeats": 16,
+    "partySize": 1,
+    "paymentPolicy": "arrival"
+  },
+  "results": {
+    "approved": 16,
+    "capacityConflicts": 16,
+    "allocatedSeats": 16
+  },
+  "durationMs": 4676,
+  "latencyMs": {
+    "p50": 2777,
+    "p95": 4666,
+    "max": 4675
+  },
+  "invariant": "PASS: exactly16 allocations; no overselling",
+  "limitations": "Local concurrency evidence, not production throughput or latency capacity planning."
+}

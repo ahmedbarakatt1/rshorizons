@@ -1,0 +1,8 @@
+img2threejs — host detection report
+
+  hermes      ✗ not detected  C:\Users\barak\.hermes\skills  (no link)
+  claude      ✓ detected  C:\Users\barak\.claude\skills  (no link)
+  codex       ✓ detected  C:\Users\barak\.codex\skills  (no link)
+  opencode    ✓ detected  C:\Users\barak\.config\opencode\skills  (no link)
+
+  ✓ git version 2.47.1.windows.1

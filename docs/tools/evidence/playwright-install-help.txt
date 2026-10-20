@@ -1,0 +1,7 @@
+playwright-cli install 
+
+Initialize workspace
+
+Options:
+  --skills                    install skills, possible values: claude (default), agents.
+  --global                    install skills into the home directory instead of the workspace (alias: -g). requires --skills.

@@ -1,0 +1,416 @@
+[
+  {
+    "name": "react-dom",
+    "version": "19.3.1",
+    "engines": null,
+    "repository": {
+      "url": "git+https://github.com/react/react.git",
+      "type": "git",
+      "directory": "packages/react-dom"
+    },
+    "scripts": {
+      "start": "node server.js"
+    },
+    "integrity": "sha512-Y0bARz53lhEC1NMCASs0/j+faB/zqt3R8hpvg1e8+61ZVJ4UL0UdC4cBbXfZMcIuhrfgeILTLe+ZeBCavQPtKQ=="
+  },
+  {
+    "name": "next-intl",
+    "version": "4.14.9",
+    "engines": null,
+    "repository": {
+      "url": "git+https://github.com/amannn/next-intl.git",
+      "type": "git"
+    },
+    "scripts": {
+      "lint": "pnpm run lint:source && pnpm run lint:package",
+      "size": "size-limit",
+      "test": "TZ=Europe/Berlin vitest",
+      "build": "rm -rf dist && rollup -c",
+      "lint:source": "eslint src test && tsc --noEmit && pnpm run lint:prettier",
+      "postpublish": "git checkout . && rm ./README.md",
+      "lint:package": "publint && attw --pack --ignore-rules=cjs-resolves-to-esm",
+      "lint:prettier": "prettier src --check",
+      "prepublishOnly": "turbo build && cp ../../README.md ."
+    },
+    "integrity": "sha512-uauRtUC+TrYNA1OL/QcwL9irndLrI9jK3Wdaa9W0B5AeKh9cqVdNeT0IWgLnhBqBRrVwppVdI0M+C1+JdGPQ3w=="
+  },
+  {
+    "name": "tailwindcss",
+    "version": "4.3.3",
+    "engines": null,
+    "repository": {
+      "url": "https://github.com/tailwindlabs/tailwindcss.git",
+      "type": "git",
+      "directory": "packages/tailwindcss"
+    },
+    "scripts": {
+      "dev": "tsup-node --env.NODE_ENV development --watch",
+      "lint": "tsc --noEmit",
+      "build": "tsup-node --env.NODE_ENV production",
+      "test:ui": "playwright test"
+    },
+    "integrity": "sha512-gOhV3P7ufE62QDGg1zVaTgCR+EtPv92k2nIhVcVKcLmxT1sUBsQGhnZj175j+MqRt4zLF7ic+sCYjfhxMxj7YQ=="
+  },
+  {
+    "name": "@tailwindcss/postcss",
+    "version": "4.3.3",
+    "engines": null,
+    "repository": {
+      "url": "https://github.com/tailwindlabs/tailwindcss.git",
+      "type": "git",
+      "directory": "packages/@tailwindcss-postcss"
+    },
+    "scripts": {
+      "dev": "pnpm run build -- --watch",
+      "lint": "tsc --noEmit",
+      "build": "tsup-node"
+    },
+    "integrity": "sha512-JTSZZGQi1AyKirbLN3azmjVzef92tcX7h+iSqPdaeStyFpGpDlKvvpxeOE8njhbUanbRwr3z8DyzhICWnMtQeg=="
+  },
+  {
+    "name": "typescript",
+    "version": "7.0.2",
+    "engines": {
+      "node": ">=16.20.0"
+    },
+    "repository": {
+      "url": "git+https://github.com/microsoft/TypeScript.git",
+      "type": "git"
+    },
+    "scripts": null,
+    "integrity": "sha512-8FYau96o3NKOhbjKi/qNvG/W5jhzxkbdm5sj9AbZ/5T5sWqn3hJgLfGx27sRKZWTvyzCP8dLRBTf5tBTSRVUNA=="
+  },
+  {
+    "name": "@types/node",
+    "version": "26.6.5",
+    "engines": null,
+    "repository": {
+      "url": "https://github.com/DefinitelyTyped/DefinitelyTyped.git",
+      "type": "git",
+      "directory": "types/node"
+    },
+    "scripts": {},
+    "integrity": "sha512-uMzsv9stDdofIZBx4UGh4Z9ZgXnGC9seRDscilBcTHAeOFk67MZg/k9bWVfO+bk4qZmG+l52hRnLwUiH2LnJTg=="
+  },
+  {
+    "name": "@types/react",
+    "version": "19.3.0",
+    "engines": null,
+    "repository": {
+      "url": "https://github.com/DefinitelyTyped/DefinitelyTyped.git",
+      "type": "git",
+      "directory": "types/react"
+    },
+    "scripts": {},
+    "integrity": "sha512-N0rFCuH9YoxG9/m61l9MfpJKfmLOVU0em7ipIz6TRgSSkvReLB9vL85GB+yr8Bs5leqpvg96JSwF4ZS1s4viQg=="
+  },
+  {
+    "name": "@types/react-dom",
+    "version": "19.3.0",
+    "engines": null,
+    "repository": {
+      "url": "https://github.com/DefinitelyTyped/DefinitelyTyped.git",
+      "type": "git",
+      "directory": "types/react-dom"
+    },
+    "scripts": {},
+    "integrity": "sha512-ZI7bU42mZXXKHn/qNLEw2IrbiINU7X5+vfgdixBHkCNpYWXjKgfQ/P+uyGb5CjOLB9UcnTeg3rylQtV2hym44Q=="
+  },
+  {
+    "name": "@types/pg",
+    "version": "8.23.1",
+    "engines": null,
+    "repository": {
+      "url": "https://github.com/DefinitelyTyped/DefinitelyTyped.git",
+      "type": "git",
+      "directory": "types/pg"
+    },
+    "scripts": {},
+    "integrity": "sha512-fKVHpikPdg4GKks3JuLEhvwSyvwzF23hnabPy6DD8ljVbC7+6J5dQzdv4arV6jqq57djnMgs1HKBxX4P8aBI3A=="
+  },
+  {
+    "name": "pg",
+    "version": "8.23.1",
+    "engines": {
+      "node": ">= 16.0.0"
+    },
+    "repository": {
+      "url": "git://github.com/brianc/node-postgres.git",
+      "type": "git",
+      "directory": "packages/pg"
+    },
+    "scripts": {
+      "test": "make test-all"
+    },
+    "integrity": "sha512-aL96AHANtWjPLDOLqnhx+ngp9+UK7ETEU8VJrDCGvsSSi/mGLcWYsS6Herg7lmaBJe4uwrfqsa7gTEFaSizDoQ=="
+  },
+  {
+    "name": "zod",
+    "version": "4.6.7",
+    "engines": null,
+    "repository": {
+      "url": "git+https://github.com/colinhacks/zod.git",
+      "type": "git"
+    },
+    "scripts": {
+      "test": "nub exec --node vitest run",
+      "build": "nub exec --node zshy --project tsconfig.build.json",
+      "clean": "git clean -xdf . -e node_modules",
+      "postbuild": "nub ../../scripts/write-stub-package-jsons.ts && nub exec --node biome check --write .",
+      "test:watch": "nub exec --node vitest",
+      "prepublishOnly": "nub ../../scripts/check-versions.ts"
+    },
+    "integrity": "sha512-g8W2D2kU6a8untc053fX1uVBKzM7yqAxW/3zwk83+6RyF2+SKOuV+c0wBDhUwzV1PaGapmZH+rmcUzPf+3CGwg=="
+  },
+  {
+    "name": "@supabase/supabase-js",
+    "version": "2.118.0",
+    "engines": {
+      "node": ">=22.0.0"
+    },
+    "repository": {
+      "url": "https://github.com/supabase/supabase-js.git",
+      "type": "git",
+      "directory": "packages/core/supabase-js"
+    },
+    "scripts": {
+      "docs": "typedoc --options ../../../typedoc.base.mjs --entryPoints src/index.ts --entryPoints src/cors.ts --entryPoints src/tracing.ts --out docs/v2",
+      "test": "npm run test:types && npm run test:run",
+      "build": "tsdown",
+      "test:all": "npm run test:types && npm run test:run && npm run test:integration && npm run test:integration:browser",
+      "test:bun": "cd test/integration/bun && bun install && bun test",
+      "test:cjs": "node test/module-resolution.test.cjs && node test/module-resolution-cors.test.cjs && node test/module-resolution-tracing.test.cjs",
+      "test:esm": "node test/module-resolution.test.mjs && node test/module-resolution-cors.test.mjs && node test/module-resolution-tracing.test.mjs",
+      "test:run": "jest --runInBand --detectOpenHandles",
+      "docs:json": "typedoc --options ../../../typedoc.base.mjs --entryPoints src/index.ts --entryPoints src/cors.ts --entryPoints src/tracing.ts --json docs/v2/spec.json --excludeExternals",
+      "test:deno": "cd test/deno && npm run test",
+      "test:expo": "cd test/integration/expo && npm test",
+      "test:next": "cd test/integration/next && npm test",
+      "test:unit": "jest --runInBand --detectOpenHandles test/unit",
+      "test:types": "tsd --files test/types/index.test-d.ts && tsd --typings dist/cors.d.cts --files test/types/cors.test-d.ts && tsd --typings dist/tracing.d.cts --files test/types/tracing.test-d.ts && jsr publish --dry-run --allow-dirty",
+      "test:watch": "jest --watch --verbose false --silent false",
+      "build:watch": "tsdown --watch",
+      "test:exports": "attw --pack . --ignore-rules no-resolution",
+      "test:coverage": "jest --runInBand --coverage --testPathIgnorePatterns=\"test/integration|test/deno|\\.[mc]js$\"",
+      "serve:coverage": "pnpm nx test:coverage supabase-js && pnpm dlx serve test/coverage",
+      "test:integration": "jest --runInBand --detectOpenHandles test/integration.test.ts",
+      "update:test-deps": "pnpm run update:test-deps:expo && pnpm run update:test-deps:next && pnpm run update:test-deps:deno && pnpm run update:test-deps:bun",
+      "test:hermes-compat": "node test/bundle-hermes-compat.test.cjs",
+      "test:edge-functions": "cd test/deno && npm run test:edge-functions",
+      "test:node:playwright": "cd test/integration/node-browser && npm install && cp ../../../dist/umd/supabase.js . && npm run test",
+      "update:test-deps:bun": "cd test/integration/bun && bun install",
+      "update:test-deps:deno": "cd test/deno && pnpm install --ignore-workspace",
+      "update:test-deps:expo": "cd test/integration/expo && pnpm install --ignore-workspace",
+      "update:test-deps:next": "cd test/integration/next && pnpm install --ignore-workspace",
+      "test:module-resolution": "npm run test:exports && npm run test:esm && npm run test:cjs && npm run test:hermes-compat",
+      "test:integration:browser": "deno test --allow-all --node-modules-dir=auto test/integration.browser.test.ts"
+    },
+    "integrity": "sha512-FxI8UXMVC2UG7IkeiI8fuQZqq2oI3JeSuN8MPIC2RLVaoEAxKS0nqE6kii9Ewpq8f9gNPM6git1Y8f0vN/QLFw=="
+  },
+  {
+    "name": "@supabase/ssr",
+    "version": "0.12.7",
+    "engines": null,
+    "repository": {
+      "url": "git+https://github.com/supabase/ssr.git",
+      "type": "git"
+    },
+    "scripts": {
+      "docs": "typedoc",
+      "test": "vitest",
+      "build": "tsc && tsc -p tsconfig.main.json",
+      "format": "prettier --write ."
+    },
+    "integrity": "sha512-wiBtEie1KkRJi9RrZWY3R2imRhX1JY7qMyUCH2z9AUk15gQebNEplM+urbCKamdxaTJLXUU6LlpkJsaxhojCEg=="
+  },
+  {
+    "name": "@playwright/test",
+    "version": "1.64.1",
+    "engines": {
+      "node": ">=20"
+    },
+    "repository": {
+      "url": "git+https://github.com/microsoft/playwright.git",
+      "type": "git"
+    },
+    "scripts": {},
+    "integrity": "sha512-IaYGml/nSOiZWROfPtuIL7neuu9qDOZ3TNvNljUIrhDMxiGTgPjzj/g9p9RxpS2tSepPDRY+UwAaEeiKtUvIAg=="
+  },
+  {
+    "name": "@axe-core/playwright",
+    "version": "4.14.0",
+    "engines": {
+      "node": ">=22.12.0"
+    },
+    "repository": {
+      "url": "git+https://github.com/dequelabs/axe-core-npm.git",
+      "type": "git"
+    },
+    "scripts": {
+      "test": "mocha --timeout 60000 -r ts-node/register 'test/**.spec.ts'",
+      "build": "tsup src/index.ts --dts --format esm,cjs",
+      "prepare": "pnpm exec playwright install && pnpm run build",
+      "test:ts": "tsc --ignoreConfig test/tsTest.ts --noEmit --skipLibCheck --esModuleInterop",
+      "coverage": "nyc pnpm run test",
+      "prebuild": "rimraf dist",
+      "test:esm": "node test/esmTest.mjs",
+      "pack:lint": "pnpm pack --config.ignore-scripts=true --out ../../node_modules/.cache/package-lint/playwright.tgz",
+      "lint:types": "pnpm run pack:lint && attw ../../node_modules/.cache/package-lint/playwright.tgz",
+      "test:export": "pnpm run test:esm && pnpm run test:commonjs && pnpm run test:ts",
+      "lint:package": "pnpm run pack:lint && publint --strict ../../node_modules/.cache/package-lint/playwright.tgz",
+      "test:commonjs": "node test/commonjsTest.js"
+    },
+    "integrity": "sha512-SGUhG5PIHd2eMdpgBF2PyQLOhX+qyDR2PT4cmoS4Qk2ak+jX/rrSvst9l0PGv5WTHolKpUMvVmoHpr4cZgf1RQ=="
+  },
+  {
+    "name": "eslint",
+    "version": "10.13.0",
+    "engines": {
+      "node": "^20.19.0 || ^22.13.0 || >=24"
+    },
+    "repository": {
+      "url": "git+https://github.com/eslint/eslint.git",
+      "type": "git"
+    },
+    "scripts": {
+      "fmt": "prettier --write .",
+      "lint": "node Makefile.js lint",
+      "test": "node Makefile.js test",
+      "lint:fix": "node Makefile.js lint -- fix",
+      "test:cli": "mocha",
+      "fmt:check": "prettier --check .",
+      "test:fuzz": "node Makefile.js fuzz",
+      "test:pnpm": "cd tests/pnpm && node check.js && pnpm install && pnpm exec tsc",
+      "build:site": "node Makefile.js gensite",
+      "lint:types": "attw --pack",
+      "test:types": "tsc -p tests/lib/types/tsconfig.json && npm run test:types --workspaces --if-present",
+      "lint:unused": "knip",
+      "test:emfile": "node tools/check-emfile-handling.js",
+      "build:readme": "node tools/update-readme.js",
+      "lint:docs:js": "node Makefile.js lintDocsJS",
+      "test:browser": "node Makefile.js cypress",
+      "build:webpack": "node Makefile.js webpack",
+      "test:ecosystem": "node tools/test-ecosystem/index.mjs",
+      "test:types:5.3": "npx -p typescript@5.3 -y -- tsc -p tsconfig.types-legacy.json",
+      "test:types:5.x": "npx -p typescript@5.x -y -- tsc -p tsconfig.types.json",
+      "test:types:7.x": "npx -p @typescript/native-preview@latest -y -- tsgo -p tsconfig.types.json",
+      "test:types:all": "npm run test:types && npm run test:types:5.3 && npm run test:types:5.x && npm run test:types:7.x",
+      "lint:rule-types": "node tools/update-rule-type-headers.js --check",
+      "release:publish": "node Makefile.js publishRelease",
+      "lint:fix:docs:js": "node Makefile.js lintDocsJS -- fix",
+      "test:performance": "node Makefile.js perf",
+      "build:rules-index": "node Makefile.js generateRuleIndexPage",
+      "release:generate:rc": "node Makefile.js generatePrerelease -- rc",
+      "release:generate:beta": "node Makefile.js generatePrerelease -- beta",
+      "test:ecosystem:update": "node tools/test-ecosystem/update.mjs",
+      "release:generate:alpha": "node Makefile.js generatePrerelease -- alpha",
+      "build:docs:update-links": "node tools/fetch-docs-links.js",
+      "lint:docs:rule-examples": "node Makefile.js checkRuleExamples",
+      "release:generate:latest": "node Makefile.js generateRelease -- latest",
+      "release:generate:maintenance": "node Makefile.js generateRelease -- maintenance"
+    },
+    "integrity": "sha512-UohDjD4zSzEwhf58M3O7vc/ycc8O1I7dNlhtD0WxE8Px8EHNJKtUwzBqrzeGhisRuv2ag4sAYswszCJRgKXYUg=="
+  },
+  {
+    "name": "eslint-config-next",
+    "version": "16.4.2",
+    "engines": null,
+    "repository": {
+      "url": "git+https://github.com/vercel/next.js.git",
+      "directory": "packages/eslint-config-next"
+    },
+    "scripts": {
+      "dev": "pnpm build",
+      "build": "swc -d dist src && pnpm types",
+      "types": "tsc --skipLibCheck --declaration --emitDeclarationOnly --esModuleInterop --declarationDir dist --rootDir src",
+      "pack-for-isolated-tests": "pnpm pack --out ./packed.tgz"
+    },
+    "integrity": "sha512-P33vjcETMXc+qBjpF77TeJHZLzk6cPcTy8KjpxLucYB3mCIFIORMcZ+cBXcAiIYjE5RM7jyknEEOwMNdnx/ADQ=="
+  },
+  {
+    "name": "tsx",
+    "version": "4.23.15",
+    "engines": {
+      "node": ">=18.0.0"
+    },
+    "repository": {
+      "url": "git+https://github.com/privatenumber/tsx.git",
+      "type": "git"
+    },
+    "scripts": null,
+    "integrity": "sha512-Yiex1Ovn8z2xPpOWckIiysV1SSyRMY9BkLF++q0yKiDxCqRhosKfMg3janKkiLBwZ5c/YryloKwGZcrEmtwxKw=="
+  },
+  {
+    "name": "dotenv",
+    "version": "18.0.8",
+    "engines": {
+      "node": ">=12"
+    },
+    "repository": {
+      "url": "git://github.com/motdotla/dotenv.git",
+      "type": "git"
+    },
+    "scripts": {
+      "lint": "standard",
+      "test": "npm run build && npm run lint && npm run dts-check && tap run tests/**/*.js --allow-empty-coverage --disable-coverage --timeout=60000",
+      "build": "node scripts/build.js",
+      "prepack": "npm run build",
+      "release": "standard-version",
+      "dts-check": "tsc --project tests/types/tsconfig.json",
+      "test:perf": "node scripts/parse-perf.js",
+      "prerelease": "npm test",
+      "prepublishOnly": "npm pack --dry-run"
+    },
+    "integrity": "sha512-2KDeoFoK/zRtcnbunCDlLG5VWVMcyqeQc6iK65o231nfNAcuGrKoqUQfJFUtBI+QlShk5HKIHxwebBtUl3rEfA=="
+  },
+  {
+    "name": "three",
+    "version": "0.186.1",
+    "engines": null,
+    "repository": {
+      "url": "git+https://github.com/mrdoob/three.js.git",
+      "type": "git"
+    },
+    "scripts": {
+      "dev": "node utils/build/dev.js && node utils/server.js -p 8080",
+      "lint": "npm run lint-core",
+      "test": "npm run lint && npm run test-unit && npm run test-unit-addons",
+      "build": "rollup -c utils/build/rollup.config.js",
+      "start": "npm run dev",
+      "preview": "node utils/build/preview.js",
+      "lint-fix": "npm run lint-core -- --fix && npm run lint-addons -- --fix && npm run lint-examples -- --fix && npm run lint-editor -- --fix && npm run lint-manual -- --fix && npm run lint-test -- --fix && npm run lint-utils -- --fix && npm run lint-tsl -- --fix",
+      "lint-tsl": "eslint tsl",
+      "test-e2e": "node test/e2e/puppeteer.js",
+      "lint-core": "eslint src",
+      "lint-test": "eslint test",
+      "test-unit": "node test/unit/puppeteer.unit.js --testPage=UnitTests.html --mode=headless",
+      "build-docs": "jsdoc -c utils/docs/jsdoc.config.json && npm run build-llms",
+      "build-llms": "node utils/llms/build.js",
+      "lint-utils": "eslint utils",
+      "lint-addons": "eslint examples/jsm",
+      "lint-editor": "eslint editor",
+      "lint-manual": "eslint manual",
+      "test-e2e-cov": "node test/e2e/check-coverage.js",
+      "lint-examples": "eslint examples",
+      "test-treeshake": "rollup -c test/rollup.treeshake.config.js",
+      "make-screenshot": "node test/e2e/puppeteer.js --make",
+      "test-e2e-webgpu": "node test/e2e/puppeteer.js --webgpu",
+      "test-unit-addons": "node test/unit/puppeteer.unit.js --testPage=UnitTestsAddons.html --mode=headless",
+      "test-unit-headful": "node test/unit/puppeteer.unit.js --testPage=UnitTests.html --mode=headful",
+      "test-unit-addons-headful": "node test/unit/puppeteer.unit.js --testPage=UnitTestsAddons.html --mode=headful"
+    },
+    "integrity": "sha512-blFeqb49wRCSGUGj7gtpfnSGHy2lwDk94RhUmS1c/hTby70kvChbWpkJ4Pm1390LqzzvTmzgXKHPEafJwCb8jA=="
+  },
+  {
+    "name": "@types/three",
+    "version": "0.186.0",
+    "engines": null,
+    "repository": {
+      "url": "https://github.com/DefinitelyTyped/DefinitelyTyped.git",
+      "type": "git",
+      "directory": "types/three"
+    },
+    "scripts": {},
+    "integrity": "sha512-mxYSBpDC+D0pLfSP6sW4WZTcT+nrtmZcimMqnVmy36Hte3XpeYSrvgg4TRdaM1GemGog1AWzI5qL2VoIfMXbJQ=="
+  }
+]

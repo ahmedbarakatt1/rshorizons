@@ -1,0 +1,20 @@
+import {randomUUID,randomBytes,createHash} from 'node:crypto';
+import {mkdir,writeFile,cp} from 'node:fs/promises';
+import {resolve} from 'node:path';
+import {localStorage} from '../src/integrations/storage/index.ts';
+if(['production','staging'].includes(process.env.APP_ENV))throw new Error('Only isolated local storage rehearsal is authorized.');
+const base=resolve('.local/rehearsals','storage-'+Date.now());
+const source=localStorage(resolve(base,'source')),restored=localStorage(resolve(base,'restored'));
+const key=randomUUID()+'/source.bin',bytes=randomBytes(16384);
+const expected=createHash('sha256').update(bytes).digest('hex');
+await source.put(key,bytes,'application/octet-stream');
+await mkdir(resolve(base,'backup'),{recursive:true});
+await cp(resolve(base,'source'),resolve(base,'backup'),{recursive:true,errorOnExist:true});
+await cp(resolve(base,'backup'),resolve(base,'restored'),{recursive:true,errorOnExist:true});
+const actual=createHash('sha256').update(await restored.read(key)).digest('hex');
+if(expected!==actual)throw new Error('STORAGE_RESTORE_HASH_MISMATCH');
+let traversalDenied=false;try{await restored.read('../source.bin');}catch{traversalDenied=true;}
+if(!traversalDenied)throw new Error('STORAGE_TRAVERSAL_NOT_DENIED');
+await mkdir('docs/evidence',{recursive:true});
+await writeFile('docs/evidence/storage-restore.json',JSON.stringify({createdAt:new Date().toISOString(),mode:'local-isolated',bytes:bytes.length,sha256:expected,restoredSha256:actual,traversalDenied,productionStorageRestore:'BLOCKED_EXTERNAL',note:'Synthetic object exercised through actual localStorage adapter; no real guest objects read, copied, or published.'},null,2));
+console.log('Local object backup/restore hash and path isolation verified. Hosted storage restoration still requires designated staging account.');

@@ -1,0 +1,25 @@
+{
+  "name": "@impeccable/cli-windows-x64",
+  "version": "0.1.16",
+  "repository": {
+    "url": "git+https://github.com/pbakaus/impeccable.git",
+    "type": "git"
+  },
+  "dist": {
+    "shasum": "10d6303d95565f627cff789444e2d09d7898e7cf",
+    "tarball": "https://registry.npmjs.org/@impeccable/cli-windows-x64/-/cli-windows-x64-0.1.16.tgz",
+    "fileCount": 3,
+    "integrity": "sha512-i/VwZh3tMgnX6GIB+XP33WUBydSZXK+OVR8I/PXp8cqo38KIENYvecqB/WqqpKudh23ejptdvsL9nVBTJzNWXg==",
+    "signatures": [
+      {
+        "sig": "MEUCIQC258JXOegIzhyB2h7tdEiDxoROwawDGar+3nUnjn/QYAIgCpFhSRQKRLEQTeEMNvTU4yvj+XsxSaPGQHCMv3Ryxts=",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+      },
+      {
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+        "sig": "MEYCIQDK7zhf07Hik/OFZcfefLh9/hhq8nmTyiodb+mc1rKu+AIhAL2gIblOjaTGv9fDdnMQEhEFe4TO0IFT0v8CeL9CLL+E"
+      }
+    ],
+    "unpackedSize": 19808210
+  }
+}

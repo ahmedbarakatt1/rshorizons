@@ -1,0 +1,25 @@
+
+ RUN  v5.0.5 D:/Tourism
+
+ ❯ tests/integration/reminders.test.ts (0 test)
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/integration/reminders.test.ts [ tests/integration/reminders.test.ts ]
+Error: Cannot find package '@/modules/jobs/reminders' imported from D:/Tourism/tests/integration/reminders.test.ts
+ ❯ tests/integration/reminders.test.ts:3:1
+      1| import {test,expect,beforeAll,afterAll} from "vitest";
+      2| import {admin,makeActor,makeDeparture,makeBooking,tourItem} from "../d…
+      3| import {enqueueReminders} from "@/modules/jobs/reminders";
+       | ^
+      4| const db=admin();
+      5| beforeAll(()=>db.connect());afterAll(()=>db.end());
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  no tests
+   Start at  19:45:15
+   Duration  474ms (worker 97%, environment 3%)
+

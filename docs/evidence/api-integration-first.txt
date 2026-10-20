@@ -1,0 +1,48 @@
+
+ RUN  v5.0.5 D:/Tourism
+
+ ❯ tests/integration/api.test.ts (5 tests | 2 failed) 508ms
+   × guest_request_staff_approval_real_runtime_boundary 29ms
+   × guest_access_idor_and_csrf_are_rejected 2ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/integration/api.test.ts > guest_request_staff_approval_real_runtime_boundary
+AssertionError: {"error":{"code":"VALIDATION_ERROR","message":"Please check the highlighted fields.","fields":{"items.0.variantId":"Invalid UUID"}},"meta":{"requestId":"021ddba8-79f3-4584-8ff0-d019e7e0306a"}}: expected 400 to be 201 // Object.is equality
+
+- Expected
++ Received
+
+- 201
++ 400
+
+ ❯ tests/integration/api.test.ts:26:62
+     24|   const departure=await makeDeparture(db,4),item=await tourItem(db,dep…
+     25|   const quoted=await call("quotes","POST",{locale:"en",paymentPolicy:"…
+     26|   expect(quoted.response.status,JSON.stringify(quoted.json)).toBe(201);
+       |                                                              ^
+     27|   bindingCookie=quoted.response.headers.getSetCookie()[0].split(";")[0…
+     28|   expect(quoted.json.data.totalAmountMinor).toBe("100000");
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/integration/api.test.ts > guest_access_idor_and_csrf_are_rejected
+AssertionError: expected 401 to be 404 // Object.is equality
+
+- Expected
++ Received
+
+- 404
++ 401
+
+ ❯ tests/integration/api.test.ts:46:110
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 3 passed (5)
+   Start at  19:14:11
+   Duration  1.56s (import 44%, tests 37%, transform 18%, worker 1%)
+

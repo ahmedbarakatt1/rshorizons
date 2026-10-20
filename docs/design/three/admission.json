@@ -1,0 +1,14 @@
+{
+  "admitted": true,
+  "reasons": [],
+  "provenance": {
+    "viewpoint": "reference",
+    "sourcePath": "D:\\Tourism\\.local\\private\\three\\camera-reference.png",
+    "width": 1536,
+    "height": 1024,
+    "foregroundCoverage": 0.5255,
+    "largestComponentFraction": 1.0,
+    "pHash": 18109232163664734864,
+    "duplicateOfHash": null
+  }
+}

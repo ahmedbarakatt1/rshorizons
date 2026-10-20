@@ -1,0 +1,55 @@
+{
+  "version": "1.7.4",
+  "name": "skills",
+  "repository": {
+    "url": "git+https://github.com/vercel-labs/skills.git",
+    "type": "git"
+  },
+  "engines": {
+    "node": ">=22.20.0"
+  },
+  "scripts": {
+    "dev": "node src/cli.ts",
+    "test": "vitest",
+    "build": "node scripts/generate-licenses.ts && obuild",
+    "format": "prettier --write \"src/**/*.ts\" \"scripts/**/*.ts\"",
+    "prepare": "husky",
+    "exec:test": "node scripts/execute-tests.ts",
+    "type-check": "tsc --noEmit",
+    "format:check": "prettier --check \"src/**/*.ts\" \"scripts/**/*.ts\"",
+    "prepublishOnly": "npm run build",
+    "publish:snapshot": "npm version prerelease --preid=snapshot --no-git-tag-version && npm publish --tag snapshot",
+    "generate-licenses": "node scripts/generate-licenses.ts"
+  },
+  "bin": {
+    "skills": "bin/cli.mjs",
+    "add-skill": "bin/cli.mjs"
+  },
+  "dist": {
+    "shasum": "f7ca98f41a7ac629f9fc8c5c4f05095a471eca06",
+    "tarball": "https://registry.npmjs.org/skills/-/skills-1.7.4.tgz",
+    "fileCount": 23,
+    "integrity": "sha512-lHZJksE8UImNAr+LL6unqq7jERjdFw5EJasm17srycwL7rXHGdCmgu1L1ttLxUO9i3rdH+QQig+px0icHqLmRw==",
+    "signatures": [
+      {
+        "sig": "MEUCIQCYfrPY2QMIS9PMiX1irkL7R5HxsKVDord3ZMhqauA0KgIgLsj4YjYZKT1U1O28URBOWcKSp9udhWSAQVd2/iqukPA=",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+      },
+      {
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+        "sig": "MEUCIQCAFHtB/x6KwzBEe/43Ypo7sobptWD9o1Lqd+WI18Y5eAIgKN0pLsY7K65Gxv0zjfGuWhcZHIYbNxKZV8ByDFGpb0Y="
+      }
+    ],
+    "attestations": {
+      "url": "https://registry.npmjs.org/-/npm/v1/attestations/skills@1.7.4",
+      "provenance": {
+        "predicateType": "https://slsa.dev/provenance/v1"
+      }
+    },
+    "unpackedSize": 607343
+  },
+  "maintainers": [
+    "rauchg <rauchg@gmail.com>",
+    "quuu <qual1337@gmail.com>"
+  ]
+}

@@ -1,0 +1,2 @@
+→ install skill img2threejs/img2threejs @ v2.0.0 into: codex
+(dry-run: no downloads or filesystem changes; ref availability and downgrade checks require a real run)

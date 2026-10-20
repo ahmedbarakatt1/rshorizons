@@ -1,0 +1,4 @@
+✅ Workspace initialized at `D:\Tourism`.
+✅ Skill installed to `.agents\skills\playwright-cli`.
+✅ Found msedge, will use it as the default browser.
+✅ Created default config for msedge at .playwright\cli.config.json.

@@ -1,0 +1,9 @@
+npm warn using --force Recommended protections disabled.
+npm warn ERESOLVE overriding peer dependency
+npm warn ERESOLVE overriding peer dependency
+npm warn ERESOLVE overriding peer dependency
+npm warn ERESOLVE overriding peer dependency
+
+added 10 packages, removed 192 packages, changed 16 packages, and audited 272 packages in 8s
+
+found 0 vulnerabilities

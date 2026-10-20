@@ -1,0 +1,21 @@
+
+Running 9 tests using 1 worker
+
+(node:33596) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 [chromium] › tests\e2e\accessibility.spec.ts:3:1 › @a11y responsive reading, image loading and keyboard navigation (2.9s)
+  ok 2 [chromium] › tests\e2e\accessibility.spec.ts:33:1 › @a11y private fragments require deliberate redemption and leave the address bar (442ms)
+  ok 3 [chromium] › tests\e2e\release.spec.ts:5:1 › @a11y release pages have no automated WCAG A/AA violations and private responses reject caching (6.5s)
+(node:30800) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 4 [firefox] › tests\e2e\accessibility.spec.ts:3:1 › @a11y responsive reading, image loading and keyboard navigation (7.0s)
+  ok 5 [firefox] › tests\e2e\accessibility.spec.ts:33:1 › @a11y private fragments require deliberate redemption and leave the address bar (766ms)
+  -  6 [firefox] › tests\e2e\release.spec.ts:5:1 › @a11y release pages have no automated WCAG A/AA violations and private responses reject caching
+(node:17784) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 7 [webkit] › tests\e2e\accessibility.spec.ts:3:1 › @a11y responsive reading, image loading and keyboard navigation (9.4s)
+  ok 8 [webkit] › tests\e2e\accessibility.spec.ts:33:1 › @a11y private fragments require deliberate redemption and leave the address bar (1.3s)
+  -  9 [webkit] › tests\e2e\release.spec.ts:5:1 › @a11y release pages have no automated WCAG A/AA violations and private responses reject caching
+
+  2 skipped
+  7 passed (34.2s)
