@@ -17,7 +17,7 @@ Updated 2026-10-20, Africa/Cairo. The full 1,415-line production handoff was rea
 
 ## Current application and verification
 
-- Root `D:\Tourism`, Git branch `codex/tourism-production`. No remote has been selected or pushed. No unrelated account, DNS or host database was modified.
+- Root `D:\Tourism`, Git branch `codex/tourism-production`, implementation commit `eec1d27`. Final source/artifact scan covered 938 source files, 569 build files and 17 deployment traces with zero findings. No remote has been selected or pushed. No unrelated account, DNS or host database was modified.
 - Local PostgreSQL17.11 uses loopback55432 and ignored `.local/postgres`; the existing host PostgreSQL17.2 is untouched.
 - Next.js16.4.2, React19.3.1, Node22.22.2, npm10.9.7, TypeScript6.0.3 and exact root lockfile.
 - Release preview: `http://127.0.0.1:3002/en`, run with `node scripts/start-local-showcase.mjs`. It uses the separate synthetic showcase recorded in `.local/showcase.json`; the domain test database is preserved.
@@ -33,8 +33,7 @@ Updated 2026-10-20, Africa/Cairo. The full 1,415-line production handoff was rea
 ## Continuation
 
 1. Read `docs/RELEASE_REPORT.md` for exact commands, outcomes, limitations and private browser evidence paths. Preserve the local implementation; do not recreate completed modules.
-2. Finish the final source/artifact scan and local source commit if the report does not yet record a commit. Exclude originals, `.env.local`, profiles, private evidence, binaries and database files.
-3. The next external task is to verify owner-designated repository/hosting/domain/Supabase identities from E01–E04 in `docs/BLOCKERS.md`, then configure separate staging credentials through secret storage. No unrelated accounts may be reused.
-4. With the remaining E05–E14 inputs, verify real provider sandboxes, hosted recovery, content/translation approval, staff MFA onboarding and UAT. Follow the deployment runbook and verify the actual production URL before marking M7 complete.
+2. The next task is to verify owner-designated repository/hosting/domain/Supabase identities from E01–E04 in `docs/BLOCKERS.md`, then configure separate staging credentials through secret storage. No unrelated accounts may be reused. These inputs are currently absent.
+3. With the remaining E05–E14 inputs, verify real provider sandboxes, hosted recovery, content/translation approval, staff MFA onboarding and UAT. Follow the deployment runbook and verify the actual production URL before marking M7 complete.
 
-All previous parallel workers have stopped. Root is integrating and verifying the saved implementation. Do not recreate completed modules or infer that an earlier scaffold-only status still applies.
+All previous parallel workers have stopped. Root completed integration and recorded the local verification. Preserve originals, local secrets, profiles, private evidence and database files outside Git/deployment. Do not infer that an earlier scaffold-only status still applies.

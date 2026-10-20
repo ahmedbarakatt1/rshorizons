@@ -4,7 +4,7 @@ Recorded 2026-10-20, Africa/Cairo. **Local release candidate verified. Hosted st
 
 ## Source and running application
 
-- Workspace: `D:\Tourism`; branch: `codex/tourism-production`. Local source commit is recorded below after the final artifact scan.
+- Workspace: `D:\Tourism`; branch: `codex/tourism-production`; implementation commit: **`eec1d27`** (`Build Red Sea Horizons reservation and operations platform`). A subsequent documentation-only commit records this identity and final continuation state.
 - No remote repository has been designated, created or pushed.
 - Actual local release URL: `http://127.0.0.1:3002/en`. Browser tests and performance measurements exercised this built application.
 - Preview startup: `node scripts/start-local-showcase.mjs`. It uses a separate synthetic showcase database. Current connection metadata and the one-use local staff grant stay in ignored `.local/` files.
@@ -47,7 +47,7 @@ See [requirements traceability](REQUIREMENTS_TRACEABILITY.md), [OpenAPI](openapi
 | Coordinated load | 32 independent connections requested 16 seats: 16 approvals, 16 conflicts, exactly 16 allocated | [local-load.json](evidence/local-load.json) |
 | Performance lab | Four route/viewport samples; LCP 1.072–2.392 s, CLS 0; no Three.js or external origins | [performance report](PERFORMANCE.md), [raw aggregate](evidence/performance-lab.json) |
 | Recorded route budgets | All four samples meet payload/layout/dependency budgets | [static-final.txt](evidence/static-final.txt) |
-| Source/artifact scan | No configured credential matches, private key material, private source paths or private/development deployment traces found | [source-artifact-scan.json](evidence/source-artifact-scan.json); limited scan, not penetration testing |
+| Source/artifact scan | 938 source files, 569 build files and 17 deployment traces inspected; zero findings | [source-artifact-scan.json](evidence/source-artifact-scan.json); limited scan, not penetration testing |
 | Production/release gates | Correctly rejected local demo mode and missing designated environments/secrets/approvals | [production-gate-final.txt](evidence/production-gate-final.txt), [release-gate-final.txt](evidence/release-gate-final.txt) |
 
 The browser matrix runs public locale, Arabic keyboard, request/access, responsive and apartment/transfer quote journeys in Chromium, Firefox and WebKit. Five specialized service submissions, the staff mutation scenario and axe audit run in Chromium; their Firefox/WebKit duplicates are explicitly skipped. No critical financial, authorization or concurrency domain tests are skipped. Accessibility results are automated checks, not a full WCAG or screen-reader certification.
