@@ -34,3 +34,7 @@ No confirmed business requirement is removed by these implementation choices.
 - Public marketing photography uses preserved owner originals through responsive, metadata-stripped local derivatives. Local authorization does not fabricate production subject/guardian consent.
 - Final browser verification uses a fresh synthetic database separate from repeated domain tests. The test database and evidence remain available; neither was reset.
 - No provider send, payment charge, domain operation, external project creation or production deployment has been performed.
+
+## Owner-requested imagery refinement
+
+On 2026-10-20 the owner requested generated or web images for parts without photographs. Six built-in image generations replace the scenery/apartment placeholders with responsive local AVIF/WebP assets. Actual previous-trip media remains untouched. Visible localized illustration labels distinguish generated apartment/vehicle/scenery concepts from the agency's real inventory. Prompts, hashes and asset paths are recorded in `docs/design/editorial-imagery.md`.

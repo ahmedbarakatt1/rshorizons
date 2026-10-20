@@ -147,5 +147,6 @@
   "securityDeposit": "Kaution",
   "pickupFee": "Abholgebühr",
   "refundable": "Gemäß den genannten Bedingungen erstattbar",
-  "meetingPoint": "Treffen am Treffpunkt"
+  "meetingPoint": "Treffen am Treffpunkt",
+  "illustrativeImage": "Beispielbild"
 }

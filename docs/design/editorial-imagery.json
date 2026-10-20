@@ -1,0 +1,43 @@
+{
+  "date": "2026-10-20",
+  "tool": "Built-in image_gen; no external stock images",
+  "purpose": "Owner-requested illustrative imagery replacing catalog scenery placeholders. Not documentary imagery of actual agency assets or past trips.",
+  "images": [
+    {
+      "key": "desert",
+      "sourceArtifact": "exec-c7500ecd-a675-446d-a294-2d7d7581fa11.png",
+      "prompt": "Use case: photorealistic-natural. Create a single landscape 3:2 editorial travel photograph for Red Sea Horizons, an Egyptian Red Sea tourism website. This is illustrative marketing imagery, not documentation of a real supplier. Natural light, realistic proportions and textures, restrained warm sand and turquoise palette, believable travel photography with gentle film texture, no heavy HDR. Full bleed image only: no text, letters, logos, watermark, border, collage or interface. Keep main subjects within the central 70% so the scene also crops well to 4:3. Eastern Desert of Egypt near the Red Sea, a quiet ochre desert valley with rugged layered limestone and granite hills, soft wind-shaped sand in the foreground, one tiny unoccupied off-road vehicle far in the middle distance giving scale. Late afternoon side light, open pale blue sky, calm adventurous mood. Eye-level wide view; realistic geography, not enormous Sahara dunes.",
+      "asset": "public/images/editorial/desert-v1-{480,960,1440}.{avif,webp}"
+    },
+    {
+      "key": "apartment",
+      "sourceArtifact": "exec-5dc72b0a-66e7-40f9-87ba-8ed50e0fd887.png",
+      "prompt": "Use case: photorealistic-natural. Create a single landscape 3:2 editorial travel photograph for Red Sea Horizons, an Egyptian Red Sea tourism website. This is illustrative marketing imagery, not documentation of a real supplier. Natural light, realistic proportions and textures, restrained warm sand and turquoise palette, believable travel photography with gentle film texture, no heavy HDR. Full bleed image only: no text, letters, logos, watermark, border, collage or interface. Keep main subjects within the central 70% so the scene also crops well to 4:3. A modest, tasteful coastal holiday apartment living room inspired by Egypt's Red Sea coast. Sunlit ivory plaster walls, natural linen sofa, woven rug, small warm wood coffee table, turquoise ceramic details, sheer curtains beside wide open balcony doors with just a glimpse of calm blue sea. Realistic lived-in materials, no people. Interior editorial photography, 28mm lens, straight architectural lines, soft late-morning light. Comfortable and attainable, no extravagant resort amenities.",
+      "asset": "public/images/editorial/apartment-v1-{480,960,1440}.{avif,webp}"
+    },
+    {
+      "key": "buggy",
+      "sourceArtifact": "exec-2c993c5c-4d8d-45ad-b721-5b8a824963ed.png",
+      "prompt": "Use case: photorealistic-natural. Create a single landscape 3:2 editorial travel photograph for Red Sea Horizons, an Egyptian Red Sea tourism website. This is illustrative marketing imagery, not documentation of a real supplier. Natural light, realistic proportions and textures, restrained warm sand and turquoise palette, believable travel photography with gentle film texture, no heavy HDR. Full bleed image only: no text, letters, logos, watermark, border, collage or interface. Keep main subjects within the central 70% so the scene also crops well to 4:3. A single unbranded two-seat off-road buggy parked on a sandy track in the rugged Eastern Desert beside Egypt's Red Sea. Three-quarter view, buggy in lower middle of the frame, sturdy realistic roll cage, black and muted sand bodywork, convincing four wheels. Low rocky mountains and a faint sliver of turquoise coast in the distance. Warm late afternoon light, no people, no racing, no flying sand.",
+      "asset": "public/images/editorial/buggy-v1-{480,960,1440}.{avif,webp}"
+    },
+    {
+      "key": "boat",
+      "sourceArtifact": "exec-45c74f05-ec3c-45ef-9c82-fa3005bde591.png",
+      "prompt": "Use case: photorealistic-natural. Create a single landscape 3:2 editorial travel photograph for Red Sea Horizons, an Egyptian Red Sea tourism website. This is illustrative marketing imagery, not documentation of a real supplier. Natural light, realistic proportions and textures, restrained warm sand and turquoise palette, believable travel photography with gentle film texture, no heavy HDR. Full bleed image only: no text, letters, logos, watermark, border, collage or interface. Keep main subjects within the central 70% so the scene also crops well to 4:3. A modest white two-deck excursion boat at anchor in clear turquoise Red Sea water beside a low arid Egyptian coastline. Slightly elevated oblique view from another vessel, the boat in the middle third with plenty of sparkling water around it. White hull, navy sun canopy, realistic railings and rigging. Bright clean late morning light. No close-up people, no superyacht extravagance, no readable vessel names or registration text.",
+      "asset": "public/images/editorial/boat-v1-{480,960,1440}.{avif,webp}"
+    },
+    {
+      "key": "coast",
+      "sourceArtifact": "exec-2612913b-672c-405a-b014-bfd9ed80eb0d.png",
+      "prompt": "Use case: photorealistic-natural. Create a single landscape 3:2 editorial travel photograph for Red Sea Horizons, an Egyptian Red Sea tourism website. This is illustrative marketing imagery, not documentation of a real supplier. Natural light, realistic proportions and textures, restrained warm sand and turquoise palette, believable travel photography with gentle film texture, no heavy HDR. Full bleed image only: no text, letters, logos, watermark, border, collage or interface. Keep main subjects within the central 70% so the scene also crops well to 4:3. An elevated wide view of a tranquil Red Sea bay on Egypt's desert coast. Pale sand curves around luminous shallow turquoise water which deepens to blue; subtle reef patterns beneath the surface, rugged arid hills beyond. A few small palm clusters far away, no hotels, no famous landmarks, no people. Natural morning sun and clear atmosphere. A geographical mood image, not a view of a named property.",
+      "asset": "public/images/editorial/coast-v1-{480,960,1440}.{avif,webp}"
+    },
+    {
+      "key": "transfer",
+      "sourceArtifact": "exec-965d2c87-f534-40c3-a632-76c371a75261.png",
+      "prompt": "Use case: photorealistic-natural. Create a single landscape 3:2 editorial travel photograph for Red Sea Horizons, an Egyptian Red Sea tourism website. This is illustrative marketing imagery, not documentation of a real supplier. Natural light, realistic proportions and textures, restrained warm sand and turquoise palette, believable travel photography with gentle film texture, no heavy HDR. Full bleed image only: no text, letters, logos, watermark, border, collage or interface. Keep main subjects within the central 70% so the scene also crops well to 4:3. An unbranded clean white passenger minivan parked on a paved pull-off beside Egypt's Red Sea coastal road. Three-quarter side view, realistic vehicle proportions and windows, no readable license plate, no logos. Turquoise sea and tawny desert hills in the background. Bright gentle morning light, quiet reliable travel mood, no people, no luggage clutter.",
+      "asset": "public/images/editorial/transfer-v1-{480,960,1440}.{avif,webp}"
+    }
+  ]
+}

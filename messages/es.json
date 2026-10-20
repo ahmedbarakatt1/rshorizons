@@ -147,5 +147,6 @@
   "securityDeposit": "Depósito de garantía",
   "pickupFee": "Cargo de recogida",
   "refundable": "Reembolsable según las condiciones indicadas",
-  "meetingPoint": "Encuentro en el punto de reunión"
+  "meetingPoint": "Encuentro en el punto de reunión",
+  "illustrativeImage": "Imagen ilustrativa"
 }

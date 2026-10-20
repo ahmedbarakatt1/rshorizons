@@ -47,7 +47,7 @@ See [requirements traceability](REQUIREMENTS_TRACEABILITY.md), [OpenAPI](openapi
 | Coordinated load | 32 independent connections requested 16 seats: 16 approvals, 16 conflicts, exactly 16 allocated | [local-load.json](evidence/local-load.json) |
 | Performance lab | Four route/viewport samples; LCP 1.072–2.392 s, CLS 0; no Three.js or external origins | [performance report](PERFORMANCE.md), [raw aggregate](evidence/performance-lab.json) |
 | Recorded route budgets | All four samples meet payload/layout/dependency budgets | [static-final.txt](evidence/static-final.txt) |
-| Source/artifact scan | 938 source files, 569 build files and 17 deployment traces inspected; zero findings | [source-artifact-scan.json](evidence/source-artifact-scan.json); limited scan, not penetration testing |
+| Source/artifact scan | Zero findings; latest scan after imagery update covers 985 source files, 567 build files and 17 deployment traces | [source-artifact-scan.json](evidence/source-artifact-scan.json); limited scan, not penetration testing |
 | Production/release gates | Correctly rejected local demo mode and missing designated environments/secrets/approvals | [production-gate-final.txt](evidence/production-gate-final.txt), [release-gate-final.txt](evidence/release-gate-final.txt) |
 
 The browser matrix runs public locale, Arabic keyboard, request/access, responsive and apartment/transfer quote journeys in Chromium, Firefox and WebKit. Five specialized service submissions, the staff mutation scenario and axe audit run in Chromium; their Firefox/WebKit duplicates are explicitly skipped. No critical financial, authorization or concurrency domain tests are skipped. Accessibility results are automated checks, not a full WCAG or screen-reader certification.
@@ -81,3 +81,13 @@ All E01–E14 in [BLOCKERS.md](BLOCKERS.md) remain unverified. The exact next ac
 The owner confirmed the working brand and local use of previous-trip media. This does not establish legal identity, production publication consent or approved operating claims.
 
 After those inputs arrive, verify account/project/domain identities, configure secret storage, deploy and test staging, rehearse hosted DB and object recovery, complete UAT, then execute [deployment](runbooks/deployment.md) with [rollback](runbooks/rollback.md). Record the actual production URL, commit, callbacks, cron/alerts and authorized end-to-end live evidence here. Until then, M7 remains uncompleted.
+
+## Subsequent owner-requested imagery update — 2026-10-20
+
+Six generated editorial images now fill the desert, buggy, boat, transfer, coastline and apartment placeholders. Owner trip imagery and the previous-trip gallery remain intact. Visible localized illustration labels distinguish these concepts from actual inventory. Files, prompts, provenance and regeneration are documented in [editorial-imagery.md](design/editorial-imagery.md).
+
+Verification for this scoped change: 6 targeted unit/localization tests passed; 8 focused browser/accessibility tests passed with 4 deliberate engine-specific duplicate skips; lint, TypeScript and production build passed. Locale parity now covers **150 keys in all ten languages**. The browser run checks all six subjects, responsive source selection, Arabic/mobile layout, existing owner-photo references and no generated images in the previous-trip gallery. These targeted results do not imply a new run of the entire earlier domain suite.
+
+The final image pass meets the unchanged route budgets: homepage image payload 343,008 B desktop / 93,793 B mobile, CLS 0, with no third-party image host or Three.js. [Updated performance evidence](PERFORMANCE.md). Safe logs: [unit](evidence/imagery-unit-green.txt), [browser](evidence/imagery-browser-green.txt), [build](evidence/imagery-build.txt).
+
+New private screenshots were inspected: `.local/evidence/ui/editorial-home-desktop.png`, `editorial-experiences.png`, `editorial-apartments-desktop.png`, and `editorial-apartments-arabic-mobile.png`. The owner's open local preview was refreshed and the new imagery visually confirmed.

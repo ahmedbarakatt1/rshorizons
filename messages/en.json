@@ -147,5 +147,6 @@
   "securityDeposit": "Security deposit",
   "pickupFee": "Pickup fee",
   "refundable": "Refundable under the stated conditions",
-  "meetingPoint": "Meet at the meeting point"
+  "meetingPoint": "Meet at the meeting point",
+  "illustrativeImage": "Illustrative image"
 }

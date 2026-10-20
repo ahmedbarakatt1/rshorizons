@@ -1,0 +1,293 @@
+{
+  "generatedWith": "built-in image_gen",
+  "images": [
+    {
+      "key": "desert",
+      "originalSha256": "2e54a7f5fa2f02549a370263497b5d9edbe766e314cf364d62b2866f1a945626",
+      "variants": [
+        {
+          "path": "public/images/editorial/desert-v1-480.webp",
+          "width": 480,
+          "format": "webp",
+          "bytes": 26582,
+          "sha256": "640b37a8a77f94a609dbfc0ac0e0fca666a19346d98205307cb9534ea03222f2"
+        },
+        {
+          "path": "public/images/editorial/desert-v1-480.avif",
+          "width": 480,
+          "format": "avif",
+          "bytes": 8603,
+          "sha256": "7ac11016ae6c1951e8f57de0790612dd0ffb224efaf4c8386eccbda21fde38cf"
+        },
+        {
+          "path": "public/images/editorial/desert-v1-960.webp",
+          "width": 960,
+          "format": "webp",
+          "bytes": 97046,
+          "sha256": "3e53f6eb28d8ef043b24cff0144dd0cd3ce01c3895cfb531f9e5b14d79e3fd19"
+        },
+        {
+          "path": "public/images/editorial/desert-v1-960.avif",
+          "width": 960,
+          "format": "avif",
+          "bytes": 29134,
+          "sha256": "a0da0ae60cd1ca1356b07b5d1ff600c097dcb9f074288862bc34e9eae82e4b20"
+        },
+        {
+          "path": "public/images/editorial/desert-v1-1440.webp",
+          "width": 1440,
+          "format": "webp",
+          "bytes": 190798,
+          "sha256": "9598ab760c727be89e359a58e2de5ff4dd89f410a810ae55f4986ce9a9d2b7e0"
+        },
+        {
+          "path": "public/images/editorial/desert-v1-1440.avif",
+          "width": 1440,
+          "format": "avif",
+          "bytes": 60659,
+          "sha256": "9fffbfcde2a4ecfe27840d0bce31a55c3ff6df88bbce1cd4bbc46e3749e3adf9"
+        }
+      ]
+    },
+    {
+      "key": "apartment",
+      "originalSha256": "3050cc6ec6b53369483b5c010177c3384ffaa35ee9aeccfe48d81f9dffa3936a",
+      "variants": [
+        {
+          "path": "public/images/editorial/apartment-v1-480.webp",
+          "width": 480,
+          "format": "webp",
+          "bytes": 23980,
+          "sha256": "0a05bfb5dc64fc8d9bc319ff06e670a5e8bdde4572b4e6d04e501b609b6ac117"
+        },
+        {
+          "path": "public/images/editorial/apartment-v1-480.avif",
+          "width": 480,
+          "format": "avif",
+          "bytes": 8184,
+          "sha256": "866bd923b981b9081cd97a7a9c0bfbcf453c9a9e1237cf6007c5df78cdac2600"
+        },
+        {
+          "path": "public/images/editorial/apartment-v1-960.webp",
+          "width": 960,
+          "format": "webp",
+          "bytes": 78654,
+          "sha256": "0aaa536e58d3e78bc6cb45c0ae526ddfc23f47ae1fd67faa1e5baa7e4ea1e55e"
+        },
+        {
+          "path": "public/images/editorial/apartment-v1-960.avif",
+          "width": 960,
+          "format": "avif",
+          "bytes": 25395,
+          "sha256": "83dff9f19f6d65f49ffe531e3e6ac97deeab3819dddba137467b8a05c4e950fc"
+        },
+        {
+          "path": "public/images/editorial/apartment-v1-1440.webp",
+          "width": 1440,
+          "format": "webp",
+          "bytes": 149282,
+          "sha256": "6effaaba1f95dbca7a26ec23af68dfd07223614e6d6df6fdc46fb0577e165497"
+        },
+        {
+          "path": "public/images/editorial/apartment-v1-1440.avif",
+          "width": 1440,
+          "format": "avif",
+          "bytes": 48800,
+          "sha256": "7d34683a76d4c0f65d60b8fd528013492f198af430fb4829e35a3d712d3f3160"
+        }
+      ]
+    },
+    {
+      "key": "buggy",
+      "originalSha256": "27ff6bfed06ec21eda313ca085b8771a19090ff83c64d26cb80fd0436cdab13b",
+      "variants": [
+        {
+          "path": "public/images/editorial/buggy-v1-480.webp",
+          "width": 480,
+          "format": "webp",
+          "bytes": 26998,
+          "sha256": "63c25a4fa646a1e3ef04002b2bc55e75f6f31c2e4cddc4ccde02c1456b63f083"
+        },
+        {
+          "path": "public/images/editorial/buggy-v1-480.avif",
+          "width": 480,
+          "format": "avif",
+          "bytes": 8676,
+          "sha256": "5e4e49cde7624dc71f083eab5006a8d96cc6f861542bc4ec14cadc2baf41507c"
+        },
+        {
+          "path": "public/images/editorial/buggy-v1-960.webp",
+          "width": 960,
+          "format": "webp",
+          "bytes": 90086,
+          "sha256": "fa6c43d579722b4233782a7a316fa5e0aa4d1e28b64faecaa2947e4bedfbe793"
+        },
+        {
+          "path": "public/images/editorial/buggy-v1-960.avif",
+          "width": 960,
+          "format": "avif",
+          "bytes": 28332,
+          "sha256": "1a5c118e8edfff403d60e80fd3bf0949c14b47aaf3c5f225f2d4e4b0b2176407"
+        },
+        {
+          "path": "public/images/editorial/buggy-v1-1440.webp",
+          "width": 1440,
+          "format": "webp",
+          "bytes": 167436,
+          "sha256": "f24856ba6b4de6e6e617e579ee605e0791d3c8a8025b12fe68ca260ddd1d99a0"
+        },
+        {
+          "path": "public/images/editorial/buggy-v1-1440.avif",
+          "width": 1440,
+          "format": "avif",
+          "bytes": 54951,
+          "sha256": "e8d8d46a5b21fa0c6db22a4a70c0321ee6db0b08b6a117ba970a2e7fdd7e4e2c"
+        }
+      ]
+    },
+    {
+      "key": "boat",
+      "originalSha256": "7bc0f5e37d0cf0e874bb4ac6661b48b42452b0823c7696c473f20e2a0dbbd935",
+      "variants": [
+        {
+          "path": "public/images/editorial/boat-v1-480.webp",
+          "width": 480,
+          "format": "webp",
+          "bytes": 27498,
+          "sha256": "4603ba449957e577d59fb1acb68191253670651feda5010c53a7ce1ede5fd711"
+        },
+        {
+          "path": "public/images/editorial/boat-v1-480.avif",
+          "width": 480,
+          "format": "avif",
+          "bytes": 8799,
+          "sha256": "d74b2e1c3dc14e0204a8117c2fee04070163b24951695528533cfa005b640c82"
+        },
+        {
+          "path": "public/images/editorial/boat-v1-960.webp",
+          "width": 960,
+          "format": "webp",
+          "bytes": 102582,
+          "sha256": "51636767a6b512445ec929f893c7fd9971f05f40c9b290d68eb6f41e8bf68cf2"
+        },
+        {
+          "path": "public/images/editorial/boat-v1-960.avif",
+          "width": 960,
+          "format": "avif",
+          "bytes": 32018,
+          "sha256": "53490875cfa929291bcd37574c28b8b465384d77d83217d2a3b5d394ffd4ca71"
+        },
+        {
+          "path": "public/images/editorial/boat-v1-1440.webp",
+          "width": 1440,
+          "format": "webp",
+          "bytes": 201958,
+          "sha256": "65cedfd7e387c735f153044c2e7da76ecd24beaca4b2a0272b04c3ae9599dfe9"
+        },
+        {
+          "path": "public/images/editorial/boat-v1-1440.avif",
+          "width": 1440,
+          "format": "avif",
+          "bytes": 65926,
+          "sha256": "2be0aa58ea34b7c69aa0a17c98f6560ffe33446692ba7085dac8676db56a6d25"
+        }
+      ]
+    },
+    {
+      "key": "coast",
+      "originalSha256": "ec85576e1145d9b720f4394882a418af904f29850f705ef57b5b5ce4b0a201c9",
+      "variants": [
+        {
+          "path": "public/images/editorial/coast-v1-480.webp",
+          "width": 480,
+          "format": "webp",
+          "bytes": 27854,
+          "sha256": "6c7ae5fef3bef475091d5515b1f2bca4193cf9eada76c9c400a276b5211963f8"
+        },
+        {
+          "path": "public/images/editorial/coast-v1-480.avif",
+          "width": 480,
+          "format": "avif",
+          "bytes": 9505,
+          "sha256": "87bb247fbba0e8b31711d37b60c9106cb6b73881dd150ad522fb909fc60601ae"
+        },
+        {
+          "path": "public/images/editorial/coast-v1-960.webp",
+          "width": 960,
+          "format": "webp",
+          "bytes": 103368,
+          "sha256": "7ef5d55a999aa48e8008be1ca4ec46b72ad9894efa32e8e4977beb4b350c51e6"
+        },
+        {
+          "path": "public/images/editorial/coast-v1-960.avif",
+          "width": 960,
+          "format": "avif",
+          "bytes": 31425,
+          "sha256": "c9af131e47139368899179097afe5e7ba54ed05db803b27682ce2a160f09a83a"
+        },
+        {
+          "path": "public/images/editorial/coast-v1-1440.webp",
+          "width": 1440,
+          "format": "webp",
+          "bytes": 207350,
+          "sha256": "fe19e80330fb6116736f3902da8eae826e84d84450501bc253c31cd7fad3fdda"
+        },
+        {
+          "path": "public/images/editorial/coast-v1-1440.avif",
+          "width": 1440,
+          "format": "avif",
+          "bytes": 64500,
+          "sha256": "8f810810a3c28a7ed5034f406bcb5e72efb8c79e592f4513f609ec1e65c3ccbd"
+        }
+      ]
+    },
+    {
+      "key": "transfer",
+      "originalSha256": "83b2b83322b372b724e5f205018edcee31d854c6674cfc784943eb500f0f0346",
+      "variants": [
+        {
+          "path": "public/images/editorial/transfer-v1-480.webp",
+          "width": 480,
+          "format": "webp",
+          "bytes": 20980,
+          "sha256": "54774f90b35bd51e5547ff35c681e332f95f28b036ba5c53182bf5bf0ff23175"
+        },
+        {
+          "path": "public/images/editorial/transfer-v1-480.avif",
+          "width": 480,
+          "format": "avif",
+          "bytes": 7003,
+          "sha256": "f75478ccc06a9c259ebeedc7ec844cfee1380f079dbde5c8f7b20ddb37f14957"
+        },
+        {
+          "path": "public/images/editorial/transfer-v1-960.webp",
+          "width": 960,
+          "format": "webp",
+          "bytes": 81078,
+          "sha256": "2257467f5dca859de9522e7876a6a81f68d8a4cdac574ea8a6a8eed51be0bda9"
+        },
+        {
+          "path": "public/images/editorial/transfer-v1-960.avif",
+          "width": 960,
+          "format": "avif",
+          "bytes": 24499,
+          "sha256": "da70ecf4bab06d2be7b606b471fe2903be4a42211b48223b00c031c531180466"
+        },
+        {
+          "path": "public/images/editorial/transfer-v1-1440.webp",
+          "width": 1440,
+          "format": "webp",
+          "bytes": 166040,
+          "sha256": "62d2be8e4fddabf8df1a1c67e94900c390f0bf88eb864fef8c3a4fb2429b4592"
+        },
+        {
+          "path": "public/images/editorial/transfer-v1-1440.avif",
+          "width": 1440,
+          "format": "avif",
+          "bytes": 52977,
+          "sha256": "7f4e94f1ebcc16b0f830908d6343ed7f2a6739de3dad4663cc3e6767f678b30c"
+        }
+      ]
+    }
+  ]
+}

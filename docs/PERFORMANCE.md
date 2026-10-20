@@ -1,8 +1,8 @@
 # Performance evidence — local release candidate
 
-Measured 2026-10-20 against the built Next.js release preview on loopback port 3002. These are four cold laboratory samples, not production field measurements, a Lighthouse score, or a throughput guarantee.
+Measured 2026-10-20 against the built Next.js release preview on loopback port 3002. These are cold laboratory samples, not production field measurements, a Lighthouse score, or a throughput guarantee. The first table records the initial release; the owner-requested imagery update is recorded below.
 
-`node scripts/performance-lab.mjs` records Chromium CDP traces and PerformanceObserver measurements. Conditions: Chromium 156.0.8078.4, cache disabled, 4× CPU slowdown, 150 ms network latency, 200,000 bytes/s download and 93,750 bytes/s upload, with 2.5 seconds of observation after page load. Raw traces remain private under `.local/evidence/perf/`. Aggregate evidence is in [performance-lab.json](evidence/performance-lab.json).
+`node scripts/performance-lab.mjs` records Chromium CDP traces and PerformanceObserver measurements. Conditions: Chromium 156.0.8078.4, cache disabled, 4× CPU slowdown, 150 ms network latency, 200,000 bytes/s download and 93,750 bytes/s upload, with 2.5 seconds of observation after page load. Raw traces remain private under `.local/evidence/perf/`. Initial aggregate evidence is in [performance-before-editorial.json](evidence/performance-before-editorial.json); [performance-lab.json](evidence/performance-lab.json) contains the latest run.
 
 | Route | Viewport width | LCP | CLS | Encoded JavaScript | Encoded images |
 |---|---:|---:|---:|---:|---:|
@@ -31,3 +31,16 @@ The photography accent remains disabled after its form-quality failure. Booking 
 The current single samples meet these budgets. Their narrow scope does not establish budgets for every admin or media delivery screen.
 
 Before launch, repeat on the owner-designated staging domain, including authenticated workflows, slow devices and representative approved assets. Evaluate field p75 LCP ≤2.5 s, INP ≤200 ms and CLS ≤0.1 when sufficient privacy-respecting real traffic exists. See [Google's Core Web Vitals guidance](https://web.dev/articles/vitals) and [Chrome's Performance panel documentation](https://developer.chrome.com/docs/devtools/performance). No field INP was measured locally.
+
+## After the illustrative imagery update
+
+At 19:20 UTC, the same lab harness measured the final generated-image implementation. AVIF sources with WebP fallback keep the existing budgets unchanged.
+
+| Route | Width | LCP | CLS | Encoded JavaScript | Encoded images |
+|---|---:|---:|---:|---:|---:|
+| Home | 1440 px | 2,416 ms | 0 | 155,935 B | 343,008 B |
+| Boat request | 1440 px | 808 ms | 0 | 155,935 B | 0 B |
+| Home | 390 px | 1,324 ms | 0 | 155,935 B | 93,793 B |
+| Boat request | 390 px | 1,204 ms | 0 | 155,935 B | 0 B |
+
+Decoded JavaScript was 523,531 B per sample. All four budget checks passed; no external origins or Three.js loaded. The initial WebP-only image addition exceeded the homepage budget (472,674 B desktop / 130,094 B mobile), which prompted the AVIF correction. The final comparison is synthetic local evidence, not a field p75 claim.

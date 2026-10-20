@@ -147,5 +147,6 @@
   "securityDeposit": "Waarborgsom",
   "pickupFee": "Ophaalkosten",
   "refundable": "Terugbetaalbaar volgens de vermelde voorwaarden",
-  "meetingPoint": "Afspreken bij het ontmoetingspunt"
+  "meetingPoint": "Afspreken bij het ontmoetingspunt",
+  "illustrativeImage": "Illustratieve afbeelding"
 }

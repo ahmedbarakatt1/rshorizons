@@ -1,0 +1,24 @@
+
+Running 12 tests using 1 worker
+
+(node:31496) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 [chromium] › tests\e2e\accessibility.spec.ts:3:1 › @a11y responsive reading, image loading and keyboard navigation (3.4s)
+  ok  2 [chromium] › tests\e2e\accessibility.spec.ts:33:1 › @a11y private fragments require deliberate redemption and leave the address bar (481ms)
+  ok  3 [chromium] › tests\e2e\imagery.spec.ts:5:1 › illustrative images fill catalog gaps while actual trip photographs remain separate (3.7s)
+  ok  4 [chromium] › tests\e2e\release.spec.ts:5:1 › @a11y release pages have no automated WCAG A/AA violations and private responses reject caching (6.2s)
+(node:8892) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  5 [firefox] › tests\e2e\accessibility.spec.ts:3:1 › @a11y responsive reading, image loading and keyboard navigation (7.4s)
+  ok  6 [firefox] › tests\e2e\accessibility.spec.ts:33:1 › @a11y private fragments require deliberate redemption and leave the address bar (760ms)
+  -   7 [firefox] › tests\e2e\imagery.spec.ts:5:1 › illustrative images fill catalog gaps while actual trip photographs remain separate
+  -   8 [firefox] › tests\e2e\release.spec.ts:5:1 › @a11y release pages have no automated WCAG A/AA violations and private responses reject caching
+(node:21544) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  9 [webkit] › tests\e2e\accessibility.spec.ts:3:1 › @a11y responsive reading, image loading and keyboard navigation (8.0s)
+  ok 10 [webkit] › tests\e2e\accessibility.spec.ts:33:1 › @a11y private fragments require deliberate redemption and leave the address bar (1.3s)
+  -  11 [webkit] › tests\e2e\imagery.spec.ts:5:1 › illustrative images fill catalog gaps while actual trip photographs remain separate
+  -  12 [webkit] › tests\e2e\release.spec.ts:5:1 › @a11y release pages have no automated WCAG A/AA violations and private responses reject caching
+
+  4 skipped
+  8 passed (38.0s)

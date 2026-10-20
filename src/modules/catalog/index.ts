@@ -3,6 +3,7 @@ import {AppError} from "@/server/http/errors";
 import {localeSchema,uuidSchema} from "@/modules/bookings/contracts";
 import {catalogFiltersSchema} from "./contracts";
 import type {ApartmentDetail,ApartmentSummary,CatalogData,DestinationSummary,ServiceDetail,ServiceSummary} from "@/types/catalog";
+import {illustrativeImage} from "@/components/catalog-imagery";
 
 function isDemo() {
   return ["development","test"].includes(process.env.APP_ENV??"development")&&process.env.DEMO_MODE==="true";
@@ -29,9 +30,13 @@ WHERE s.status='published' AND t.approved_at IS NOT NULL AND dt.approved_at IS N
 AND ($2::boolean OR NOT s.synthetic)`;
 function serviceImage(category:string) {
   category=category.replaceAll("_","-");
-  return isDemo()&&["scuba-diving","shore-dives","snorkeling","photography","tours"].includes(category)
-    ? `/api/v1/demo-media/${category==="photography"?"diving":"reef"}`
-    : `/images/${["desert-safari","beach-buggy"].includes(category)?"desert":"coast"}.svg`;
+  if(isDemo()&&["scuba-diving","shore-dives","snorkeling","photography","tours"].includes(category))
+    return `/api/v1/demo-media/${category==="photography"?"diving":"reef"}`;
+  if(category==="beach-buggy")return illustrativeImage("buggy");
+  if(category==="desert-safari")return illustrativeImage("desert");
+  if(category==="boat-tours")return illustrativeImage("boat");
+  if(category==="transportation")return illustrativeImage("transfer");
+  return illustrativeImage("coast");
 }
 export async function searchServices(filters:unknown,locale="en") {
   const f=catalogFiltersSchema.parse({...filters as object,locale});
@@ -46,7 +51,7 @@ export async function searchServices(filters:unknown,locale="en") {
 export async function getDestinations(locale:string):Promise<DestinationSummary[]> {
   localeSchema.parse(locale);
   const {rows}=await query<DestinationSummary>(`SELECT d.id,d.canonical_slug AS slug,t.title,t.description AS summary FROM app.destinations d JOIN app.destination_translations t ON t.destination_id=d.id AND t.locale=$1 WHERE d.active AND t.approved_at IS NOT NULL ORDER BY d.canonical_slug`,[locale]);
-  return rows.map((row,index)=>({...row,image:isDemo()&&index<2?`/api/v1/demo-media/${index?"diving":"hero"}`:"/images/coast.svg"}));
+  return rows.map((row,index)=>({...row,image:isDemo()&&index<2?`/api/v1/demo-media/${index?"diving":"hero"}`:illustrativeImage("coast")}));
 }
 export async function getService(idOrSlug:string,locale:string):Promise<ServiceDetail> {
   localeSchema.parse(locale);
@@ -71,14 +76,14 @@ const apartmentSelect=`SELECT a.id,t.slug,t.title,t.description AS summary,a.uni
 export async function searchApartments(filters:{checkIn?:string;checkOut?:string;guests?:number}={},locale="en"):Promise<ApartmentSummary[]> {
   localeSchema.parse(locale);
   const {rows}=await query<ApartmentSummary>(`${apartmentSelect} AND a.max_guests>=COALESCE($3,1) AND ($4::date IS NULL OR $5::date IS NULL OR NOT EXISTS(SELECT 1 FROM app.apartment_inventory ai WHERE ai.apartment_id=a.id AND ai.released_at IS NULL AND ai.date_range && daterange($4::date,$5::date+a.cleaning_buffer_days,'[)'))) ORDER BY a.unit_code`,[locale,isDemo(),filters.guests??null,filters.checkIn??null,filters.checkOut??null]);
-  return rows.map(row=>({...row,image:"/images/apartment.svg"}));
+  return rows.map(row=>({...row,image:illustrativeImage("apartment")}));
 }
 export async function getApartment(idOrSlug:string,locale:string):Promise<ApartmentDetail> {
   localeSchema.parse(locale);
   const {rows}=await query<ApartmentSummary>(`${apartmentSelect} AND (a.id::text=$3 OR t.slug=$3)`,[locale,isDemo(),idOrSlug]);
   if(!rows[0]) throw new AppError("NOT_FOUND",404);
   const {rows:details}=await query(`SELECT t.house_rules AS "houseRules",a.check_in_time AS "checkInTime",a.check_out_time AS "checkOutTime",a.min_nights AS "minNights",COALESCE((SELECT array_agg(p.type) FROM app.apartment_payment_policies ap JOIN app.payment_policies p ON p.id=ap.policy_id WHERE ap.apartment_id=a.id AND p.approved_at IS NOT NULL),'{}') AS "paymentPolicies" FROM app.apartments a JOIN app.apartment_translations t ON t.apartment_id=a.id AND t.locale=$2 WHERE a.id=$1`,[rows[0].id,locale]);
-  return {...rows[0],...details[0],image:"/images/apartment.svg"} as ApartmentDetail;
+  return {...rows[0],...details[0],image:illustrativeImage("apartment")} as ApartmentDetail;
 }
 export async function getCatalog(locale:string):Promise<CatalogData> {
   const [services,apartments,destinations]=await Promise.all([searchServices({},locale),searchApartments({},locale),getDestinations(locale)]);

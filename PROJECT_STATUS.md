@@ -8,7 +8,7 @@ Updated 2026-10-20, Africa/Cairo. The full 1,415-line production handoff was rea
 |---|---|---|
 | M0 Foundation and five resources | VERIFIED_LOCAL | All five resources installed, pinned and used; clean `npm ci`, zero reported npm vulnerabilities, Next.js production build |
 | M1 Database and authorization | VERIFIED_LOCAL; external Auth onboarding pending |18 applied forward migrations,117 tables with matching generated types, real PostgreSQL17.11; current scopes, revocation and private grants tested; designated Supabase MFA onboarding remains external |
-| M2 Catalog, localization and design | VERIFIED_LOCAL; business publication pending | Data-backed public/admin screens, ten locales ×149 keys, RTL; approved variant/rate selection regression fixed; human content/translation approvals absent |
+| M2 Catalog, localization and design | VERIFIED_LOCAL; business publication pending | Data-backed public/admin screens, ten locales ×150 keys, RTL; approved variant/rate selection regression fixed; owner-requested illustrative imagery fills photo gaps; human content/translation approvals absent |
 | M3 Reservations and inventory | VERIFIED_LOCAL | Quote/request/manual approval/revisions/fulfilment; independent-connection races and all-service browser journeys; private/shared transfers and physical stays |
 | M4 Finance, jobs and messaging | VERIFIED_LOCAL / BLOCKED_EXTERNAL | Ledger, source-bound refunds, verified webhook/inquiry adapters, leases, reminders and callback dedupe tested; actual Paymob/Meta/Resend accounts and provider evidence absent |
 | M5 Media, reviews and contact | VERIFIED_LOCAL with disabled 3D accent | Real image/video processing, private entitlement checks, public-consent guards, retention, verified reviews and contact; static poster ships because current 3D form gate failed |
@@ -17,7 +17,7 @@ Updated 2026-10-20, Africa/Cairo. The full 1,415-line production handoff was rea
 
 ## Current application and verification
 
-- Root `D:\Tourism`, Git branch `codex/tourism-production`, implementation commit `eec1d27`. Final source/artifact scan covered 938 source files, 569 build files and 17 deployment traces with zero findings. No remote has been selected or pushed. No unrelated account, DNS or host database was modified.
+- Root `D:\Tourism`, Git branch `codex/tourism-production`, baseline implementation commit `eec1d27`. Latest source/artifact scan after the image update covered 985 source files, 567 build files and 17 deployment traces with zero findings. No remote has been selected or pushed. No unrelated account, DNS or host database was modified.
 - Local PostgreSQL17.11 uses loopback55432 and ignored `.local/postgres`; the existing host PostgreSQL17.2 is untouched.
 - Next.js16.4.2, React19.3.1, Node22.22.2, npm10.9.7, TypeScript6.0.3 and exact root lockfile.
 - Release preview: `http://127.0.0.1:3002/en`, run with `node scripts/start-local-showcase.mjs`. It uses the separate synthetic showcase recorded in `.local/showcase.json`; the domain test database is preserved.
@@ -37,3 +37,7 @@ Updated 2026-10-20, Africa/Cairo. The full 1,415-line production handoff was rea
 3. With the remaining E05–E14 inputs, verify real provider sandboxes, hosted recovery, content/translation approval, staff MFA onboarding and UAT. Follow the deployment runbook and verify the actual production URL before marking M7 complete.
 
 All previous parallel workers have stopped. Root completed integration and recorded the local verification. Preserve originals, local secrets, profiles, private evidence and database files outside Git/deployment. Do not infer that an earlier scaffold-only status still applies.
+
+## Latest scoped update
+
+The owner requested generated or web images for areas without photography. Six generated images now cover desert, buggy, boats, transfers, coast and apartments, with responsive AVIF/WebP and localized illustration labels. Owner trip media remains unchanged. Targeted verification: 6 unit/localization tests and 8 browser/accessibility checks passed; 4 documented duplicate engine checks skipped. Lint, types and build passed; 150-key parity and unchanged performance budgets passed. Exact imagery/provenance/evidence is in `docs/design/editorial-imagery.md` and the release-report addendum. Production blockers and the next external task above remain unchanged.

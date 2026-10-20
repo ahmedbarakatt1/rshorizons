@@ -147,5 +147,6 @@
   "securityDeposit": "Страховий депозит",
   "pickupFee": "Плата за підвезення",
   "refundable": "Повернення за вказаними умовами",
-  "meetingPoint": "Зустріч у місці збору"
+  "meetingPoint": "Зустріч у місці збору",
+  "illustrativeImage": "Ілюстративне зображення"
 }

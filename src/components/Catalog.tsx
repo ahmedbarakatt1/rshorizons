@@ -6,7 +6,11 @@ import type {ApartmentSummary,DestinationSummary,ServiceSummary} from "@/types/c
 import {Arrow} from "./PublicShell";
 import {api} from "./api";
 import {money} from "./format";
+import {resolveIllustrativeImage} from "./catalog-imagery";
 export function Photo({image,alt,priority=false,className="",sizes="(max-width:767px) 50vw, (max-width:1100px) 55vw, 40vw"}:{image:string;alt:string;priority?:boolean;className?:string;sizes?:string}) {
+ const t=useTranslations();
+ const illustration=resolveIllustrativeImage(image);
+ if(illustration)return <span className={`photo illustrative-photo ${className}`}><picture><source type="image/avif" srcSet={illustration.avifSrcSet} sizes={sizes}/><img className="illustrative-photo-image" src={illustration.src} srcSet={illustration.srcSet} sizes={sizes} alt={`${t("illustrativeImage")} — ${alt}`} width="1536" height="1024" loading={priority?"eager":"lazy"} fetchPriority={priority?"high":"auto"}/></picture><span className="illustrative-photo-caption">{t("illustrativeImage")}</span></span>;
  if(!image || image==="apartment") return <div className={`photo unavailable-photo ${className}`} role="img" aria-label={alt}><span>Port Ghalib<br/><small>Unit photography awaiting approval</small></span></div>;
  const src=image.startsWith("/")?image:`/api/v1/demo-media/${image}`;
  const responsive=src.startsWith("/api/v1/demo-media/");

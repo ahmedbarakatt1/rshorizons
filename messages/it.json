@@ -147,5 +147,6 @@
   "securityDeposit": "Deposito cauzionale",
   "pickupFee": "Costo del prelievo",
   "refundable": "Rimborsabile secondo le condizioni indicate",
-  "meetingPoint": "Incontro al punto di ritrovo"
+  "meetingPoint": "Incontro al punto di ritrovo",
+  "illustrativeImage": "Immagine illustrativa"
 }

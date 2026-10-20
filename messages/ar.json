@@ -147,5 +147,6 @@
   "securityDeposit": "مبلغ التأمين",
   "pickupFee": "رسوم الاستلام",
   "refundable": "قابل للاسترداد وفق الشروط المذكورة",
-  "meetingPoint": "المقابلة في نقطة التجمع"
+  "meetingPoint": "المقابلة في نقطة التجمع",
+  "illustrativeImage": "صورة توضيحية"
 }

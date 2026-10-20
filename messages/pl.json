@@ -147,5 +147,6 @@
   "securityDeposit": "Kaucja",
   "pickupFee": "Opłata za odbiór",
   "refundable": "Zwrot zgodnie z podanymi warunkami",
-  "meetingPoint": "Spotkanie w miejscu zbiórki"
+  "meetingPoint": "Spotkanie w miejscu zbiórki",
+  "illustrativeImage": "Zdjęcie poglądowe"
 }
