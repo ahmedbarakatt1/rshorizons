@@ -30,6 +30,8 @@ WHERE s.status='published' AND t.approved_at IS NOT NULL AND dt.approved_at IS N
 AND ($2::boolean OR NOT s.synthetic)`;
 function serviceImage(category:string) {
   category=category.replaceAll("_","-");
+  if(isDemo()&&category==="transportation")return "/api/v1/demo-media/transfer-car";
+  if(isDemo()&&category==="boat-tours")return "/api/v1/demo-media/boat-day";
   if(isDemo()&&["scuba-diving","shore-dives","snorkeling","photography","tours"].includes(category))
     return `/api/v1/demo-media/${category==="photography"?"diving":"reef"}`;
   if(category==="beach-buggy")return illustrativeImage("buggy");

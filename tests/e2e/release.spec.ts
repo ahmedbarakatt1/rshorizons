@@ -25,8 +25,8 @@ test("@a11y release pages have no automated WCAG A/AA violations and private res
  await page.evaluate(()=>window.scrollTo({top:0,behavior:"instant"}));
  await page.screenshot({path:".local/evidence/ui/release-public-desktop.png",fullPage:true,animations:"disabled"});
  await page.setViewportSize({width:390,height:844});await page.goto("/en/gallery");
- await expect(page.locator(".editorial-gallery img")).toHaveCount(4);
- for(const image of await page.locator(".editorial-gallery img").all()){await image.scrollIntoViewIfNeeded();await image.evaluate((node:HTMLImageElement)=>node.decode());}
+ await expect(page.locator(".owner-photo-gallery img")).toHaveCount(12);
+ for(const image of await page.locator(".owner-photo-gallery img").all()){await image.scrollIntoViewIfNeeded();await image.evaluate((node:HTMLImageElement)=>node.decode());}
  await page.evaluate(()=>window.scrollTo({top:0,behavior:"instant"}));
  await page.screenshot({path:".local/evidence/ui/release-gallery-mobile.png",fullPage:true});
  await page.goto("/ar/contact");await expect(page.getByRole("heading",{level:1})).toBeVisible();await expect(page.getByRole("button",{name:"أرسل الرسالة"})).toBeEnabled();await page.screenshot({path:".local/evidence/ui/release-arabic-mobile.png",fullPage:true});

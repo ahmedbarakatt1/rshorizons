@@ -1,0 +1,21 @@
+
+Running 9 tests using 1 worker
+
+(node:25996) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 [chromium] › tests\e2e\imagery.spec.ts:5:1 › illustrative images fill catalog gaps while actual trip photographs remain separate (4.8s)
+  ok 2 [chromium] › tests\e2e\owner-media.spec.ts:5:1 › owner photos and videos load on demand, play and seek (3.3s)
+  ok 3 [chromium] › tests\e2e\release.spec.ts:5:1 › @a11y release pages have no automated WCAG A/AA violations and private responses reject caching (7.6s)
+(node:26492) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  -  4 [firefox] › tests\e2e\imagery.spec.ts:5:1 › illustrative images fill catalog gaps while actual trip photographs remain separate
+  ok 5 [firefox] › tests\e2e\owner-media.spec.ts:5:1 › owner photos and videos load on demand, play and seek (5.6s)
+  -  6 [firefox] › tests\e2e\release.spec.ts:5:1 › @a11y release pages have no automated WCAG A/AA violations and private responses reject caching
+(node:21136) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  -  7 [webkit] › tests\e2e\imagery.spec.ts:5:1 › illustrative images fill catalog gaps while actual trip photographs remain separate
+  ok 8 [webkit] › tests\e2e\owner-media.spec.ts:5:1 › owner photos and videos load on demand, play and seek (5.5s)
+  -  9 [webkit] › tests\e2e\release.spec.ts:5:1 › @a11y release pages have no automated WCAG A/AA violations and private responses reject caching
+
+  4 skipped
+  5 passed (36.1s)

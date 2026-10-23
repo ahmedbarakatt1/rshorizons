@@ -1,0 +1,15 @@
+# Owner photography and video — 2026-10-24
+
+The owner supplied `media/WhatsApp Unknown 2026-10-24 at 1.19.31 AM`, identified its event and transfer-car photos, and asked to use the existing videos. The folder contains 15 photographs; eight distinct views were selected: two boats, three evening scenes and three views of the transfer car. The earlier four underwater gallery photographs remain. Boat and transportation catalog cards/detail heroes now use the appropriate actual photograph in the local showcase. Generated imagery remains for subjects without operator photography.
+
+All 30 original MP4s are represented in the gallery. Six videos appear initially; each additional request reveals six more. A click loads the video and starts playback with native controls, inline playback and seeking. No video bytes load before a visitor chooses a clip. Portrait and landscape videos retain their entire frames. These are complete short clips, with audio removed; the gallery explains that they are silent. Captions describe visible subjects without claiming a location, date, vehicle capacity or service guarantee that the supplied material does not establish.
+
+`src/integrations/storage/prepare-owner-media.mjs` creates metadata-stripped responsive WebP photographs. `scripts/prepare-owner-videos.mjs` creates H.264/yuv420p MP4s at up to 960 pixels on either axis, with fast-start headers, no audio/chapters/source metadata and WebP posters. Original files are untouched. SHA-256 source/derivative hashes, output dimensions, byte counts and authorization dates are recorded in ignored `.local/media/owner-media-manifest.json` and `.local/media/owner-video-manifest.json`.
+
+Only the non-sensitive logical asset registry ships in source. Original media, prepared local derivatives and inspection sheets remain ignored by Git and deployment. The preview endpoint accepts fixed registry keys, development/test mode with explicit demo enablement and loopback hostnames only. It implements single byte ranges, suffix/open-ended ranges, HEAD metadata and 416 responses; unknown paths and missing assets return 404. There is no raw-directory file server.
+
+Production public-gallery delivery now supports an explicitly approved copy of a processed video, preserving MIME and dimensions. Original/private derivative keys remain inaccessible through public routes. The existing database consent and publication guards apply, and every byte-range request checks current gallery/asset eligibility. Owner source-use authorization does not invent missing subject/guardian consent. E10 remains a production publication gate.
+
+The supplied Taste direction is retained. The new gallery adds actual subject matter rather than changing the established layout, typography or brand. Playback and photo controls are localized across all ten locales. CI creates explicitly synthetic image/video fixtures from the shared registry; it never requires or uploads owner originals.
+
+Verification results and screenshot paths are recorded in the release-report addendum after the checks run.

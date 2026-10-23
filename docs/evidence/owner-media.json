@@ -1,0 +1,311 @@
+{
+  "at": "2026-10-23T23:16:44.805Z",
+  "scope": "Local owner derivatives only; production publication approvals remain external",
+  "photos": 15,
+  "newWhatsAppPhotos": 8,
+  "videos": 30,
+  "totalVideoBytes": 121301620,
+  "originalsCommitted": false,
+  "checks": [
+    {
+      "key": "clip-gx019474",
+      "bytes": 2641184,
+      "width": 960,
+      "height": 540,
+      "duration": 17.733333,
+      "codec": "h264",
+      "audioStreams": 0,
+      "sha256": "44181ce8dc033bb8765b53e24f5b6e0eb896a75dbe6a21c66947e17e4ba12a77"
+    },
+    {
+      "key": "clip-gx017027",
+      "bytes": 5469256,
+      "width": 960,
+      "height": 540,
+      "duration": 15.3,
+      "codec": "h264",
+      "audioStreams": 0,
+      "sha256": "032d447385a3e322295f39ad932656e12a9c2e20b5be1c2bb408b2ed9d49ad40"
+    },
+    {
+      "key": "clip-gx017023",
+      "bytes": 3585957,
+      "width": 540,
+      "height": 960,
+      "duration": 7.966667,
+      "codec": "h264",
+      "audioStreams": 0,
+      "sha256": "9455645618b96d6fb67a98e9389b36bccd48c8678fd62b24c8600ff43e627608"
+    },
+    {
+      "key": "clip-gx017041",
+      "bytes": 2533675,
+      "width": 960,
+      "height": 540,
+      "duration": 10.233333,
+      "codec": "h264",
+      "audioStreams": 0,
+      "sha256": "5668f4dd5be9f06073a9569e0e5e24c98800207eefc59a0d9c411286b681aab4"
+    },
+    {
+      "key": "clip-gx013777",
+      "bytes": 5446848,
+      "width": 540,
+      "height": 960,
+      "duration": 7.2,
+      "codec": "h264",
+      "audioStreams": 0,
+      "sha256": "02e2f8ddd68bc27bd59747fa37a8d65b43d0d5caf9f4fc518182bd4daced4947"
+    },
+    {
+      "key": "clip-gx011348",
+      "bytes": 4373233,
+      "width": 960,
+      "height": 540,
+      "duration": 12.933333,
+      "codec": "h264",
+      "audioStreams": 0,
+      "sha256": "410052585435997d12b3377e06fc48a9d3da5af0d2a79a8a66458fd5eec09468"
+    },
+    {
+      "key": "clip-gx010123",
+      "bytes": 2230425,
+      "width": 540,
+      "height": 960,
+      "duration": 22.566667,
+      "codec": "h264",
+      "audioStreams": 0,
+      "sha256": "e5d60d7526102b64810d1ba8d398fac27bcb3314c59aeb432c0a1d0fcf02e0f4"
+    },
+    {
+      "key": "clip-gx010345",
+      "bytes": 2397260,
+      "width": 540,
+      "height": 960,
+      "duration": 13.466667,
+      "codec": "h264",
+      "audioStreams": 0,
+      "sha256": "ced3086c4573216770180433393ecfa065749e8d9bdbe91258e2d5a58ddf4789"
+    },
+    {
+      "key": "clip-gx010870",
+      "bytes": 2828933,
+      "width": 540,
+      "height": 960,
+      "duration": 16.966667,
+      "codec": "h264",
+      "audioStreams": 0,
+      "sha256": "848ed3b0d858cbf317a1a54af22afd3e9c7914f17145341c615d7209e3324b8c"
+    },
+    {
+      "key": "clip-gx011544",
+      "bytes": 3096796,
+      "width": 540,
+      "height": 960,
+      "duration": 10.533008,
+      "codec": "h264",
+      "audioStreams": 0,
+      "sha256": "aa66eeb9fab6de7292d79984da7e05a58617c0c300113215d38ee9b18d62acf5"
+    },
+    {
+      "key": "clip-gx012050",
+      "bytes": 2305608,
+      "width": 540,
+      "height": 960,
+      "duration": 14.133333,
+      "codec": "h264",
+      "audioStreams": 0,
+      "sha256": "5ef225ed6248bba7de96a236177e605c6c67c5f14949a12361999b3e4f0c597a"
+    },
+    {
+      "key": "clip-gx012662",
+      "bytes": 5896535,
+      "width": 540,
+      "height": 960,
+      "duration": 18.733333,
+      "codec": "h264",
+      "audioStreams": 0,
+      "sha256": "b97be06bd415823790febfe2728b8d7891c8b1fd5b66b6355edbf4407e51c4b9"
+    },
+    {
+      "key": "clip-gx019157",
+      "bytes": 3516588,
+      "width": 540,
+      "height": 960,
+      "duration": 22,
+      "codec": "h264",
+      "audioStreams": 0,
+      "sha256": "b7a4f372a9375ee7aa6b906252aa3f82665d2f7fbc9bd2f53f0dea0845a583b4"
+    },
+    {
+      "key": "clip-gx019247",
+      "bytes": 932248,
+      "width": 540,
+      "height": 960,
+      "duration": 10.4,
+      "codec": "h264",
+      "audioStreams": 0,
+      "sha256": "0ab8f8c36d8eec80189d7a8fa20dbfd78bce4860c36a4d93a00540396365d3e7"
+    },
+    {
+      "key": "clip-gx019326",
+      "bytes": 4848982,
+      "width": 540,
+      "height": 960,
+      "duration": 32.033333,
+      "codec": "h264",
+      "audioStreams": 0,
+      "sha256": "2107d7beb16fab377bccbdefca87a8b418fcc83fb1fd39c29bd2130285e432af"
+    },
+    {
+      "key": "clip-fm-sun-20",
+      "bytes": 3122540,
+      "width": 540,
+      "height": 960,
+      "duration": 18.6,
+      "codec": "h264",
+      "audioStreams": 0,
+      "sha256": "963830f0c70dd370b0a7f8edafe9cca2414ad70a2ea3d3892ec710376d85c2ef"
+    },
+    {
+      "key": "clip-stone",
+      "bytes": 1675886,
+      "width": 540,
+      "height": 960,
+      "duration": 19.533333,
+      "codec": "h264",
+      "audioStreams": 0,
+      "sha256": "ea4923d8a06c3c5d7d594480c5f6ed556f829dbd79e594f4dae121e55a4bf44b"
+    },
+    {
+      "key": "clip-gx010356",
+      "bytes": 3127927,
+      "width": 540,
+      "height": 960,
+      "duration": 10.366667,
+      "codec": "h264",
+      "audioStreams": 0,
+      "sha256": "cce24d5d1184a48c2255e9cb082786c86481d3888a35633d2280b81784720b78"
+    },
+    {
+      "key": "clip-gx010697",
+      "bytes": 3713929,
+      "width": 540,
+      "height": 960,
+      "duration": 14.166667,
+      "codec": "h264",
+      "audioStreams": 0,
+      "sha256": "2d63433513059de9c4f989c320a65ed6cde03070cb3b480fe461f3e01d2a5847"
+    },
+    {
+      "key": "clip-gx011517",
+      "bytes": 7541003,
+      "width": 540,
+      "height": 960,
+      "duration": 20.933333,
+      "codec": "h264",
+      "audioStreams": 0,
+      "sha256": "963bf121c3d810a0575169eef75a0099e5f9ca2f3ed0d222378f269d1b073d5b"
+    },
+    {
+      "key": "clip-gx011612",
+      "bytes": 7814780,
+      "width": 540,
+      "height": 960,
+      "duration": 36.2,
+      "codec": "h264",
+      "audioStreams": 0,
+      "sha256": "f88a10e091a9c7d3c7a8b12919deba2af4a269f9c1e701e8950a923b310e8a9f"
+    },
+    {
+      "key": "clip-gx017017",
+      "bytes": 3827719,
+      "width": 540,
+      "height": 960,
+      "duration": 16.6,
+      "codec": "h264",
+      "audioStreams": 0,
+      "sha256": "e62586cbb133ff62ea5c5215c2bd69890267501b039eca12328ce02130e55559"
+    },
+    {
+      "key": "clip-gx017113",
+      "bytes": 2170354,
+      "width": 540,
+      "height": 960,
+      "duration": 18.5,
+      "codec": "h264",
+      "audioStreams": 0,
+      "sha256": "dbf16c331a1e2097fd2ab71c8dd1c7c8c591b877d18dd88e80d84cbb982d39e2"
+    },
+    {
+      "key": "clip-gx017119",
+      "bytes": 3265607,
+      "width": 960,
+      "height": 540,
+      "duration": 29.566667,
+      "codec": "h264",
+      "audioStreams": 0,
+      "sha256": "aeabac211f6ce4951409b0494d8c871bcdad1c42e0c44ab019ee5716f14ca22c"
+    },
+    {
+      "key": "clip-gx019591",
+      "bytes": 15285104,
+      "width": 540,
+      "height": 960,
+      "duration": 27.366667,
+      "codec": "h264",
+      "audioStreams": 0,
+      "sha256": "e8a42ed045320f954aef5fd7e5949a0ee84163e759bbd8ad15ae858675219d13"
+    },
+    {
+      "key": "clip-turtele",
+      "bytes": 8749394,
+      "width": 540,
+      "height": 960,
+      "duration": 30.433333,
+      "codec": "h264",
+      "audioStreams": 0,
+      "sha256": "9f0da824baeeb7b113b9fd5a24dc0c82a0383b989a95b7f2161cd8eb9ca18600"
+    },
+    {
+      "key": "clip-gx017014",
+      "bytes": 551455,
+      "width": 540,
+      "height": 960,
+      "duration": 11.233333,
+      "codec": "h264",
+      "audioStreams": 0,
+      "sha256": "e2761fce700373b5d3389490889a476facaa94e05d151da9af425e20e529935e"
+    },
+    {
+      "key": "clip-gx017512",
+      "bytes": 4547929,
+      "width": 540,
+      "height": 960,
+      "duration": 23.8,
+      "codec": "h264",
+      "audioStreams": 0,
+      "sha256": "8ea692baefb8be9083c2e322b15b661375834780e64d35580058c5d128ae6721"
+    },
+    {
+      "key": "clip-gx017583",
+      "bytes": 2805094,
+      "width": 540,
+      "height": 960,
+      "duration": 21.7,
+      "codec": "h264",
+      "audioStreams": 0,
+      "sha256": "9b26cd044728ffb3ac01b91210f61656d36854b3b836b4499efa3d65941fcf12"
+    },
+    {
+      "key": "clip-gx019473",
+      "bytes": 999371,
+      "width": 540,
+      "height": 960,
+      "duration": 8.066667,
+      "codec": "h264",
+      "audioStreams": 0,
+      "sha256": "b9eb2eb934430659f9b2c701cfbcefdf66aadf62a65165add1c9fff17ab09289"
+    }
+  ]
+}

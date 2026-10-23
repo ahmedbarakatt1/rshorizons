@@ -1,10 +1,10 @@
-import {readFile} from "node:fs/promises";
-import {resolve} from "node:path";
+import {serveOwnerMedia} from "@/integrations/storage/owner-media";
+import {mediaResponse} from "@/server/http/byte-range";
 import {z} from "zod";
 import {query} from "@/server/db";
 import {AppError} from "@/server/http/errors";
 import {readJson,success,rateLimit,idempotencyKey} from "@/server/http/request";
-import {cookieValue,getGuest,issueGuestSession,localEnvironment,redeemGuestGrant,sessionCookie} from "@/server/auth";
+import {cookieValue,getGuest,issueGuestSession,redeemGuestGrant,sessionCookie} from "@/server/auth";
 import {newSecret,digestSecret} from "@/server/security";
 import {getApartment,getCatalog,getDepartures,getDestinations,getService,searchApartments,searchServices} from "@/modules/catalog";
 import {catalogFiltersSchema} from "@/modules/catalog/contracts";
@@ -18,15 +18,15 @@ const dateRangeSchema=z.object({from:dateSchema,to:dateSchema}).refine(v=>v.to>=
 export async function publicRoute(request:Request,parts:string[]):Promise<Response|undefined> {
   const url=new URL(request.url),locale=localeSchema.parse(url.searchParams.get("locale")??"en");
   const [resource,id,action]=parts;
+  if(resource==="demo-media"&&parts.length===2)return serveOwnerMedia(request,id);
+  if(resource==="galleries"&&id==="public"&&action==="assets"&&parts.length===4&&["GET","HEAD"].includes(request.method)){
+    const asset=await streamPublicDerivative(uuidSchema.parse(parts[3]));
+    return mediaResponse(request,asset.bytes,asset.mimeType,asset.headers);
+  }
   if(request.method==="GET") {
     if(resource==="health") {
       if(id==="live")return success({status:"ok"});
       if(id==="ready"){await query("SELECT 1");return success({status:"ok",environment:process.env.APP_ENV??"development",bookingIntake:process.env.BOOKING_ENABLED==="true"});}
-    }
-    if(resource==="demo-media") {
-      if(!localEnvironment()||!["127.0.0.1","localhost","[::1]"].includes(url.hostname)||!/^(?:hero|diving|reef|surface-swim|reef-pause|underwater-heart|open-water)(?:-(?:480|960|1440))?$/.test(id))throw new AppError("NOT_FOUND",404);
-      const bytes=await readFile(resolve(".local","media",`${id}.webp`));
-      return new Response(bytes,{headers:{"Content-Type":"image/webp","Cache-Control":"private, max-age=300","X-Robots-Tag":"noindex","X-Content-Type-Options":"nosniff"}});
     }
     if(resource==="catalog")return success(await getCatalog(locale));
     if(resource==="policies"&&id==="current"){
@@ -74,10 +74,7 @@ export async function publicRoute(request:Request,parts:string[]):Promise<Respon
     }
     if(resource==="galleries") {
       if(id==="public"){
-        if(action==="assets"&&parts[3]){
-          const asset=await streamPublicDerivative(uuidSchema.parse(parts[3]));
-          return new Response(new Uint8Array(asset.bytes),{headers:{"Content-Type":asset.mimeType,...asset.headers}});
-        }
+        if(action)throw new AppError("NOT_FOUND",404);
         return success({items:await listPublicGalleries(locale)});
       }
       if(id) {

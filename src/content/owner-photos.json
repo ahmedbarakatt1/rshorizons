@@ -1,0 +1,14 @@
+[
+ {"key":"surface-swim","captionKey":"snorkeler","group":"trips"},
+ {"key":"reef-pause","captionKey":"diver","group":"trips"},
+ {"key":"underwater-heart","captionKey":"diver","group":"trips"},
+ {"key":"open-water","captionKey":"diver","group":"trips"},
+ {"key":"boat-day","captionKey":"boatDay","group":"trips"},
+ {"key":"boat-cruise","captionKey":"boatDay","group":"trips"},
+ {"key":"evening-dining","captionKey":"eveningDining","group":"evenings"},
+ {"key":"evening-outing","captionKey":"eveningOuting","group":"evenings"},
+ {"key":"evening-promenade","captionKey":"eveningOuting","group":"evenings"},
+ {"key":"transfer-car","captionKey":"transferCar","group":"transport"},
+ {"key":"transfer-cabin","captionKey":"transferCabin","group":"transport"},
+ {"key":"transfer-interior","captionKey":"transferCabin","group":"transport"}
+]

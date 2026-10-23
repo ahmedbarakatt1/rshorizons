@@ -38,3 +38,7 @@ No confirmed business requirement is removed by these implementation choices.
 ## Owner-requested imagery refinement
 
 On 2026-10-20 the owner requested generated or web images for parts without photographs. Six built-in image generations replace the scenery/apartment placeholders with responsive local AVIF/WebP assets. Actual previous-trip media remains untouched. Visible localized illustration labels distinguish generated apartment/vehicle/scenery concepts from the agency's real inventory. Prompts, hashes and asset paths are recorded in `docs/design/editorial-imagery.md`.
+
+## Owner media and repository — 2026-10-24
+
+The owner designated `https://github.com/ahmedbarakatt1/rshorizons` and supplied WhatsApp event/transfer-car photos, expressly requesting use of the original videos. This resolves repository selection and authorizes local asset preparation/use. All 30 videos are included on demand; source footage, private inspection evidence and metadata-stripped local derivatives remain outside Git/deployment. Eight selected WhatsApp photographs add actual boats, evening outings and transportation. No vehicle capacity or event details are inferred from photographs. Production subject/guardian consent remains E10. See `docs/design/owner-media.md`.

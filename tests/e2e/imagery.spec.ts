@@ -21,7 +21,7 @@ test("illustrative images fill catalog gaps while actual trip photographs remain
  }
  await page.screenshot({path:".local/evidence/ui/editorial-home-desktop.png",fullPage:true,animations:"disabled"});
  await page.locator(".featured-experiences").screenshot({path:".local/evidence/ui/editorial-experiences.png",animations:"disabled"});
- for(const [path,subjects] of [["experiences",["boat","transfer","buggy","desert"]],["destinations",["coast"]]] as const){
+ for(const [path,subjects] of [["experiences",["buggy","desert"]],["destinations",["coast"]]] as const){
   await page.goto(`/en/${path}`);
   for(const subject of subjects){
    const image=page.locator(`img[src*="/${subject}-v1-"]`).first();
@@ -43,6 +43,6 @@ test("illustrative images fill catalog gaps while actual trip photographs remain
  await page.locator(".catalog-card img").first().evaluate((image:HTMLImageElement)=>image.decode());
  await page.screenshot({path:".local/evidence/ui/editorial-apartments-arabic-mobile.png",fullPage:true});
  await page.goto("/en/gallery");
- await expect(page.locator(".editorial-gallery img")).toHaveCount(4);
+ await expect(page.locator(".owner-photo-gallery img")).toHaveCount(12);
  await expect(page.locator(".illustrative-photo")).toHaveCount(0);
 });

@@ -44,3 +44,7 @@ At 19:20 UTC, the same lab harness measured the final generated-image implementa
 | Boat request | 390 px | 1,204 ms | 0 | 155,935 B | 0 B |
 
 Decoded JavaScript was 523,531 B per sample. All four budget checks passed; no external origins or Three.js loaded. The initial WebP-only image addition exceeded the homepage budget (472,674 B desktop / 130,094 B mobile), which prompted the AVIF correction. The final comparison is synthetic local evidence, not a field p75 claim.
+
+## After owner photos and video — 2026-10-24
+
+The same four cold Chromium samples (evidence timestamp 2026-10-23T23:20:52Z, Cairo date October 24) passed unchanged budgets. Home LCP was 2,436 ms desktop / 1,288 ms mobile; request LCP was 1,132 / 1,124 ms. CLS remained 0. Encoded JavaScript was 157,127 B (528,622 B decoded); homepage images remained 343,008 B desktop / 93,793 B mobile. No external origin or Three.js loaded. The gallery separately verifies zero MP4 requests before choosing a video, and loads six posters initially. These remain local lab measurements, not production field claims.

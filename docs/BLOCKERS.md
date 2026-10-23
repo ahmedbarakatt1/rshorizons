@@ -1,10 +1,10 @@
 # External launch dependencies
 
-All rows below are `BLOCKED_EXTERNAL` until their evidence is supplied and verified. These do not block local implementation.
+E01 is now owner-designated and access-verified. Remaining rows are `BLOCKED_EXTERNAL` until their evidence is supplied and verified; these do not block independent implementation.
 
 | ID | Owner | Required single next action | Impact / exact destination |
 |---|---|---|---|
-| E01 | Agency owner | Designate the GitHub repository and organization | Remote, CI secrets and protected release environment; do not reuse another client repository |
+| E01 | Agency owner / implementation | Owner designated `ahmedbarakatt1/rshorizons` on 2026-10-24; repository identity, push access and enabled Actions verified; `origin` configured | Initial source publication and CI verification in progress; deployment secrets/protected release environment depend on hosting inputs |
 | E02 | Agency owner | Designate an approved commercial Vercel account/project and billing plan | Production hosting, project IDs, deployment token; no purchase is authorized |
 | E03 | Agency owner | Designate the domain and DNS account | `APP_BASE_URL`, canonical domain, HTTPS and DNS verification |
 | E04 | Agency owner | Supply separate staging/production Supabase project access via secret storage | Runtime/migration DB roles, Auth, storage, redirect allowlists, backup rehearsal |
@@ -19,4 +19,4 @@ All rows below are `BLOCKED_EXTERNAL` until their evidence is supplied and verif
 | E13 | Operations owner | Designate the Mux account/environment and monitoring destination | Implemented signed private Mux playback/retention; actual account/billing approval, processing verification, alerts and cron ownership remain required |
 | E14 | Agency owner | Approve UAT, recovery/retention objectives and designated live-test transaction amount/contacts | M6 release gate and M7 authorized production journey |
 
-Working brand was resolved: owner confirmed **Red Sea Horizons** on 2026-10-20. Production deployment has not been attempted because E01–E14 remain unverified.
+Working brand was resolved: owner confirmed **Red Sea Horizons** on 2026-10-20. Production deployment has not been attempted because E02–E14 remain unverified. E01 repository selection/access is resolved; see the release addendum for publication and CI results.

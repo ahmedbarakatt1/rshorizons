@@ -163,7 +163,7 @@ export async function streamAsset(actor:ActorContext,input:{galleryId:string;der
 }
 export async function listPublicGalleries(locale:string){
   const result=await query(`SELECT g.id,t.title,t.description,
-    (SELECT jsonb_agg(jsonb_build_object('id',d.id,'url','/api/v1/galleries/public/assets/'||d.id::text,'width',d.width,'height',d.height) ORDER BY ga.display_order) FROM app.gallery_assets ga JOIN app.media_derivatives d ON d.id=ga.public_derivative_id WHERE ga.gallery_id=g.id AND d.visibility='public' AND d.state='ready' AND d.approved_at IS NOT NULL AND app.asset_publication_eligible(ga.asset_id)) assets
+    (SELECT jsonb_agg(jsonb_build_object('id',d.id,'url','/api/v1/galleries/public/assets/'||d.id::text,'width',d.width,'height',d.height,'mimeType',d.mime_type) ORDER BY ga.display_order) FROM app.gallery_assets ga JOIN app.media_derivatives d ON d.id=ga.public_derivative_id WHERE ga.gallery_id=g.id AND d.visibility='public' AND d.state='ready' AND d.approved_at IS NOT NULL AND app.asset_publication_eligible(ga.asset_id)) assets
     FROM app.galleries g JOIN app.public_gallery_translations t ON t.gallery_id=g.id AND t.locale=$1
     WHERE g.kind='public' AND g.visibility_state='published' AND t.approved_at IS NOT NULL AND (g.expires_at IS NULL OR g.expires_at>now())
     AND EXISTS(SELECT 1 FROM app.gallery_assets ga WHERE ga.gallery_id=g.id)
@@ -173,11 +173,11 @@ export async function listPublicGalleries(locale:string){
 }
 export async function streamPublicDerivative(derivativeId:string){
   uuid.parse(derivativeId);
-  const result=await query(`SELECT d.storage_key FROM app.media_derivatives d JOIN app.gallery_assets ga ON ga.public_derivative_id=d.id JOIN app.galleries g ON g.id=ga.gallery_id
+  const result=await query(`SELECT d.storage_key,d.mime_type FROM app.media_derivatives d JOIN app.gallery_assets ga ON ga.public_derivative_id=d.id JOIN app.galleries g ON g.id=ga.gallery_id
     WHERE d.id=$1 AND d.kind<>'original' AND d.visibility='public' AND d.state='ready' AND d.approved_at IS NOT NULL AND app.asset_publication_eligible(d.asset_id)
     AND g.kind='public' AND g.visibility_state='published' AND (g.expires_at IS NULL OR g.expires_at>now()) LIMIT 1`,[derivativeId]);
   if(!result.rows[0])throw new MediaError("NOT_FOUND",404);
-  return {bytes:await storage().read(result.rows[0].storage_key),mimeType:"image/webp",headers:privateHeaders};
+  return {bytes:await storage().read(result.rows[0].storage_key),mimeType:result.rows[0].mime_type as string,headers:privateHeaders};
 }
 export async function createApprovedPublicDerivative(actor:ActorContext,input:{assetId:string;galleryId:string;expectedVersion:number}){
   uuid.parse(input.assetId);uuid.parse(input.galleryId);
@@ -185,19 +185,19 @@ export async function createApprovedPublicDerivative(actor:ActorContext,input:{a
     await staffPermission(tx,actor,"content.publish");
     const {gallery}=await authorizeGallery(tx,actor,input.galleryId,"galleries.manage");
     if(gallery.kind!=="public"||gallery.version!==input.expectedVersion)throw new MediaError("VERSION_CONFLICT",409);
-    const {rows}=await tx.query(`SELECT d.storage_key FROM app.media_derivatives d WHERE d.asset_id=$1 AND d.kind='web' AND d.state='ready' AND d.visibility='private' AND app.asset_publication_eligible($1) ORDER BY d.created_at LIMIT 1`,[input.assetId]);
+    const {rows}=await tx.query(`SELECT d.storage_key,d.kind,d.mime_type,d.width,d.height FROM app.media_derivatives d WHERE d.asset_id=$1 AND ((d.kind='web' AND d.mime_type='image/webp') OR (d.kind='video' AND d.mime_type='video/mp4')) AND d.state='ready' AND d.visibility='private' AND app.asset_publication_eligible($1) ORDER BY d.created_at LIMIT 1`,[input.assetId]);
     if(!rows[0])throw new MediaError("PUBLICATION_NOT_ELIGIBLE",422);
-    return rows[0].storage_key as string;
+    return rows[0];
   });
   // Separate object; never change an original's bucket ACL, path or visibility.
-  const derivativeId=randomUUID(),key=`${input.assetId}/${derivativeId}.webp`,bytes=await storage().read(source);
-  await storage().put(key,bytes,"image/webp");
+  const derivativeId=randomUUID(),key=`${input.assetId}/${derivativeId}.${source.kind==="video"?"mp4":"webp"}`,bytes=await storage().read(source.storage_key);
+  await storage().put(key,bytes,source.mime_type);
   return withTransaction(actor,async tx=>{
     await staffPermission(tx,actor,"content.publish");
     await authorizeGallery(tx,actor,input.galleryId,"galleries.manage");
     const changed=await tx.query(`UPDATE app.galleries SET version=version+1 WHERE id=$1 AND version=$2 RETURNING version`,[input.galleryId,input.expectedVersion]);
     if(!changed.rowCount)throw new MediaError("VERSION_CONFLICT",409);
-    await tx.query(`INSERT INTO app.media_derivatives(id,asset_id,kind,storage_bucket,storage_key,visibility,state,size_bytes,approved_by,approved_at) VALUES($1,$2,'web','tourism-private',$3,'public','ready',$4,$5,now())`,[derivativeId,input.assetId,key,bytes.length,actor.id]);
+    await tx.query(`INSERT INTO app.media_derivatives(id,asset_id,kind,storage_bucket,storage_key,visibility,state,size_bytes,approved_by,approved_at,mime_type,width,height) VALUES($1,$2,$6,'tourism-private',$3,'public','ready',$4,$5,now(),$7,$8,$9)`,[derivativeId,input.assetId,key,bytes.length,actor.id,source.kind,source.mime_type,source.width,source.height]);
     await tx.query(`INSERT INTO app.gallery_assets(gallery_id,asset_id,public_derivative_id) VALUES($1,$2,$3) ON CONFLICT(gallery_id,asset_id) DO UPDATE SET public_derivative_id=excluded.public_derivative_id`,[input.galleryId,input.assetId,derivativeId]);
     return {derivativeId,version:changed.rows[0].version};
   });

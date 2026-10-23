@@ -91,3 +91,21 @@ Verification for this scoped change: 6 targeted unit/localization tests passed; 
 The final image pass meets the unchanged route budgets: homepage image payload 343,008 B desktop / 93,793 B mobile, CLS 0, with no third-party image host or Three.js. [Updated performance evidence](PERFORMANCE.md). Safe logs: [unit](evidence/imagery-unit-green.txt), [browser](evidence/imagery-browser-green.txt), [build](evidence/imagery-build.txt).
 
 New private screenshots were inspected: `.local/evidence/ui/editorial-home-desktop.png`, `editorial-experiences.png`, `editorial-apartments-desktop.png`, and `editorial-apartments-arabic-mobile.png`. The owner's open local preview was refreshed and the new imagery visually confirmed.
+
+## Owner media and repository update — 2026-10-24
+
+The owner designated `ahmedbarakatt1/rshorizons`; GitHub returned the exact repository identity, empty initial history, push/admin access and enabled Actions. The local remote now points only to that repository. Source publication/remote CI verification follows these local checks. Hosting, domain, provider identities/secrets and business approvals remain E02–E14; production is not deployed.
+
+Eight WhatsApp images supply boat, evening and vehicle photography. The gallery retains four earlier dive photographs and includes all 30 owner videos, optimized to H.264/MP4 up to 960 pixels with posters. Total video derivatives: 121,301,620 bytes, fetched only after selection. The three homepage owner photos are also retained. All 15 prepared photographs and all 30 video derivatives passed metadata/format/hash inspection. Public production galleries support approved processed video copies, correct MIME/dimensions, HEAD and byte-range requests while rechecking current publication eligibility. Originals and private derivatives cannot be requested through public URLs. Existing database guards/columns are reused; no schema migration was needed for this change.
+
+Tests were written before implementation. The initial browser test found zero video players; the public-video integration test rejected an otherwise eligible video because the old selector allowed only image derivatives. Both regressions now pass. The first build exposed a Buffer/Response typing issue and an optional test lookup; both were corrected before the passing build.
+
+- Unit suite: 31 passed. Security suite: 32 passed.
+- Targeted PostgreSQL/media checks: media database tests, existing image/gallery integration, public-video publication/revocation/ranges, and real FFmpeg processing/provider-signature tests passed (17 database/integration cases across the recorded runs).
+- Browser release subset: 5 passed, 4 deliberate duplicate engine skips. The new media flow passed in Chromium, Firefox and WebKit: no initial MP4 download, real decode/playback, seeking, all 30 entries revealed, car hero, Arabic mobile layout and automated accessibility.
+- Lint, TypeScript, Next production build and 169-key parity across ten locales passed.
+- Source/artifact scan: 1,000 source files, 559 build files, 17 traces, zero findings before documentation publication. This is a targeted configured-secret/private-path scan, not a general security certification.
+
+Private screenshots: `.local/evidence/ui/owner-videos-desktop.png`, `owner-gallery-arabic.png`, plus the refreshed release/gallery/illustration captures. The in-app gallery was opened and visually inspected. [Media preparation evidence](evidence/owner-media.json) contains non-sensitive registry metadata/hashes; source provenance and originals remain private.
+
+The fresh performance run also passed the unchanged four route/viewport budgets; see [performance](PERFORMANCE.md). Playwright Agent CLI inspected the gallery at 1440×1000 and saved `owner-gallery-preview.png`.

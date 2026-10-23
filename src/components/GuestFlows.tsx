@@ -9,6 +9,7 @@ import {useTranslations} from "next-intl";
 import {api,ApiError} from "./api";
 
 import {money,cairoDate} from "./format";
+import {OwnerGallery,TripVideo} from "./OwnerGallery";
 
 
 
@@ -116,10 +117,10 @@ export function PolicyContent({slug,locale}:{slug:string;locale:string}) {
 
 export function PublicGallery({locale,demo}:{locale:string;demo:boolean}) {
 
- const t=useTranslations();const [galleries,setGalleries]=useState<{id:string;title:string;description?:string;assets:{id:string;url:string;width?:number;height?:number}[]}[]>([]);const [loaded,setLoaded]=useState(false);
+ const t=useTranslations();const [galleries,setGalleries]=useState<{id:string;title:string;description?:string;assets:{id:string;url:string;width?:number;height?:number;mimeType?:string}[]}[]>([]);const [loaded,setLoaded]=useState(false);
 
  useEffect(()=>{api<{items:typeof galleries}>(`/galleries/public?locale=${locale}`).then(result=>setGalleries(result.items)).catch(()=>{}).finally(()=>setLoaded(true));},[locale]);
 
- return <>{!loaded?<p role="status">{t("loading")}</p>:galleries.length?galleries.map(gallery=><section key={gallery.id}><h2>{gallery.title}</h2><p>{gallery.description}</p><div className="editorial-gallery">{gallery.assets?.map(asset=><figure key={asset.id}><img className="photo" src={asset.url} width={asset.width??1200} height={asset.height??900} alt={gallery.title} loading="lazy"/></figure>)}</div></section>):demo?<div className="editorial-gallery">{["surface-swim","reef-pause","underwater-heart","open-water"].map((key,index)=><figure key={key}><img className="photo" src={`/api/v1/demo-media/${key}`} alt={`${t("photography")} ${index+1}`} width="1200" height="900" loading="lazy"/><figcaption>{t("previousTrips")} · {t("demo")}</figcaption></figure>)}</div>:<p className="empty-state">{t("empty")}</p>}</>;
+ return <>{!loaded?<p role="status">{t("loading")}</p>:galleries.length?galleries.map(gallery=><section key={gallery.id}><h2>{gallery.title}</h2><p>{gallery.description}</p><div className="editorial-gallery">{gallery.assets?.map(asset=>asset.mimeType==="video/mp4"?<TripVideo key={asset.id} src={asset.url} title={gallery.title} width={asset.width} height={asset.height}/>:<figure key={asset.id}><img className="photo" src={asset.url} width={asset.width??1200} height={asset.height??900} alt={gallery.title} loading="lazy"/></figure>)}</div></section>):demo?<OwnerGallery/>:<p className="empty-state">{t("empty")}</p>}</>;
 
 }

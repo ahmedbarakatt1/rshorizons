@@ -1,0 +1,39 @@
+
+> red-sea-tourism@0.1.0 build
+> next build
+
+▲ Next.js 16.4.2 (Turbopack)
+- Environments: .env.local
+✓ Running next.config.ts took 303ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 4.1s
+  Running TypeScript ...
+  Finished TypeScript in 3.1s ...
+  Collecting page data using 11 workers ...
+  Generating static pages using 11 workers (0/6) ...
+  Generating static pages using 11 workers (1/6) 
+  Generating static pages using 11 workers (2/6) 
+  Generating static pages using 11 workers (4/6) 
+✓ Generating static pages using 11 workers (6/6) in 333ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ƒ /
+├ ƒ /_not-found
+├ ƒ /[locale]/[[...path]]
+├ ƒ /[locale]/photography
+├ ƒ /admin/[[...path]]
+├ ƒ /api/internal/monitor
+├ ƒ /api/internal/retention
+├ ƒ /api/internal/worker
+├ ƒ /api/v1/[...path]
+├ ○ /robots.txt
+└ ○ /sitemap.xml
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
