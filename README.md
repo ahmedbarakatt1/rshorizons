@@ -23,7 +23,14 @@ The Windows database helper uses the task-local PostgreSQL binary under `.toolin
 
 Open `http://127.0.0.1:3000/en`. The one-use local operator token is saved in ignored `.local/operator-access.json`; enter it at `/admin`. It expires after eight hours and works only in explicitly enabled development/test demo mode. There is no default staff password. Never copy this grant or `.env.local` into Git.
 
-Owner-supplied trip photos remain in `media/`. Local optimized derivatives can be regenerated with `node src/integrations/storage/prepare-owner-media.mjs`; production publication uses the consented media workflow. Original images/videos, local profiles and database files are excluded from deployment.
+Owner-supplied trip photos and videos remain in `media/`, including the WhatsApp subfolder. Restore these private originals separately when cloning; they are intentionally absent from Git. Prepare the local gallery with:
+
+```powershell
+node src/integrations/storage/prepare-owner-media.mjs
+node scripts/prepare-owner-videos.mjs
+```
+
+The gallery includes selected event/boat/transfer-car photos and all 30 videos with posters and on-demand playback. See [media preparation and provenance](docs/design/owner-media.md). Production publication uses the consented media workflow. Original images/videos, local derivatives, profiles and database files are excluded from deployment. CI generates its own explicitly synthetic media fixtures.
 
 ## Verification
 
