@@ -24,6 +24,9 @@ test("@a11y responsive reading, image loading and keyboard navigation",async({pa
   await expect(page.locator(".owner-photo-gallery img")).toHaveCount(12);
   for(const image of await page.locator(".owner-photo-gallery img").all()){
     await image.scrollIntoViewIfNeeded();
+    // Firefox may defer the lazy image request until after scrolling returns.
+    // Require a successfully loaded image before asking its decoder to settle.
+    await expect.poll(()=>image.evaluate((node:HTMLImageElement)=>node.complete&&node.naturalWidth>0)).toBe(true);
     await image.evaluate((node:HTMLImageElement)=>node.decode());
     await expect(image).toHaveAttribute("alt",/\S/);
   }
