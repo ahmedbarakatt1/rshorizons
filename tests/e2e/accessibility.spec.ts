@@ -21,8 +21,8 @@ test("@a11y responsive reading, image loading and keyboard navigation",async({pa
   const errors:string[]=[];
   page.on("pageerror",error=>errors.push(error.message));
   await page.goto("/en/gallery");
-  await expect(page.locator(".editorial-gallery img")).toHaveCount(4);
-  for(const image of await page.locator(".editorial-gallery img").all()){
+  await expect(page.locator(".owner-photo-gallery img")).toHaveCount(12);
+  for(const image of await page.locator(".owner-photo-gallery img").all()){
     await image.scrollIntoViewIfNeeded();
     await image.evaluate((node:HTMLImageElement)=>node.decode());
     await expect(image).toHaveAttribute("alt",/\S/);

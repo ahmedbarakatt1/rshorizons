@@ -65,6 +65,8 @@ jobs:
         run: node scripts/verify-source-artifact.mjs
       - name: Install browser revisions from locked Playwright
         run: npx --no-install playwright install --with-deps chromium firefox webkit
+      - name: Separate fresh browser inventory from domain fixtures
+        run: npx --no-install tsx scripts/prepare-ci-browser.ts
       - name: Browser and accessibility regression
         env:
           E2E_LOCAL_STAFF: "1"

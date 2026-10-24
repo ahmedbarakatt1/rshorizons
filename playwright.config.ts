@@ -4,5 +4,5 @@ export default defineConfig({
  reporter:[["list"],["html",{open:"never"}]],
  use:{baseURL:process.env.E2E_BASE_URL??"http://127.0.0.1:3000",trace:"retain-on-failure",screenshot:"only-on-failure"},
  projects:[{name:"chromium",use:{...devices["Desktop Chrome"]}},{name:"firefox",use:{...devices["Desktop Firefox"]}},{name:"webkit",use:{...devices["Desktop Safari"]}}],
- ...(process.env.E2E_BASE_URL?{}:{webServer:{command:"npm run dev",url:"http://127.0.0.1:3000/api/v1/health/live",reuseExistingServer:!process.env.CI,timeout:120000}})
+ ...(process.env.E2E_BASE_URL?{}:{webServer:{command:process.env.CI?"npm run start":"npm run dev",url:"http://127.0.0.1:3000/api/v1/health/live",reuseExistingServer:!process.env.CI,timeout:120000}})
 });

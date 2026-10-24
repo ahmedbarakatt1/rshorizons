@@ -1,0 +1,57 @@
+
+Running 45 tests using 1 worker
+
+(node:5500) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 [chromium] › tests\e2e\accessibility.spec.ts:3:1 › @a11y responsive reading, image loading and keyboard navigation (3.3s)
+  ok  2 [chromium] › tests\e2e\accessibility.spec.ts:33:1 › @a11y private fragments require deliberate redemption and leave the address bar (389ms)
+  ok  3 [chromium] › tests\e2e\booking-kinds.spec.ts:4:3 › stay submits a complete request awaiting staff approval (2.1s)
+  ok  4 [chromium] › tests\e2e\booking-kinds.spec.ts:4:3 › transfer submits a complete request awaiting staff approval (2.5s)
+  ok  5 [chromium] › tests\e2e\booking-kinds.spec.ts:4:3 › shared-transfer submits a complete request awaiting staff approval (1.9s)
+  ok  6 [chromium] › tests\e2e\booking-kinds.spec.ts:4:3 › photography submits a complete request awaiting staff approval (2.6s)
+  ok  7 [chromium] › tests\e2e\booking-kinds.spec.ts:4:3 › tour-addon submits a complete request awaiting staff approval (1.4s)
+  ok  8 [chromium] › tests\e2e\imagery.spec.ts:5:1 › illustrative images fill catalog gaps while actual trip photographs remain separate (3.8s)
+  ok  9 [chromium] › tests\e2e\operations.spec.ts:4:1 › staff operates a real resource and reviews a pending request (4.2s)
+  ok 10 [chromium] › tests\e2e\operations.spec.ts:76:1 › apartment dates and transfer requests quote on the server (2.0s)
+  ok 11 [chromium] › tests\e2e\owner-media.spec.ts:5:1 › owner photos and videos load on demand, play and seek (3.1s)
+  ok 12 [chromium] › tests\e2e\public.spec.ts:3:1 › ten locale navigation and private access boundary (2.9s)
+  ok 13 [chromium] › tests\e2e\public.spec.ts:13:1 › arabic_form_keyboard_flow (359ms)
+  ok 14 [chromium] › tests\e2e\public.spec.ts:24:1 › request_does_not_confirm and checkout_no_threejs (1.2s)
+  ok 15 [chromium] › tests\e2e\release.spec.ts:5:1 › @a11y release pages have no automated WCAG A/AA violations and private responses reject caching (7.0s)
+(node:7644) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 16 [firefox] › tests\e2e\accessibility.spec.ts:3:1 › @a11y responsive reading, image loading and keyboard navigation (7.5s)
+  ok 17 [firefox] › tests\e2e\accessibility.spec.ts:33:1 › @a11y private fragments require deliberate redemption and leave the address bar (706ms)
+  -  18 [firefox] › tests\e2e\booking-kinds.spec.ts:4:3 › stay submits a complete request awaiting staff approval
+  -  19 [firefox] › tests\e2e\booking-kinds.spec.ts:4:3 › transfer submits a complete request awaiting staff approval
+  -  20 [firefox] › tests\e2e\booking-kinds.spec.ts:4:3 › shared-transfer submits a complete request awaiting staff approval
+  -  21 [firefox] › tests\e2e\booking-kinds.spec.ts:4:3 › photography submits a complete request awaiting staff approval
+  -  22 [firefox] › tests\e2e\booking-kinds.spec.ts:4:3 › tour-addon submits a complete request awaiting staff approval
+  -  23 [firefox] › tests\e2e\imagery.spec.ts:5:1 › illustrative images fill catalog gaps while actual trip photographs remain separate
+  -  24 [firefox] › tests\e2e\operations.spec.ts:4:1 › staff operates a real resource and reviews a pending request
+  ok 25 [firefox] › tests\e2e\operations.spec.ts:76:1 › apartment dates and transfer requests quote on the server (3.9s)
+  ok 26 [firefox] › tests\e2e\owner-media.spec.ts:5:1 › owner photos and videos load on demand, play and seek (2.3s)
+  ok 27 [firefox] › tests\e2e\public.spec.ts:3:1 › ten locale navigation and private access boundary (3.1s)
+  ok 28 [firefox] › tests\e2e\public.spec.ts:13:1 › arabic_form_keyboard_flow (557ms)
+  ok 29 [firefox] › tests\e2e\public.spec.ts:24:1 › request_does_not_confirm and checkout_no_threejs (1.8s)
+  -  30 [firefox] › tests\e2e\release.spec.ts:5:1 › @a11y release pages have no automated WCAG A/AA violations and private responses reject caching
+(node:6320) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 31 [webkit] › tests\e2e\accessibility.spec.ts:3:1 › @a11y responsive reading, image loading and keyboard navigation (10.5s)
+  ok 32 [webkit] › tests\e2e\accessibility.spec.ts:33:1 › @a11y private fragments require deliberate redemption and leave the address bar (1.2s)
+  -  33 [webkit] › tests\e2e\booking-kinds.spec.ts:4:3 › stay submits a complete request awaiting staff approval
+  -  34 [webkit] › tests\e2e\booking-kinds.spec.ts:4:3 › transfer submits a complete request awaiting staff approval
+  -  35 [webkit] › tests\e2e\booking-kinds.spec.ts:4:3 › shared-transfer submits a complete request awaiting staff approval
+  -  36 [webkit] › tests\e2e\booking-kinds.spec.ts:4:3 › photography submits a complete request awaiting staff approval
+  -  37 [webkit] › tests\e2e\booking-kinds.spec.ts:4:3 › tour-addon submits a complete request awaiting staff approval
+  -  38 [webkit] › tests\e2e\imagery.spec.ts:5:1 › illustrative images fill catalog gaps while actual trip photographs remain separate
+  -  39 [webkit] › tests\e2e\operations.spec.ts:4:1 › staff operates a real resource and reviews a pending request
+  ok 40 [webkit] › tests\e2e\operations.spec.ts:76:1 › apartment dates and transfer requests quote on the server (2.8s)
+  ok 41 [webkit] › tests\e2e\owner-media.spec.ts:5:1 › owner photos and videos load on demand, play and seek (4.9s)
+  ok 42 [webkit] › tests\e2e\public.spec.ts:3:1 › ten locale navigation and private access boundary (4.0s)
+  ok 43 [webkit] › tests\e2e\public.spec.ts:13:1 › arabic_form_keyboard_flow (756ms)
+  ok 44 [webkit] › tests\e2e\public.spec.ts:24:1 › request_does_not_confirm and checkout_no_threejs (2.6s)
+  -  45 [webkit] › tests\e2e\release.spec.ts:5:1 › @a11y release pages have no automated WCAG A/AA violations and private responses reject caching
+
+  16 skipped
+  29 passed (1.6m)
