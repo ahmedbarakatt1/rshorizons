@@ -1,12 +1,12 @@
 {
-  "at": "2026-10-24T01:52:43.129Z",
+  "at": "2026-10-24T13:56:07.745Z",
   "environment": "Local production build, Chromium, no CPU/network throttle; lab diagnostics only, not field Core Web Vitals.",
   "measurements": [
     {
       "path": "/en",
       "navigation": [
         {
-          "duration": 206.40000000596046
+          "duration": 182.80000001192093
         }
       ],
       "resources": [
@@ -15,16 +15,16 @@
           "bytes": 48345
         },
         {
-          "name": "2gvu8dyrhibpa.js",
-          "bytes": 71899
+          "name": "0umf92h1sb77c.js",
+          "bytes": 3514
         },
         {
           "name": "turbopack-2c3mg3r-05n1w.js",
           "bytes": 4390
         },
         {
-          "name": "0umf92h1sb77c.js",
-          "bytes": 3514
+          "name": "2gvu8dyrhibpa.js",
+          "bytes": 71899
         },
         {
           "name": "0r-swioa0mbxu.js",
@@ -39,12 +39,12 @@
           "bytes": 12107
         },
         {
-          "name": "1cm4w3ipf1syl.js",
-          "bytes": 10054
-        },
-        {
           "name": "0ajc4qd6vlfv7.js",
           "bytes": 415
+        },
+        {
+          "name": "1qgh90xesoiuo.js",
+          "bytes": 10076
         }
       ]
     },
@@ -52,7 +52,7 @@
       "path": "/ar/contact",
       "navigation": [
         {
-          "duration": 107.79999999701977
+          "duration": 108.79999999701977
         }
       ],
       "resources": [
@@ -85,8 +85,8 @@
           "bytes": 2772
         },
         {
-          "name": "1cm4w3ipf1syl.js",
-          "bytes": 10054
+          "name": "1qgh90xesoiuo.js",
+          "bytes": 10076
         },
         {
           "name": "0ajc4qd6vlfv7.js",
@@ -98,7 +98,7 @@
       "path": "/en/experiences/boat-tours",
       "navigation": [
         {
-          "duration": 62.79999999701977
+          "duration": 73.5
         }
       ],
       "resources": [
@@ -131,8 +131,8 @@
           "bytes": 2772
         },
         {
-          "name": "1cm4w3ipf1syl.js",
-          "bytes": 10054
+          "name": "1qgh90xesoiuo.js",
+          "bytes": 10076
         },
         {
           "name": "0ajc4qd6vlfv7.js",
@@ -144,7 +144,7 @@
       "path": "/en/booking/request?service=boat-tours",
       "navigation": [
         {
-          "duration": 79.79999999701977
+          "duration": 64.20000000298023
         }
       ],
       "resources": [
@@ -177,8 +177,8 @@
           "bytes": 2772
         },
         {
-          "name": "1cm4w3ipf1syl.js",
-          "bytes": 10054
+          "name": "1qgh90xesoiuo.js",
+          "bytes": 10076
         },
         {
           "name": "0ajc4qd6vlfv7.js",

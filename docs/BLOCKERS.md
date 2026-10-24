@@ -15,7 +15,7 @@ E01 is resolved: the designated repository contains the source and its CI is pas
 | E09 | Agency/legal owner | Approve legal identity, contact/social URLs, terms/privacy/cancellation/safety content | Agency settings and approved policy versions; brand name alone is not legal identity approval |
 | E10 | Content owner | Confirm media rights and subject/guardian publication consent | Explicit consent records and approved public derivatives; supplied originals are not automatically public |
 | E11 | Language reviewers | Approve all ten public/booking-critical translations | Translation approval records; local translation coverage is not human approval |
-| E12 | Agency owner | Designate staff invitation addresses, scopes and initial MFA owner | Invite-only Auth bootstrap; no default credentials |
+| E12 | Agency owner | Initial administrator designated as the privately recorded administrator email, all-scope owner role; local account provisioned and browser verified. Designate the hosted Supabase project and complete its password/MFA setup | `docs/runbooks/staff.md`; local credentials never become production defaults. Other staff addresses/scopes and hosted MFA verification remain outstanding |
 | E13 | Operations owner | Designate the Mux account/environment and monitoring destination | Implemented signed private Mux playback/retention; actual account/billing approval, processing verification, alerts and cron ownership remain required |
 | E14 | Agency owner | Approve UAT, recovery/retention objectives and designated live-test transaction amount/contacts | M6 release gate and M7 authorized production journey |
 

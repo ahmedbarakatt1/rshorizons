@@ -1,5 +1,7 @@
 # Requested resource usage
 
+Administrator follow-up, 2026-10-24: applied Supabase skill (current changelog, official Admin Auth docs and Context7), test-driven-development and systematic-debugging skills, browser workflow guidance and verification-before-completion. Used the requesting-code-review skill for an independent focused security review. The reviewer reproduced a local-session boundary gap; root added a failing regression, unified the local eligibility gate for sign-in and session consumption, and the reviewer confirmed rejection before any local session lookup. Browser evidence exercises actual password login, database-backed price changes and uploads; the owner's credentials never enter committed test fixtures. Hosted account creation and real message delivery remain explicitly unverified.
+
 Updated 2026-10-20. This starts with verified acquisition and explicit application gates. A help command or installation is not proof that a resource improved the product.
 
 | Resource | Actual work so far | Deliverable influenced / evidence | Remaining application gate |

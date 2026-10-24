@@ -46,6 +46,8 @@ export const bookingInputSchema=z.object({
     termsAccepted:z.literal(true),termsVersion:z.string().min(1).max(80),privacyNoticeVersion:z.string().min(1).max(80),
     whatsappBookingUpdates:z.boolean(),marketing:z.boolean(),publicMediaUse:z.boolean()
   }).strict()
-}).strict();
+}).strict().superRefine((value,ctx)=>{
+  if(value.consents.whatsappBookingUpdates&&!value.guest.phoneE164)ctx.addIssue({code:"custom",path:["guest","phoneE164"],message:"A phone number with country code is required for WhatsApp updates."});
+});
 export type QuoteInput=z.infer<typeof quoteInputSchema>;
 export type BookingInput=z.infer<typeof bookingInputSchema>;

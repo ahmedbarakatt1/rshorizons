@@ -2,6 +2,7 @@ import {createClient} from "@supabase/supabase-js";
 import {query,withTransaction,type ActorContext} from "@/server/db";
 import {AppError} from "@/server/http/errors";
 import {digestSecret,newSecret} from "@/server/security";
+import {localPasswordEnvironment} from "./local-password";
 
 export type StaffActor=ActorContext&{type:"staff";id:string;name:string;aal:"aal2"};
 export type GuestActor=ActorContext&{type:"guest";id:string;sessionHash:string;bookingId:string;scope:string[]};
@@ -13,8 +14,8 @@ export function cookieValue(request:Request,name:string) {
 export function sessionCookie(name:string,value:string,maxAge=7200) {
   return `${name}=${encodeURIComponent(value)}; HttpOnly; SameSite=Lax; Path=/; Max-Age=${maxAge}${process.env.APP_ENV==="production"||process.env.APP_ENV==="staging"?"; Secure":""}`;
 }
-export function localEnvironment() {
-  return ["development","test"].includes(process.env.APP_ENV??"development")&&process.env.DEMO_MODE==="true";
+export function localEnvironment(requestUrl?:string) {
+  return localPasswordEnvironment(requestUrl);
 }
 function authClient() {
   const url=process.env.NEXT_PUBLIC_SUPABASE_URL,key=process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
@@ -24,7 +25,7 @@ function authClient() {
 export async function getStaff(request:Request,permission?:string,bookingId?:string):Promise<StaffActor> {
   const localToken=cookieValue(request,"rsh_local_staff");
   let staffId:string|undefined,aal="aal1";
-  if(localToken&&localEnvironment()) {
+  if(localToken&&localEnvironment(request.url)) {
     const {rows}=await query<{staff_id:string}>(`SELECT staff_id FROM app.local_operator_sessions WHERE token_hash=$1 AND expires_at>now() AND redeemed_at IS NOT NULL AND revoked_at IS NULL`,[digestSecret(localToken)]);
     staffId=rows[0]?.staff_id;
     if(staffId)aal="aal2";
@@ -55,8 +56,8 @@ export async function loginStaff(email:string,password:string) {
   const {data:claims}=await auth.auth.getClaims(data.session.access_token);
   return {accessToken:data.session.access_token,refreshToken:data.session.refresh_token,requiresMfa:claims?.claims.aal!=="aal2"};
 }
-export async function localLogin(token:string) {
-  if(!localEnvironment())throw new AppError("NOT_FOUND",404);
+export async function localLogin(token:string,requestUrl:string) {
+  if(!localEnvironment(requestUrl))throw new AppError("NOT_FOUND",404);
   if(!/^[A-Za-z0-9_-]{43}$/.test(token))throw new AppError("INVALID_CREDENTIALS",401);
   const hash=digestSecret(token);
   const replacement=newSecret();

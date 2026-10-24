@@ -26,6 +26,12 @@ The handoff is the approved specification and milestone execution plan. The user
 
 No confirmed business requirement is removed by these implementation choices.
 
+## Administrator and automatic guest messages — 2026-10-24
+
+The owner designated the privately recorded administrator email with administrator authority and supplied a password for provisioning. A reusable local preview identity is now supported behind strict local development/test gates, stored only as a randomly salted scrypt hash. It reuses the existing hashed staff sessions and live role/scope checks. Hosted access continues through Supabase Auth plus MFA; a protected provisioning command binds the explicitly designated project and database before creating the initial owner. No account/password is seeded by migrations, committed to source, or copied between environments.
+
+The request for automatic messages applies after successful booking submission. Phone/email field entry alone sends nothing. Existing WhatsApp consent, preferred-channel/email-fallback behavior, immutable approved templates, durable event/jobs, unknown-outcome reconciliation and manual booking approval remain authoritative. The local preview runs the real worker on a minute schedule with external providers disabled and synthetic email previews only. Actual OpenWA and email delivery remain E06/E07 launch gates.
+
 ## Reviews, OpenWA and Vercel — 2026-10-24
 
 The owner's latest request specifies a reviews page, `rmyndharis/OpenWA` for WhatsApp and owner-performed Vercel deployment. OpenWA explicitly supersedes the handoff's older Meta-only/unofficial-client prohibition; all consent, marketing classification, durable delivery, fallback and secret requirements remain. The retained Meta adapter is optional and its historical receipts are preserved. OpenWA is a separately hosted persistent gateway, not a Vercel Function. Its documented unofficial-client/account-restriction risk was communicated; no number has been linked or messaged.

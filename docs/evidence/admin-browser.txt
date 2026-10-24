@@ -1,0 +1,81 @@
+
+Running 69 tests using 1 worker
+
+(node:24616) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 [chromium] › tests\e2e\accessibility.spec.ts:3:1 › @a11y responsive reading, image loading and keyboard navigation (3.5s)
+  ok  2 [chromium] › tests\e2e\accessibility.spec.ts:36:1 › @a11y private fragments require deliberate redemption and leave the address bar (451ms)
+  ok  3 [chromium] › tests\e2e\admin-account.spec.ts:7:1 › password administrator updates a real quote price and uploads a gallery photo (4.7s)
+  ok  4 [chromium] › tests\e2e\admin-account.spec.ts:57:1 › choosing WhatsApp makes the booking phone number required (1.2s)
+  ok  5 [chromium] › tests\e2e\booking-kinds.spec.ts:4:3 › stay submits a complete request awaiting staff approval (2.4s)
+  ok  6 [chromium] › tests\e2e\booking-kinds.spec.ts:4:3 › transfer submits a complete request awaiting staff approval (2.2s)
+  ok  7 [chromium] › tests\e2e\booking-kinds.spec.ts:4:3 › shared-transfer submits a complete request awaiting staff approval (1.6s)
+  ok  8 [chromium] › tests\e2e\booking-kinds.spec.ts:4:3 › photography submits a complete request awaiting staff approval (2.5s)
+  ok  9 [chromium] › tests\e2e\booking-kinds.spec.ts:4:3 › tour-addon submits a complete request awaiting staff approval (1.4s)
+  ok 10 [chromium] › tests\e2e\hosted-media.spec.ts:4:1 › staff upload sends a file above 4.5 MB directly to storage before server finalization (1.6s)
+  ok 11 [chromium] › tests\e2e\imagery.spec.ts:5:1 › illustrative images fill catalog gaps while actual trip photographs remain separate (3.7s)
+  ok 12 [chromium] › tests\e2e\operations.spec.ts:4:1 › staff operates a real resource and reviews a pending request (3.9s)
+  ok 13 [chromium] › tests\e2e\operations.spec.ts:76:1 › apartment dates and transfer requests quote on the server (1.5s)
+  ok 14 [chromium] › tests\e2e\owner-media.spec.ts:5:1 › owner photos and videos load on demand, play and seek (2.8s)
+  ok 15 [chromium] › tests\e2e\public.spec.ts:3:1 › ten locale navigation and private access boundary (2.7s)
+  ok 16 [chromium] › tests\e2e\public.spec.ts:13:1 › arabic_form_keyboard_flow (373ms)
+  ok 17 [chromium] › tests\e2e\public.spec.ts:24:1 › request_does_not_confirm and checkout_no_threejs (973ms)
+  ok 18 [chromium] › tests\e2e\release.spec.ts:5:1 › @a11y release pages have no automated WCAG A/AA violations and private responses reject caching (6.6s)
+  ok 19 [chromium] › tests\e2e\reviews.spec.ts:7:1 › reviews show original feedback, honest aggregate, rating filters and another page (539ms)
+  ok 20 [chromium] › tests\e2e\reviews.spec.ts:26:1 › reviews have an honest empty state and a recoverable loading error (445ms)
+  ok 21 [chromium] › tests\e2e\reviews.spec.ts:40:1 › invited reviewer chooses an accessible rating and public display name and cannot submit twice (574ms)
+  ok 22 [chromium] › tests\e2e\reviews.spec.ts:57:1 › @a11y reviews remain readable and accessible on mobile and Arabic RTL (2.7s)
+  ok 23 [chromium] › tests\e2e\reviews.spec.ts:75:1 › reviews are discoverable in navigation and long display names wrap on narrow screens (488ms)
+(node:11772) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 24 [firefox] › tests\e2e\accessibility.spec.ts:3:1 › @a11y responsive reading, image loading and keyboard navigation (7.6s)
+  ok 25 [firefox] › tests\e2e\accessibility.spec.ts:36:1 › @a11y private fragments require deliberate redemption and leave the address bar (731ms)
+  -  26 [firefox] › tests\e2e\admin-account.spec.ts:7:1 › password administrator updates a real quote price and uploads a gallery photo
+  ok 27 [firefox] › tests\e2e\admin-account.spec.ts:57:1 › choosing WhatsApp makes the booking phone number required (1.3s)
+  -  28 [firefox] › tests\e2e\booking-kinds.spec.ts:4:3 › stay submits a complete request awaiting staff approval
+  -  29 [firefox] › tests\e2e\booking-kinds.spec.ts:4:3 › transfer submits a complete request awaiting staff approval
+  -  30 [firefox] › tests\e2e\booking-kinds.spec.ts:4:3 › shared-transfer submits a complete request awaiting staff approval
+  -  31 [firefox] › tests\e2e\booking-kinds.spec.ts:4:3 › photography submits a complete request awaiting staff approval
+  -  32 [firefox] › tests\e2e\booking-kinds.spec.ts:4:3 › tour-addon submits a complete request awaiting staff approval
+  ok 33 [firefox] › tests\e2e\hosted-media.spec.ts:4:1 › staff upload sends a file above 4.5 MB directly to storage before server finalization (2.5s)
+  -  34 [firefox] › tests\e2e\imagery.spec.ts:5:1 › illustrative images fill catalog gaps while actual trip photographs remain separate
+  -  35 [firefox] › tests\e2e\operations.spec.ts:4:1 › staff operates a real resource and reviews a pending request
+  ok 36 [firefox] › tests\e2e\operations.spec.ts:76:1 › apartment dates and transfer requests quote on the server (2.5s)
+  ok 37 [firefox] › tests\e2e\owner-media.spec.ts:5:1 › owner photos and videos load on demand, play and seek (2.5s)
+  ok 38 [firefox] › tests\e2e\public.spec.ts:3:1 › ten locale navigation and private access boundary (3.4s)
+  ok 39 [firefox] › tests\e2e\public.spec.ts:13:1 › arabic_form_keyboard_flow (702ms)
+  ok 40 [firefox] › tests\e2e\public.spec.ts:24:1 › request_does_not_confirm and checkout_no_threejs (1.8s)
+  -  41 [firefox] › tests\e2e\release.spec.ts:5:1 › @a11y release pages have no automated WCAG A/AA violations and private responses reject caching
+  ok 42 [firefox] › tests\e2e\reviews.spec.ts:7:1 › reviews show original feedback, honest aggregate, rating filters and another page (836ms)
+  ok 43 [firefox] › tests\e2e\reviews.spec.ts:26:1 › reviews have an honest empty state and a recoverable loading error (1.7s)
+  ok 44 [firefox] › tests\e2e\reviews.spec.ts:40:1 › invited reviewer chooses an accessible rating and public display name and cannot submit twice (838ms)
+  ok 45 [firefox] › tests\e2e\reviews.spec.ts:57:1 › @a11y reviews remain readable and accessible on mobile and Arabic RTL (2.8s)
+  ok 46 [firefox] › tests\e2e\reviews.spec.ts:75:1 › reviews are discoverable in navigation and long display names wrap on narrow screens (722ms)
+(node:14384) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 47 [webkit] › tests\e2e\accessibility.spec.ts:3:1 › @a11y responsive reading, image loading and keyboard navigation (10.3s)
+  ok 48 [webkit] › tests\e2e\accessibility.spec.ts:36:1 › @a11y private fragments require deliberate redemption and leave the address bar (1.4s)
+  -  49 [webkit] › tests\e2e\admin-account.spec.ts:7:1 › password administrator updates a real quote price and uploads a gallery photo
+  ok 50 [webkit] › tests\e2e\admin-account.spec.ts:57:1 › choosing WhatsApp makes the booking phone number required (1.9s)
+  -  51 [webkit] › tests\e2e\booking-kinds.spec.ts:4:3 › stay submits a complete request awaiting staff approval
+  -  52 [webkit] › tests\e2e\booking-kinds.spec.ts:4:3 › transfer submits a complete request awaiting staff approval
+  -  53 [webkit] › tests\e2e\booking-kinds.spec.ts:4:3 › shared-transfer submits a complete request awaiting staff approval
+  -  54 [webkit] › tests\e2e\booking-kinds.spec.ts:4:3 › photography submits a complete request awaiting staff approval
+  -  55 [webkit] › tests\e2e\booking-kinds.spec.ts:4:3 › tour-addon submits a complete request awaiting staff approval
+  ok 56 [webkit] › tests\e2e\hosted-media.spec.ts:4:1 › staff upload sends a file above 4.5 MB directly to storage before server finalization (2.3s)
+  -  57 [webkit] › tests\e2e\imagery.spec.ts:5:1 › illustrative images fill catalog gaps while actual trip photographs remain separate
+  -  58 [webkit] › tests\e2e\operations.spec.ts:4:1 › staff operates a real resource and reviews a pending request
+  ok 59 [webkit] › tests\e2e\operations.spec.ts:76:1 › apartment dates and transfer requests quote on the server (2.9s)
+  ok 60 [webkit] › tests\e2e\owner-media.spec.ts:5:1 › owner photos and videos load on demand, play and seek (4.5s)
+  ok 61 [webkit] › tests\e2e\public.spec.ts:3:1 › ten locale navigation and private access boundary (4.4s)
+  ok 62 [webkit] › tests\e2e\public.spec.ts:13:1 › arabic_form_keyboard_flow (847ms)
+  ok 63 [webkit] › tests\e2e\public.spec.ts:24:1 › request_does_not_confirm and checkout_no_threejs (2.5s)
+  -  64 [webkit] › tests\e2e\release.spec.ts:5:1 › @a11y release pages have no automated WCAG A/AA violations and private responses reject caching
+  ok 65 [webkit] › tests\e2e\reviews.spec.ts:7:1 › reviews show original feedback, honest aggregate, rating filters and another page (1.5s)
+  ok 66 [webkit] › tests\e2e\reviews.spec.ts:26:1 › reviews have an honest empty state and a recoverable loading error (1.3s)
+  ok 67 [webkit] › tests\e2e\reviews.spec.ts:40:1 › invited reviewer chooses an accessible rating and public display name and cannot submit twice (1.6s)
+  ok 68 [webkit] › tests\e2e\reviews.spec.ts:57:1 › @a11y reviews remain readable and accessible on mobile and Arabic RTL (3.8s)
+  ok 69 [webkit] › tests\e2e\reviews.spec.ts:75:1 › reviews are discoverable in navigation and long display names wrap on narrow screens (1.2s)
+
+  18 skipped
+  51 passed (2.2m)

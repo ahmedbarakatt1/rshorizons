@@ -5,16 +5,22 @@ import {cookieValue,loginStaff,localLogin,sessionCookie,getStaff} from "@/server
 import {digestSecret} from "@/server/security";
 import {readJson,success,rateLimit} from "@/server/http/request";
 import {AppError} from "@/server/http/errors";
+import {localPasswordEnvironment,loginLocalPassword} from "@/server/auth/local-password";
 export async function authRoute(request:Request,parts:string[]){
   if(parts[0]!=="admin"||parts[1]!=="auth"||request.method!=="POST")return undefined;
   await rateLimit(request,"staff-auth",10);
   const action=parts[2];
   if(action==="local") {
     const {token}=z.object({token:z.string().max(200)}).strict().parse(await readJson(request));
-    return success({authenticated:true},200,[sessionCookie("rsh_local_staff",await localLogin(token),28800)]);
+    return success({authenticated:true},200,[sessionCookie("rsh_local_staff",await localLogin(token,request.url),28800)]);
   }
   if(action==="login") {
-    const input=z.object({email:z.email(),password:z.string().min(1).max(256)}).strict().parse(await readJson(request));
+    const input=z.object({email:z.email().transform(value=>value.toLowerCase()),password:z.string().min(1).max(256)}).strict().parse(await readJson(request));
+    await rateLimit(request,"staff-password",5,input.email);
+    if(localPasswordEnvironment()){
+      const token=await loginLocalPassword(input.email,input.password,request.url);
+      return success({requiresMfa:false},200,[sessionCookie("rsh_local_staff",token,28800),sessionCookie("rsh_staff_access","",0),sessionCookie("rsh_staff_refresh","",0)]);
+    }
     const result=await loginStaff(input.email,input.password);
     return success({requiresMfa:result.requiresMfa},200,[sessionCookie("rsh_staff_access",result.accessToken,3600),sessionCookie("rsh_staff_refresh",result.refreshToken,86400)]);
   }

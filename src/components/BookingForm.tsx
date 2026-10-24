@@ -13,6 +13,7 @@ export function BookingForm({locale,service,apartment}:{locale:string;service?:S
  const t=useTranslations(); const [quote,setQuote]=useState<Quote|null>(null);const [receipt,setReceipt]=useState<Receipt|null>(null);const [busy,setBusy]=useState(false);const [error,setError]=useState("");const [fields,setFields]=useState<Record<string,string>>({});const [adults,setAdults]=useState(1);const [children,setChildren]=useState(0);const [names,setNames]=useState<string[]>([""]);const [bookingKey,setBookingKey]=useState("");const resultRef=useRef<HTMLDivElement>(null);const selectionRef=useRef<HTMLFormElement>(null);
  const kind=apartment?"stay":service?.category==="transportation"||service?.category==="transfer"?"transfer":service?.category==="photography"?"photography":"tour";
  const [variantId,setVariantId]=useState(service?.variants[0]?.id??"");
+ const [whatsappUpdates,setWhatsappUpdates]=useState(false);
  const selectedVariant=service?.variants.find(variant=>variant.id===variantId);
  const scheduled=kind==="tour"||kind==="transfer"&&["shared","departure"].includes(selectedVariant?.capacityModel??"");
  const departures=service?.departures.filter(departure=>departure.variantId===variantId)??[];
@@ -75,11 +76,11 @@ export function BookingForm({locale,service,apartment}:{locale:string;service?:S
     <h2>{t("details")}</h2>
     <label>{t("fullName")}<input name="fullName" autoComplete="name" minLength={2} maxLength={150} required/></label>
     <label>{t("email")}<input name="email" type="email" autoComplete="email" dir="ltr" required/></label>
-    <label>{t("phone")}<input name="phoneE164" type="tel" autoComplete="tel" pattern="\+[1-9][0-9]{7,14}" placeholder="+201234567890" dir="ltr"/></label>
+    <label>{t("phone")}<input name="phoneE164" type="tel" autoComplete="tel" pattern="\+[1-9][0-9]{7,14}" placeholder="+201234567890" dir="ltr" required={whatsappUpdates}/></label>
     <fieldset><legend>{t("guests")}</legend>{names.map((name,index)=><label key={index}>{t("participant")} {index+1}<input value={name} onChange={event=>setNames(current=>current.map((item,i)=>i===index?event.target.value:item))} maxLength={150} required/></label>)}</fieldset>
     <label className="check-label"><input type="checkbox" name="terms" required/><span>{t("termsConsent")} · <Link href={`/${locale}/terms`} target="_blank">{t("terms")}</Link></span></label>
     <label className="check-label"><input type="checkbox" required/><span>{t("privacyConsent")} · <Link href={`/${locale}/privacy`} target="_blank">{t("privacy")}</Link></span></label>
-    <label className="check-label"><input type="checkbox" name="whatsapp"/><span>{t("whatsappConsent")}</span></label>
+    <label className="check-label"><input type="checkbox" name="whatsapp" checked={whatsappUpdates} onChange={event=>setWhatsappUpdates(event.target.checked)}/><span>{t("whatsappConsent")}</span></label>
     <p className="small">{t("pendingNotice")}</p><button className="button" disabled={busy}>{busy?t("loading"):t("submit")}</button>
    </form>
   </div>}
