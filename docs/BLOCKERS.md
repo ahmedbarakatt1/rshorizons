@@ -4,7 +4,7 @@ E01 is resolved: the designated repository contains the source and its CI is pas
 
 | ID | Owner | Required single next action | Impact / exact destination |
 |---|---|---|---|
-| E01 | Resolved | Owner-designated `ahmedbarakatt1/rshorizons`; source published to `main`; [CI passed](https://github.com/ahmedbarakatt1/rshorizons/actions/runs/40044050864) | Production deployment secrets/environment configuration remain dependent on E02–E14 |
+| E01 | Resolved | Owner-designated `ahmedbarakatt1/rshorizons`; source published to `main`; [latest CI passed](https://github.com/ahmedbarakatt1/rshorizons/actions/runs/40052027620) for reviews/OpenWA/Vercel implementation | Production deployment secrets/environment configuration remain dependent on E02–E14 |
 | E02 | Agency owner | Vercel selected; owner will deploy. Configure the designated commercial account/project and plan using `docs/runbooks/vercel-owner-setup.md` | Provider and self-deployment choice resolved; exact project, plan, environment secrets and actual deployment URL remain unverified; no purchase is authorized |
 | E03 | Agency owner | Designate the domain and DNS account | `APP_BASE_URL`, canonical domain, HTTPS and DNS verification |
 | E04 | Agency owner | Supply separate staging/production Supabase project access via secret storage | Runtime/migration DB roles, Auth, storage, redirect allowlists, backup rehearsal |

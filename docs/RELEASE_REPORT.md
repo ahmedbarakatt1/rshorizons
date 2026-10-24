@@ -17,12 +17,14 @@ Fresh combined verification:
 | `docker compose -f deploy/openwa/compose.yaml config --quiet` |Passed with synthetic admin value; no build/start/pairing |
 | `npm run verify:release` |Correctly rejected development environment; no approval bypass |
 | Source/artifact scan |Zero configured credential/private-path findings; exact counts in `docs/evidence/source-artifact-scan.json` |
+| GitHub CI |[Run40052027620 passed](https://github.com/ahmedbarakatt1/rshorizons/actions/runs/40052027620) for implementation6c774397a4852a5b98a40e04879d36794344e52c:193 domain tests,47 browser tests,16 intentional skips; clean migrations, recovery,build and scans |
+| Fresh public-route performance |Four cold samples passed unchanged budgets; LCP872–2480ms,CLS0,158757B encoded script; local lab only |
 
 Evidence: `docs/evidence/reviews-openwa-domain.txt`, `docs/evidence/reviews-openwa-browser.txt`; private inspected production screenshot `.local/evidence/ui/reviews-production-preview.png`, plus mobile/RTL/provider-mock captures described in `docs/design/reviews-page.md`. Root Playwright CLI recorded0 console errors and0 warnings. Provider-mock browser tests prove application behavior, not live Supabase CORS/OpenWA/Mux delivery. OpenWA integration tests use a real loopback HTTP server and real database; no messages reach WhatsApp.
 
 Failure history: new OpenWA tests first rejected the missing signature/provider schema; configuration tests first required stale Meta secrets; initial engine4xx tests exposed unsafe automatic fallback; database tests exposed mutable approved message content. All were fixed with passing regression checks. The independent reviewer found no remaining important issue in the scoped follow-up review.
 
-Deployment handoff: `docs/runbooks/vercel-owner-setup.md`, `docs/runbooks/openwa.md`, pinned `deploy/openwa/compose.yaml`. E02 provider/self-deployment and E06 integration choices are resolved; exact accounts/host/domain/session/secrets, approved text/content, hosted large-media verification and actual provider receipts remain external. The current candidate must pass remote CI before owner staging/promote steps.
+Deployment handoff: `docs/runbooks/vercel-owner-setup.md`, `docs/runbooks/openwa.md`, pinned `deploy/openwa/compose.yaml`. E02 provider/self-deployment and E06 integration choices are resolved; exact accounts/host/domain/session/secrets, approved text/content, hosted large-media verification and actual provider receipts remain external. The implementation is published on main and passed remote CI. Follow-up documentation-only commits preserve the tested application code.
 
 # Red Sea Horizons — local release report
 

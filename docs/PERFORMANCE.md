@@ -48,3 +48,7 @@ Decoded JavaScript was 523,531 B per sample. All four budget checks passed; no e
 ## After owner photos and video — 2026-10-24
 
 The same four cold Chromium samples (evidence timestamp 2026-10-23T23:20:52Z, Cairo date October 24) passed unchanged budgets. Home LCP was 2,436 ms desktop / 1,288 ms mobile; request LCP was 1,132 / 1,124 ms. CLS remained 0. Encoded JavaScript was 157,127 B (528,622 B decoded); homepage images remained 343,008 B desktop / 93,793 B mobile. No external origin or Three.js loaded. The gallery separately verifies zero MP4 requests before choosing a video, and loads six posters initially. These remain local lab measurements, not production field claims.
+
+## After reviews and navigation — 2026-10-24
+
+Fresh samples at01:56:42UTC passed unchanged budgets. Home LCP was2480ms desktop/1304ms mobile; request LCP1112ms/872ms. All samples had CLS0,158757B encoded JavaScript and535633B decoded. Homepage image transfer remained343008B desktop/93793B mobile; request images remained0B. No external origin or Three.js loaded. These single cold local samples check the new public bundle/navigation for regressions; they are not hosted production or field measurements.

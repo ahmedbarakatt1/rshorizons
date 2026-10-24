@@ -50,7 +50,7 @@ npm run verify:production
 
 `npm test` runs unit, database, integration, contract, security and real concurrency suites. These suites create synthetic records; use an isolated test database. Browser operation tests require `E2E_LOCAL_STAFF=1` and a fresh local operator bootstrap. Production verification intentionally fails on the local configuration.
 
-The browser suite covers all ten locale routes and Arabic RTL, all reservation kinds, approval, private-access denial, keyboard interactions and axe checks. Local Paymob/Meta/Resend/Mux contract evidence does not prove a merchant sandbox or live provider journey.
+The browser suite covers all ten locale routes and Arabic RTL, all reservation kinds, approval, reviews, private-access denial, large media transport, keyboard interactions and axe checks. Local Paymob/OpenWA/Resend/Mux contract evidence does not prove a merchant sandbox or live provider journey.
 
 ## Structure
 
@@ -65,6 +65,6 @@ No direct anonymous access is allowed to the private application schema. The run
 
 ## Deployment
 
-Use the owner-designated Vercel and Supabase projects with separate staging/production credentials. Paymob, Meta WhatsApp, Resend and Mux are configured through server-only secrets. `vercel.json` defines bounded worker, monitor and retention cron jobs; the owner must designate a plan that supports their frequency and duration.
+The owner selected Vercel and will deploy. Follow the [Vercel owner setup guide](docs/runbooks/vercel-owner-setup.md) with separate staging/production projects and Supabase credentials. WhatsApp uses the owner-selected [OpenWA gateway](docs/runbooks/openwa.md), which runs on a separate persistent Docker host. Paymob, OpenWA, Resend and Mux use server-only secrets. `vercel.json` defines bounded worker, monitor and retention cron jobs; the owner must designate a plan that supports their frequency and duration.
 
 Follow [deployment](docs/runbooks/deployment.md), [rollback](docs/runbooks/rollback.md) and [staff training](docs/runbooks/staff.md). Production is deliberately unavailable while demo mode, synthetic catalog data, missing provider credentials, unapproved policies or incomplete locale approvals remain.
