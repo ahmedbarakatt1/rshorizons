@@ -6,7 +6,7 @@ import Link from "next/link";
 
 import {useTranslations} from "next-intl";
 
-import {api,ApiError} from "./api";
+import {api} from "./api";
 
 import {money,cairoDate} from "./format";
 import {OwnerGallery,TripVideo} from "./OwnerGallery";
@@ -88,18 +88,6 @@ export function PrivateGallery({locale,id}:{locale:string;id:string}) {
  if(!gallery)return <GuestAccess locale={locale}/>;
 
  return <><h2>{gallery.title}</h2>{gallery.expiresAt&&<p>{cairoDate(gallery.expiresAt,locale)}</p>}<div className="gallery-grid">{gallery.assets.map(asset=><figure key={asset.id}>{asset.previewUrl&&<img src={asset.previewUrl} alt={asset.title??gallery.title} width={800} height={600} loading="lazy"/>}<figcaption>{asset.title}</figcaption>{asset.downloadAllowed&&<button className="button button-secondary" onClick={async()=>{try{const result=await api<{token:string;assets:{url:string}[]}>(`/galleries/${id}/download-grants`,{assetIds:[asset.id],derivative:"original"});const response=await fetch(result.assets[0].url,{headers:{"x-download-token":result.token},credentials:"same-origin",cache:"no-store"});if(!response.ok)throw new Error("Download unavailable");const blob=await response.blob();const local=URL.createObjectURL(blob);const link=document.createElement("a");link.href=local;link.download=`photo-${asset.id}`;link.click();setTimeout(()=>URL.revokeObjectURL(local),1000);}catch{setMessage(t("error"));}}}>{t("download")}</button>}</figure>)}</div>{message&&<p role="alert">{message}</p>}</>;
-
-}
-
-export function Reviews({locale}:{locale:string}) {
-
- const t=useTranslations();const [reviews,setReviews]=useState<{id:string;rating:number;text:string;displayName?:string;display_name?:string}[]>([]);const [loaded,setLoaded]=useState(false);const [message,setMessage]=useState("");const [busy,setBusy]=useState(false);const [invitation,setInvitation]=useState("");const [accessNeeded,setAccessNeeded]=useState(false);
-
- useEffect(()=>{const url=new URL(window.location.href);const fragment=new URLSearchParams(url.hash.slice(1));setInvitation(url.searchParams.get("invitation")??fragment.get("invitation")??"");setAccessNeeded(fragment.has("token"));},[]);
-
- useEffect(()=>{api<{items:typeof reviews}>(`/reviews?locale=${locale}`).then(result=>setReviews(result.items??[])).catch(()=>{}).finally(()=>setLoaded(true));},[locale]);
-
- return <>{accessNeeded&&<GuestAccess locale={locale}/>}<div>{!loaded?<p>{t("loading")}</p>:reviews.length?reviews.map(review=><blockquote key={review.id}><p>{review.text}</p><footer>{review.displayName??review.display_name} · {review.rating}/5</footer></blockquote>):<p className="empty-state">{t("noReviews")}</p>}</div><details className="review-form"><summary>{t("reviews")}</summary><p>{t("requestAccess")}</p><form className="form-stack" onSubmit={async event=>{event.preventDefault();setBusy(true);const form=new FormData(event.currentTarget);try{await api("/reviews",{invitationId:form.get("invitationId"),rating:Number(form.get("rating")),text:form.get("text"),locale,displayName:"initials"},undefined,crypto.randomUUID());setMessage(t("requestSent"));}catch(cause){setMessage(cause instanceof ApiError&&cause.status===401?t("requestAccess"):t("error"));}finally{setBusy(false);}}}><label>{t("invitation")}<input name="invitationId" value={invitation} onChange={event=>setInvitation(event.target.value)} required dir="ltr"/></label><label>{t("reviews")}<select name="rating">{[5,4,3,2,1].map(rating=><option key={rating}>{rating}</option>)}</select></label><label>{t("message")}<textarea name="text" minLength={10} maxLength={4000} required rows={5}/></label><button className="button" disabled={busy}>{t("send")}</button>{message&&<p role="status">{message}</p>}</form></details></>;
 
 }
 

@@ -1288,14 +1288,42 @@
     "/api/v1/reviews": {
       "get": {
         "operationId": "get__reviews",
-        "summary": "Read /reviews",
-        "description": "Validated server operation. All money, inventory, approval and authorization rules are enforced against the current database state.",
+        "summary": "Read published verified reviews and rating summary",
+        "description": "Published originals and non-withdrawn public agency replies only. Optional rating 1–5 and serviceId UUID filters. Cursor is a review UUID; limit defaults to 12, maximum 24. Aggregate includes all published reviews in the service scope regardless of rating filter or page.",
         "tags": [
           "reviews"
         ],
         "parameters": [
           {
             "name": "locale",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "serviceId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "rating",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
             "in": "query",
             "schema": {
               "type": "string"
@@ -1309,7 +1337,18 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Success"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Success"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/ReviewPage"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -23162,6 +23201,192 @@
         }
       }
     },
+    "/api/v1/webhooks/openwa": {
+      "post": {
+        "operationId": "post__webhooks_openwa",
+        "summary": "Verify signed OpenWA delivery acknowledgements",
+        "description": "Raw HMAC-SHA256 signature, exact configured session and signed idempotency key required. Delayed durable retries are allowed; future timestamps rejected. Statuses do not regress. No incoming chat processing.",
+        "tags": [
+          "webhooks"
+        ],
+        "parameters": [
+          {
+            "name": "x-openwa-signature",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^sha256=[0-9a-f]{64}$"
+            }
+          }
+        ],
+        "security": [
+          {
+            "openwaSignature": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation; private endpoints are no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Success"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing/invalid session or signature",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, scope or origin rejected",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Unavailable or unauthorized object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Version, inventory, idempotency or state conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "Expired quote or consumed/expired grant",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Business rule rejected",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Dependency/configuration unavailable; no simulated external success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "event",
+                  "sessionId",
+                  "timestamp",
+                  "idempotencyKey",
+                  "data"
+                ],
+                "properties": {
+                  "event": {
+                    "enum": [
+                      "message.ack",
+                      "message.failed"
+                    ]
+                  },
+                  "sessionId": {
+                    "type": "string"
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "idempotencyKey": {
+                    "type": "string"
+                  },
+                  "data": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "messageId",
+                      "status"
+                    ],
+                    "properties": {
+                      "messageId": {
+                        "type": "string"
+                      },
+                      "status": {
+                        "enum": [
+                          "pending",
+                          "sent",
+                          "delivered",
+                          "read",
+                          "failed"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/internal/worker": {
       "get": {
         "operationId": "get__internal_worker",
@@ -25822,6 +26047,117 @@
         ],
         "additionalProperties": false
       },
+      "ReviewPage": {
+        "type": "object",
+        "required": [
+          "items",
+          "summary",
+          "filteredTotal",
+          "nextCursor"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "id",
+                "rating",
+                "text",
+                "locale",
+                "display_name",
+                "submitted_at",
+                "replies"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "rating": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 5
+                },
+                "text": {
+                  "type": "string",
+                  "description": "Immutable original guest text."
+                },
+                "locale": {
+                  "type": "string"
+                },
+                "display_name": {
+                  "type": "string"
+                },
+                "submitted_at": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "replies": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "body",
+                      "publishedAt"
+                    ],
+                    "properties": {
+                      "body": {
+                        "type": "string"
+                      },
+                      "publishedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "summary": {
+            "type": "object",
+            "required": [
+              "total",
+              "average",
+              "ratings"
+            ],
+            "properties": {
+              "total": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "average": {
+                "type": [
+                  "number",
+                  "null"
+                ],
+                "description": "Mean of every published review in the service scope, independent of rating filter and pagination. Null when empty."
+              },
+              "ratings": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "description": "Counts keyed by each star rating 1–5."
+              }
+            }
+          },
+          "filteredTotal": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "nextCursor": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid",
+            "description": "Last visible review ID; newest-first keyset pagination preserves equal timestamps."
+          }
+        }
+      },
       "StaffInvitation": {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "type": "object",
@@ -25915,6 +26251,11 @@
         "in": "query",
         "name": "hmac",
         "description": "Paymob HMAC-SHA512 exact canonical transaction fields."
+      },
+      "openwaSignature": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-openwa-signature"
       },
       "resendSignature": {
         "type": "apiKey",

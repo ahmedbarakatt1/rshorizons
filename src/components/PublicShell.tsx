@@ -11,7 +11,7 @@ export function Arrow() {return <svg viewBox="0 0 24 24" width="20" height="20" 
 export function PublicShell({children,locale}:{children:React.ReactNode;locale:Locale}) {
  const t=useTranslations(); const pathname=usePathname();const [social,setSocial]=useState<{platform:string;url:string}[]>([]);
  useEffect(()=>{api<{items:typeof social}>("/social-links").then(result=>setSocial(result.items)).catch(()=>{});},[]);
- const links=[["experiences","experiences"],["destinations","destinations"],["apartments","apartments"],["photography","photography"]] as const;
+ const links=[["experiences","experiences"],["destinations","destinations"],["apartments","apartments"],["photography","photography"],["reviews","reviews"]] as const;
  return <>
   <a tabIndex={0} className="skip-link" href="#main">{t("skipContent")}</a>
   <header className="site-header">

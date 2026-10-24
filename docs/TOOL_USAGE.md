@@ -56,3 +56,9 @@ All five requested resources were acquired and applied. The img2threejs form fai
 ## Owner media extension — 2026-10-24
 
 The existing Taste direction and Impeccable readability guidance were retained while integrating actual boats, evening outings, car views and all 30 videos. Playwright Agent CLI session `owner-media` inspected the 1440×1000 gallery, saved gallery/vehicle/evening screenshots, and reported zero console errors or warnings. The session was closed after inspection. Playwright Test verified playback/seek/load-on-demand in all three engines and the full local/remote suite. CI results and retained harness findings are in the release report.
+
+## Reviews, messaging and host readiness — 2026-10-24
+
+Applied the supplied Impeccable, Playwright CLI, test-first/debugging, parallel execution, code-review and verification skills. Impeccable detected no mechanical findings in the reviews UI. The Taste inspector failed to launch Chrome; this is not claimed as a passing inspection. Manual screenshots and Playwright evidence establish the rendered result. Root CLI session `reviews-release` inspected the actual production-build empty reviews page at1440×1000 and recorded zero console errors/warnings, then closed. Full production-artifact browser verification passed47 cases with16 established engine-specific skips.
+
+Context7 and primary upstream source informed Vercel/Supabase transport and the exact OpenWA API. OpenWA commit173916c83b41e622f849ecd380bf36486dfd8cdf was read from the designated repository. Its Compose file passed `docker compose config --quiet` with a synthetic validation-only environment value; no gateway was deployed. A real loopback HTTP fixture plus PostgreSQL tests verify the adapter without contacting WhatsApp. Review found and fixed initial-4xx ambiguity and mutable approved-template content. See release evidence for the193-test result and external verification limits.

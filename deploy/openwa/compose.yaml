@@ -1,0 +1,55 @@
+name: rsh-whatsapp
+services:
+  gateway:
+    # Exact upstream source examined for the REST and webhook contract; do not float main/latest.
+    build:
+      context: https://github.com/rmyndharis/OpenWA.git#173916c83b41e622f849ecd380bf36486dfd8cdf
+    image: rsh-openwa:173916c83b41
+    restart: unless-stopped
+    stop_grace_period: 75s
+    ports:
+      - "127.0.0.1:2785:2785"
+    volumes:
+      - gateway-data:/app/data
+    environment:
+      NODE_ENV: production
+      PORT: "2785"
+      TZ: UTC
+      API_MASTER_KEY: ${OPENWA_MASTER_KEY:?Set a unique gateway admin secret in the host secret store}
+      ENGINE_TYPE: whatsapp-web.js
+      AUTO_START_SESSIONS: "true"
+      SESSION_DATA_PATH: /app/data/sessions
+      DATABASE_TYPE: sqlite
+      DATABASE_NAME: /app/data/openwa.sqlite
+      MAIN_DATABASE_NAME: /app/data/main.sqlite
+      DATABASE_SYNCHRONIZE: "false"
+      MAIN_DATABASE_SYNCHRONIZE: "false"
+      DATABASE_LOGGING: "false"
+      STORAGE_TYPE: local
+      STORAGE_LOCAL_PATH: /app/data/media
+      REDIS_ENABLED: "false"
+      QUEUE_ENABLED: "false"
+      CACHE_ENABLED: "false"
+      SEND_PACING_ENABLED: "true"
+      ENABLE_SWAGGER: "false"
+      LOG_LEVEL: warn
+      HOME: /tmp
+      XDG_CONFIG_HOME: /tmp/.config
+      XDG_CACHE_HOME: /tmp/.cache
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: [ALL]
+    # Upstream root entrypoint fixes volume ownership, then drops to its openwa user.
+    cap_add: [CHOWN, DAC_OVERRIDE, FOWNER, KILL, SETGID, SETUID]
+    read_only: true
+    tmpfs: [/tmp]
+    pids_limit: 2048
+    mem_limit: 2g
+    healthcheck:
+      test: [CMD, curl, -f, http://localhost:2785/api/health/ready]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+volumes:
+  gateway-data:

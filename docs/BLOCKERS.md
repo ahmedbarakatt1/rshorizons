@@ -5,11 +5,11 @@ E01 is resolved: the designated repository contains the source and its CI is pas
 | ID | Owner | Required single next action | Impact / exact destination |
 |---|---|---|---|
 | E01 | Resolved | Owner-designated `ahmedbarakatt1/rshorizons`; source published to `main`; [CI passed](https://github.com/ahmedbarakatt1/rshorizons/actions/runs/40044050864) | Production deployment secrets/environment configuration remain dependent on E02–E14 |
-| E02 | Agency owner | Designate an approved commercial Vercel account/project and billing plan | Production hosting, project IDs, deployment token; no purchase is authorized |
+| E02 | Agency owner | Vercel selected; owner will deploy. Configure the designated commercial account/project and plan using `docs/runbooks/vercel-owner-setup.md` | Provider and self-deployment choice resolved; exact project, plan, environment secrets and actual deployment URL remain unverified; no purchase is authorized |
 | E03 | Agency owner | Designate the domain and DNS account | `APP_BASE_URL`, canonical domain, HTTPS and DNS verification |
 | E04 | Agency owner | Supply separate staging/production Supabase project access via secret storage | Runtime/migration DB roles, Auth, storage, redirect allowlists, backup rehearsal |
 | E05 | Merchant owner | Supply Paymob sandbox/live account configuration and enabled methods | Paymob environment variables, real sandbox evidence, callback verification and live-test authorization |
-| E06 | Messaging owner | Supply Meta number/app credentials, approved locale templates and allowlisted test recipients | WhatsApp adapter and signature/callback tests; opt-in enforcement remains mandatory |
+| E06 | Messaging owner | OpenWA selected. Designate its persistent host/HTTPS origin, dedicated number, paired session, session-scoped API key, webhook secret, approved locale text and test recipients | `docs/runbooks/openwa.md`; website is on Vercel, gateway is separate. Actual gateway pairing/send/callback evidence remains absent. Meta credentials are not required for OpenWA; consent and email fallback remain mandatory |
 | E07 | Agency owner | Designate the Resend account and verify the sender domain | Implemented Resend adapter; account credentials, SPF/DKIM/DMARC and real delivery/callback evidence are still required |
 | E08 | Agency operator | Approve catalog, prices, deposits, fees, capacity, schedules and apartment inventory | Published catalog/payment policy versions; demo prices cannot launch |
 | E09 | Agency/legal owner | Approve legal identity, contact/social URLs, terms/privacy/cancellation/safety content | Agency settings and approved policy versions; brand name alone is not legal identity approval |

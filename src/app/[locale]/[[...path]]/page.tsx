@@ -7,7 +7,8 @@ import {isLocale,locales} from "@/i18n/locales";
 import {Catalog,Photo,Search,ServiceCard} from "@/components/Catalog";
 import {Arrow} from "@/components/PublicShell";
 import {BookingForm} from "@/components/BookingForm";
-import {BookingStatus,ContactForm,GuestAccess,PolicyContent,PrivateGallery,Reviews,PublicGallery} from "@/components/GuestFlows";
+import {BookingStatus,ContactForm,GuestAccess,PolicyContent,PrivateGallery,PublicGallery} from "@/components/GuestFlows";
+import {Reviews} from "@/components/ReviewsPage";
 import {money} from "@/components/format";
 
 function detailFailure(error:unknown):never{if(typeof error==="object"&&error!==null&&"status" in error&&error.status===404)notFound();throw error;}
@@ -27,7 +28,7 @@ export default async function PublicPage({params,searchParams}:Props) {
  if(section==="my-gallery"&&detail)return frame(t("privateGallery"),<PrivateGallery id={detail} locale={locale}/>);
  if(section==="contact")return frame(t("contact"),<div className="contact-layout"><div><h2>{t("manualTitle")}</h2><p className="lead">{t("manualIntro")}</p><p>{t("noPayment")}</p><p className="muted">Marsa Alam · Al-Qusair<br/>Hurghada · Port Ghalib</p></div><ContactForm locale={locale}/></div>);
  if(["privacy","terms","cancellation-policy"].includes(section))return frame(t(section==="cancellation-policy"?"cancellation":section),<PolicyContent slug={section} locale={locale}/>);
- if(section==="reviews")return frame(t("reviews"),<Reviews locale={locale}/>);
+ if(section==="reviews")return <>{demoBanner}<main tabIndex={-1} id="main" className="page-wrap reviews-page"><Reviews locale={locale}/></main></>;
  if(section==="about")return frame(t("about"),<div className="about-layout"><Photo image={demo?"hero":"/images/coast.svg"} alt="Red Sea" priority/><div><h2>{t("manualTitle")}</h2><p className="lead">{t("manualIntro")}</p><p>{t("noPayment")}</p><Link href={`/${locale}/contact`} className="button">{t("contact")}<Arrow/></Link></div></div>);
  const data=await getCatalog(locale);
  if(section==="booking"&&detail==="request") {

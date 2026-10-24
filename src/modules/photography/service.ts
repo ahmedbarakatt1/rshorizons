@@ -26,13 +26,17 @@ const entitlementRelations=`app.gallery_entitlements e JOIN app.booking_items bi
 
 export async function createUploadIntent(actor:ActorContext,input:unknown){
   const data=uploadInputSchema.parse(input),store=storage();
-  return withTransaction(actor,async tx=>{
+  const intent=await withTransaction(actor,async tx=>{
     await authorizeGallery(tx,actor,data.galleryId,"media.upload");
     const id=randomUUID(),key=`${id}/source.bin`;
     await tx.query(`INSERT INTO app.media_assets(id,storage_bucket,storage_key,uploaded_by,mime_type,size_bytes,checksum_sha256,retention_deadline) VALUES($1,'tourism-private',$2,$3,$4,$5,$6,now()+make_interval(days=>$7))`,[id,key,actor.id,data.mimeType,data.sizeBytes,data.checksumSha256,mediaRetentionDays()]);
     await tx.query(`INSERT INTO app.gallery_assets(gallery_id,asset_id) VALUES($1,$2)`,[data.galleryId,id]);
     return {assetId:id,state:"quarantine",uploadUrl:`/api/v1/admin/media/${id}/bytes`,method:"PUT",maxBytes:data.sizeBytes,storageMode:store.mode};
   });
+  // External capability creation follows commit. A failed provider call leaves only
+  // a quarantined, retention-bound record; no job or publication can begin.
+  if(store.createUploadUrl)intent.uploadUrl=await store.createUploadUrl(`${intent.assetId}/source.bin`);
+  return intent;
 }
 async function assetForStaff(tx:Transaction,actor:ActorContext,assetId:string){
   const {rows}=await tx.query(`SELECT a.*,ga.gallery_id FROM app.media_assets a JOIN app.gallery_assets ga ON ga.asset_id=a.id WHERE a.id=$1`,[assetId]);
@@ -136,7 +140,7 @@ export async function issueDownloadGrant(actor:ActorContext,input:unknown){
   });
 }
 /** Token travels in an authorization header, never a logged URL. Bytes are never cached. */
-export async function streamAsset(actor:ActorContext,input:{galleryId:string;derivativeId:string;downloadToken?:string}){
+async function authorizedPrivateAsset(actor:ActorContext,input:{galleryId:string;derivativeId:string;downloadToken?:string}){
   uuid.parse(input.galleryId);uuid.parse(input.derivativeId);
   const authorized=await withTransaction(actor,async tx=>{
     const {sessionId,grantId}=await authorizeGallery(tx,actor,input.galleryId);
@@ -157,9 +161,16 @@ export async function streamAsset(actor:ActorContext,input:{galleryId:string;der
     }
     return d;
   });
-  const bytes=await storage().read(authorized.storage_key);
-  return {bytes,mimeType:authorized.kind==="original"?"application/octet-stream":authorized.mime_type,
+  return {storageKey:authorized.storage_key as string,mimeType:authorized.kind==="original"?"application/octet-stream":authorized.mime_type as string,
     headers:{...privateHeaders,...(input.downloadToken?{"Content-Disposition":`attachment; filename="media-${authorized.asset_id}.${authorized.kind==="original"?"bin":authorized.mime_type==="video/mp4"?"mp4":"webp"}"`}:{})}};
+}
+export async function streamAsset(actor:ActorContext,input:{galleryId:string;derivativeId:string;downloadToken?:string}){
+  const {storageKey,...metadata}=await authorizedPrivateAsset(actor,input);
+  return {...metadata,bytes:await storage().read(storageKey)};
+}
+export async function servePrivateAsset(request:Request,actor:ActorContext,input:{galleryId:string;derivativeId:string;downloadToken?:string}){
+  const asset=await authorizedPrivateAsset(actor,input);
+  return storage().serve(request,asset.storageKey,asset.mimeType,asset.headers);
 }
 export async function listPublicGalleries(locale:string){
   const result=await query(`SELECT g.id,t.title,t.description,
@@ -171,13 +182,21 @@ export async function listPublicGalleries(locale:string){
     ORDER BY g.published_at DESC LIMIT 50`,[locale]);
   return result.rows;
 }
-export async function streamPublicDerivative(derivativeId:string){
+async function authorizedPublicDerivative(derivativeId:string){
   uuid.parse(derivativeId);
   const result=await query(`SELECT d.storage_key,d.mime_type FROM app.media_derivatives d JOIN app.gallery_assets ga ON ga.public_derivative_id=d.id JOIN app.galleries g ON g.id=ga.gallery_id
     WHERE d.id=$1 AND d.kind<>'original' AND d.visibility='public' AND d.state='ready' AND d.approved_at IS NOT NULL AND app.asset_publication_eligible(d.asset_id)
     AND g.kind='public' AND g.visibility_state='published' AND (g.expires_at IS NULL OR g.expires_at>now()) LIMIT 1`,[derivativeId]);
   if(!result.rows[0])throw new MediaError("NOT_FOUND",404);
-  return {bytes:await storage().read(result.rows[0].storage_key),mimeType:result.rows[0].mime_type as string,headers:privateHeaders};
+  return {storageKey:result.rows[0].storage_key as string,mimeType:result.rows[0].mime_type as string,headers:privateHeaders};
+}
+export async function streamPublicDerivative(derivativeId:string){
+  const {storageKey,...metadata}=await authorizedPublicDerivative(derivativeId);
+  return {...metadata,bytes:await storage().read(storageKey)};
+}
+export async function servePublicDerivative(request:Request,derivativeId:string){
+  const asset=await authorizedPublicDerivative(derivativeId);
+  return storage().serve(request,asset.storageKey,asset.mimeType,asset.headers);
 }
 export async function createApprovedPublicDerivative(actor:ActorContext,input:{assetId:string;galleryId:string;expectedVersion:number}){
   uuid.parse(input.assetId);uuid.parse(input.galleryId);

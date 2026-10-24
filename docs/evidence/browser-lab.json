@@ -1,12 +1,12 @@
 {
-  "at": "2026-10-24T00:01:29.688Z",
+  "at": "2026-10-24T01:52:43.129Z",
   "environment": "Local production build, Chromium, no CPU/network throttle; lab diagnostics only, not field Core Web Vitals.",
   "measurements": [
     {
       "path": "/en",
       "navigation": [
         {
-          "duration": 167.70000000298023
+          "duration": 206.40000000596046
         }
       ],
       "resources": [
@@ -15,32 +15,32 @@
           "bytes": 48345
         },
         {
-          "name": "turbopack-2c3mg3r-05n1w.js",
-          "bytes": 4390
-        },
-        {
           "name": "2gvu8dyrhibpa.js",
           "bytes": 71899
         },
         {
-          "name": "0hmxqyfoj_2jg.js",
-          "bytes": 5254
+          "name": "turbopack-2c3mg3r-05n1w.js",
+          "bytes": 4390
         },
         {
           "name": "0umf92h1sb77c.js",
           "bytes": 3514
         },
         {
-          "name": "0_v_2027x3jgl.js",
-          "bytes": 12107
+          "name": "0r-swioa0mbxu.js",
+          "bytes": 5261
         },
         {
           "name": "41oa5yrv8czhv.js",
           "bytes": 2772
         },
         {
-          "name": "2nzzyvg-dky4i.js",
-          "bytes": 8431
+          "name": "0_v_2027x3jgl.js",
+          "bytes": 12107
+        },
+        {
+          "name": "1cm4w3ipf1syl.js",
+          "bytes": 10054
         },
         {
           "name": "0ajc4qd6vlfv7.js",
@@ -52,7 +52,7 @@
       "path": "/ar/contact",
       "navigation": [
         {
-          "duration": 118.5
+          "duration": 107.79999999701977
         }
       ],
       "resources": [
@@ -73,8 +73,8 @@
           "bytes": 3514
         },
         {
-          "name": "0hmxqyfoj_2jg.js",
-          "bytes": 5254
+          "name": "0r-swioa0mbxu.js",
+          "bytes": 5261
         },
         {
           "name": "0_v_2027x3jgl.js",
@@ -85,8 +85,8 @@
           "bytes": 2772
         },
         {
-          "name": "2nzzyvg-dky4i.js",
-          "bytes": 8431
+          "name": "1cm4w3ipf1syl.js",
+          "bytes": 10054
         },
         {
           "name": "0ajc4qd6vlfv7.js",
@@ -98,7 +98,7 @@
       "path": "/en/experiences/boat-tours",
       "navigation": [
         {
-          "duration": 70.09999999403954
+          "duration": 62.79999999701977
         }
       ],
       "resources": [
@@ -119,8 +119,8 @@
           "bytes": 3514
         },
         {
-          "name": "0hmxqyfoj_2jg.js",
-          "bytes": 5254
+          "name": "0r-swioa0mbxu.js",
+          "bytes": 5261
         },
         {
           "name": "0_v_2027x3jgl.js",
@@ -131,8 +131,8 @@
           "bytes": 2772
         },
         {
-          "name": "2nzzyvg-dky4i.js",
-          "bytes": 8431
+          "name": "1cm4w3ipf1syl.js",
+          "bytes": 10054
         },
         {
           "name": "0ajc4qd6vlfv7.js",
@@ -144,7 +144,7 @@
       "path": "/en/booking/request?service=boat-tours",
       "navigation": [
         {
-          "duration": 75.09999999403954
+          "duration": 79.79999999701977
         }
       ],
       "resources": [
@@ -165,8 +165,8 @@
           "bytes": 3514
         },
         {
-          "name": "0hmxqyfoj_2jg.js",
-          "bytes": 5254
+          "name": "0r-swioa0mbxu.js",
+          "bytes": 5261
         },
         {
           "name": "0_v_2027x3jgl.js",
@@ -177,8 +177,8 @@
           "bytes": 2772
         },
         {
-          "name": "2nzzyvg-dky4i.js",
-          "bytes": 8431
+          "name": "1cm4w3ipf1syl.js",
+          "bytes": 10054
         },
         {
           "name": "0ajc4qd6vlfv7.js",

@@ -26,6 +26,14 @@ The handoff is the approved specification and milestone execution plan. The user
 
 No confirmed business requirement is removed by these implementation choices.
 
+## Reviews, OpenWA and Vercel — 2026-10-24
+
+The owner's latest request specifies a reviews page, `rmyndharis/OpenWA` for WhatsApp and owner-performed Vercel deployment. OpenWA explicitly supersedes the handoff's older Meta-only/unofficial-client prohibition; all consent, marketing classification, durable delivery, fallback and secret requirements remain. The retained Meta adapter is optional and its historical receipts are preserved. OpenWA is a separately hosted persistent gateway, not a Vercel Function. Its documented unofficial-client/account-restriction risk was communicated; no number has been linked or messaged.
+
+The public review page uses the existing verified fulfilled-item invitations, immutable originals and staff moderation. Rating aggregates use only published reviews; negative reviews are included; no testimonial content is invented. New browsing/filtering/privacy UI does not loosen eligibility.
+
+Vercel media uploads now use single-object private storage upload capabilities with overwrite disabled. Finalization still checks actual bytes/checksum/current authority. Downloads stream through current entitlement/consent checks; storage read capabilities remain server-only. Hosted CORS, large transfer and provider tests remain external gates.
+
 ## Final local release decisions
 
 - Resend email and Mux signed private video are implemented provider adapters. Selection of an adapter does not designate or authorize an external account or billing plan.

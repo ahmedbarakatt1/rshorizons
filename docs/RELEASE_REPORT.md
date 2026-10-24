@@ -1,3 +1,29 @@
+# Reviews, OpenWA and Vercel extension — 2026-10-24
+
+This addendum is the latest local application result. The older sections below retain the baseline history. Owner requested the reviews page, selected OpenWA and will perform Vercel deployment. Production remains **not deployed**.
+
+Implemented published-review aggregation/filtering/pagination, original text and public replies, privacy choices and invitation-only accessible submission across ten locales. No customer reviews were invented. Added the exact `rmyndharis/OpenWA` HTTP adapter, HMAC/session-bound delivery callbacks, consent/template gates, unknown-send reconciliation and email fallback. Two migrations add OpenWA receipts and freeze approved notification content. Vercel media uploads now use a private single-object upload capability; reads stream after current authorization/consent checks.
+
+Fresh combined verification:
+
+| Check | Result |
+|---|---|
+| `npm test` |193 passed,40 files; real PostgreSQL17.11 |
+| `node scripts/run-showcase-e2e.mjs` |47 passed,16 intentional duplicate-engine skips; production build,3 engines |
+| `npm run lint`, `npm run typecheck` |Passed |
+| `NEXT_BUILD_DIR=.next-release npm run build` |Passed |
+| `npm run db:drift` |117 tables match;20 ordered migrations applied locally and to separate showcase |
+| `npm run i18n:check` |10 locales ×213 keys; human approval remains external |
+| `docker compose -f deploy/openwa/compose.yaml config --quiet` |Passed with synthetic admin value; no build/start/pairing |
+| `npm run verify:release` |Correctly rejected development environment; no approval bypass |
+| Source/artifact scan |Zero configured credential/private-path findings; exact counts in `docs/evidence/source-artifact-scan.json` |
+
+Evidence: `docs/evidence/reviews-openwa-domain.txt`, `docs/evidence/reviews-openwa-browser.txt`; private inspected production screenshot `.local/evidence/ui/reviews-production-preview.png`, plus mobile/RTL/provider-mock captures described in `docs/design/reviews-page.md`. Root Playwright CLI recorded0 console errors and0 warnings. Provider-mock browser tests prove application behavior, not live Supabase CORS/OpenWA/Mux delivery. OpenWA integration tests use a real loopback HTTP server and real database; no messages reach WhatsApp.
+
+Failure history: new OpenWA tests first rejected the missing signature/provider schema; configuration tests first required stale Meta secrets; initial engine4xx tests exposed unsafe automatic fallback; database tests exposed mutable approved message content. All were fixed with passing regression checks. The independent reviewer found no remaining important issue in the scoped follow-up review.
+
+Deployment handoff: `docs/runbooks/vercel-owner-setup.md`, `docs/runbooks/openwa.md`, pinned `deploy/openwa/compose.yaml`. E02 provider/self-deployment and E06 integration choices are resolved; exact accounts/host/domain/session/secrets, approved text/content, hosted large-media verification and actual provider receipts remain external. The current candidate must pass remote CI before owner staging/promote steps.
+
 # Red Sea Horizons — local release report
 
 Recorded 2026-10-20, Africa/Cairo. **Local release candidate verified. Hosted staging acceptance and M7 production remain `BLOCKED_EXTERNAL`; nothing is deployed to production.** The handoff remains the approved specification.

@@ -13,7 +13,7 @@ const complete: Record<string,string> = {
   PAYMOB_MODE:"live", PAYMOB_API_BASE_URL:"https://accept.paymob.com",
   PAYMOB_SECRET_KEY:"synthetic-paymob", PAYMOB_HMAC_SECRET:"synthetic-hmac",
   PAYMOB_PUBLIC_KEY:"synthetic-public", PAYMOB_ACCOUNT_ID:"synthetic-account", PAYMOB_INTEGRATION_IDS:"1",
-  WHATSAPP_TOKEN:"synthetic-meta", WHATSAPP_PHONE_NUMBER_ID:"synthetic-number",
+  WHATSAPP_PROVIDER:"meta", WHATSAPP_TOKEN:"synthetic-meta", WHATSAPP_PHONE_NUMBER_ID:"synthetic-number",
   META_APP_SECRET:"synthetic-meta-secret", WHATSAPP_VERIFY_TOKEN:"synthetic-verification",
   META_GRAPH_API_VERSION:"v24.0", EMAIL_PROVIDER:"resend", EMAIL_API_KEY:"synthetic-email",
   EMAIL_FROM:"agency@example.com", EMAIL_WEBHOOK_SECRET:"synthetic-email-signature",
@@ -29,6 +29,17 @@ const complete: Record<string,string> = {
 };
 
 describe("deployment environment", () => {
+  it("OpenWA production needs its own session and server secrets, without Meta credentials",()=>{
+    const env={...complete,WHATSAPP_PROVIDER:"openwa",OPENWA_BASE_URL:"https://wa.example.invalid",OPENWA_API_KEY:"gateway-key-".repeat(4),OPENWA_SESSION_ID:"rsh-production",OPENWA_WEBHOOK_SECRET:"webhook-key-".repeat(4)};
+    for(const name of ["WHATSAPP_TOKEN","WHATSAPP_PHONE_NUMBER_ID","META_APP_SECRET","WHATSAPP_VERIFY_TOKEN","META_GRAPH_API_VERSION","WHATSAPP_BUSINESS_ACCOUNT_ID"])delete env[name as keyof typeof env];
+    expect(readEnvironment("production",env).target).toBe("production");
+    expect(()=>readEnvironment("production",{...env,OPENWA_WEBHOOK_SECRET:"short"})).toThrow(/OPENWA_WEBHOOK_SECRET/);
+    expect(()=>readEnvironment("production",{...env,OPENWA_BASE_URL:"http://127.0.0.1:2785"})).toThrow(/OPENWA_BASE_URL/);
+    expect(()=>readEnvironment("production",{...env,OPENWA_BASE_URL:"https://gateway.invalid/api?token=secret"})).toThrow(/OPENWA_BASE_URL/);
+    expect(()=>readEnvironment("production",{...env,OPENWA_SESSION_ID:"../other"})).toThrow(/OPENWA_SESSION_ID/);
+    expect(()=>readEnvironment("production",{...env,NEXT_PUBLIC_GATEWAY:env.OPENWA_API_KEY})).toThrow(/public/);
+    expect(()=>readEnvironment("production",{...env,WHATSAPP_PROVIDER:"unknown"})).toThrow(/WHATSAPP_PROVIDER/);
+  });
   it("production_no_demo_secrets", () => {
     expect(()=>readEnvironment("production",{...complete,DEMO_MODE:"true"})).toThrow(/DEMO_MODE/);
     expect(()=>readEnvironment("production",{...complete,PAYMOB_MODE:"fake"})).toThrow(/PAYMOB_MODE/);

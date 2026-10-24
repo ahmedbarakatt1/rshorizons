@@ -2,6 +2,7 @@ import {z} from "zod";
 import {query,withTransaction,type ActorContext} from "@/server/db";
 import {staffPermission} from "@/modules/photography/access";
 import {MediaError} from "@/modules/photography/validation";
+import type {PublishedReview,ReviewPage} from "./types";
 const locale=z.enum(["en","de","pl","fr","ru","uk","es","ar","it","nl"]);
 export const reviewInputSchema=z.object({invitationId:z.uuid(),rating:z.number().int().min(1).max(5),text:z.string().trim().min(1).max(10000),locale,
   displayName:z.enum(["first_name","initials","anonymous"]).default("initials")}).strict();
@@ -59,4 +60,37 @@ export async function listPublishedReviews(input:{serviceId?:string;cursor?:stri
     WHERE r.moderation_state='published' AND ($1::uuid IS NULL OR v.service_id=$1) AND ($2::timestamptz IS NULL OR r.submitted_at<$2)
     ORDER BY r.submitted_at DESC LIMIT 50`,[input.serviceId??null,input.cursor??null]);
   return result.rows;
+}
+
+export const reviewPageInputSchema=z.object({
+ serviceId:z.uuid().optional(),cursor:z.uuid().optional(),rating:z.coerce.number().int().min(1).max(5).optional(),
+ limit:z.coerce.number().int().min(1).max(24).default(12)
+}).strict();
+
+export async function listReviewPage(input:z.input<typeof reviewPageInputSchema>={}):Promise<ReviewPage>{
+ const data=reviewPageInputSchema.parse(input);
+ // One statement keeps aggregate and page consistent. The ID cursor retains PostgreSQL's full timestamp precision.
+ const result=await query<{items:PublishedReview[];total:number;average:number|null;ratings:Record<string,number>;filtered_total:number}>(`
+  WITH published AS (
+   SELECT r.* FROM app.reviews r
+   JOIN app.booking_items bi ON bi.id=r.booking_item_id
+   JOIN app.quote_items qi ON qi.id=bi.quote_item_id
+   LEFT JOIN app.service_variants v ON v.id=qi.variant_id
+   WHERE r.moderation_state='published' AND ($1::uuid IS NULL OR v.service_id=$1)
+  ), filtered AS (SELECT * FROM published WHERE $2::integer IS NULL OR rating=$2),
+  page AS (
+   SELECT * FROM filtered WHERE $3::uuid IS NULL OR (submitted_at,id)<(SELECT submitted_at,id FROM app.reviews WHERE id=$3)
+   ORDER BY submitted_at DESC,id DESC LIMIT $4
+  )
+  SELECT (SELECT count(*)::integer FROM published) total,(SELECT round(avg(rating),1)::float FROM published) average,
+   (SELECT jsonb_object_agg(star,(SELECT count(*)::integer FROM published WHERE rating=star)) FROM generate_series(1,5) star) ratings,
+   (SELECT count(*)::integer FROM filtered) filtered_total,
+   COALESCE((SELECT jsonb_agg(jsonb_build_object('id',r.id,'rating',r.rating,'text',r.original_text,'locale',r.original_locale,
+    'display_name',r.public_display_name,'submitted_at',r.submitted_at,'replies',
+    COALESCE((SELECT jsonb_agg(jsonb_build_object('body',reply.body,'publishedAt',reply.published_at) ORDER BY reply.published_at,reply.id)
+     FROM app.review_replies reply WHERE reply.review_id=r.id AND reply.published_at IS NOT NULL AND reply.withdrawn_at IS NULL),'[]'::jsonb))
+    ORDER BY r.submitted_at DESC,r.id DESC) FROM page r),'[]'::jsonb) items`,
+  [data.serviceId??null,data.rating??null,data.cursor??null,data.limit+1]);
+ const row=result.rows[0],hasMore=row.items.length>data.limit,items=row.items.slice(0,data.limit);
+ return {items,summary:{total:row.total,average:row.average,ratings:row.ratings},filteredTotal:row.filtered_total,nextCursor:hasMore?items.at(-1)!.id:null};
 }

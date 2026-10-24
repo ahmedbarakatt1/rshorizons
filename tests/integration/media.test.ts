@@ -2,7 +2,7 @@ import {randomUUID,randomBytes,createHash} from "node:crypto";
 import {afterAll,beforeAll,expect,it} from "vitest";
 import sharp from "sharp";
 import {admin,makeActor,makeBooking,makeDeparture,tourItem} from "../database/helpers";
-import {createUploadIntent,receiveUpload,finalizeUpload,processMediaAsset,getGalleryManifest,issueDownloadGrant,streamAsset,publishGallery} from "@/modules/photography/service";
+import {createUploadIntent,receiveUpload,finalizeUpload,processMediaAsset,getGalleryManifest,issueDownloadGrant,streamAsset,servePrivateAsset,publishGallery} from "@/modules/photography/service";
 import {submitReview,moderateReview} from "@/modules/reviews/service";
 import {localStorage} from "@/integrations/storage";
 
@@ -65,10 +65,14 @@ it("real_processing_download_entitlement_and_immediate_revocation",async()=>{
   const asset=await streamAsset(f.guest,{galleryId:f.galleryId,derivativeId:download.assets[0].derivativeId,downloadToken:download.token});
   expect(asset.bytes.equals(bytes)).toBe(true);
   expect(asset.headers["Cache-Control"]).toContain("no-store");
+  const response=await servePrivateAsset(new Request("https://app.example.test/media"),f.guest,{galleryId:f.galleryId,derivativeId:download.assets[0].derivativeId,downloadToken:download.token});
+  expect(Buffer.from(await response.arrayBuffer()).equals(bytes)).toBe(true);
+  expect(response.headers.get("Cache-Control")).toContain("no-store");
   const refund=(await db.query("SELECT app.request_refund($1,NULL,$2,1,'Synthetic refund','{}',$3) r",[f.bookingId,receipt.id,f.owner.id])).rows[0].r;
   await db.query("SELECT app.approve_refund($1,1,$2)",[refund.id,f.owner.id]);
   await db.query("SELECT app.complete_offline_refund($1,$2,$3)",[refund.id,randomUUID(),f.owner.id]);
   await expect(streamAsset(f.guest,{galleryId:f.galleryId,derivativeId:download.assets[0].derivativeId,downloadToken:download.token})).rejects.toThrow("DOWNLOAD_NOT_ENTITLED");
+  await expect(servePrivateAsset(new Request("https://app.example.test/media"),f.guest,{galleryId:f.galleryId,derivativeId:download.assets[0].derivativeId,downloadToken:download.token})).rejects.toThrow("DOWNLOAD_NOT_ENTITLED");
   expect((await getGalleryManifest(f.guest,f.galleryId)).assets[0].downloadAllowed).toBe(false);
   await db.query("SELECT app.record_offline_receipt($1,1,'EGP','cash','Synthetic re-payment',gen_random_uuid()::text,$2)",[f.bookingId,f.owner.id]);
   await db.query(`UPDATE app.gallery_entitlements SET revoked_at=now() WHERE gallery_id=$1`,[f.galleryId]);

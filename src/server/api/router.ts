@@ -21,8 +21,8 @@ export async function route(request:Request,parts:string[]) {
         if(!/^\d{1,100}$/.test(challenge))throw new AppError("INVALID_CHALLENGE",400);
         return new Response(challenge,{headers:{"Content-Type":"text/plain","Cache-Control":"no-store"}});
       }
-      if(request.method==="POST"&&["resend","whatsapp"].includes(parts[1]))
-        return success(await applyMessagingWebhook(verifyMessagingWebhook(parts[1] as "resend"|"whatsapp",await readRawBody(request),request.headers)));
+      if(request.method==="POST"&&["resend","whatsapp","openwa"].includes(parts[1]))
+        return success(await applyMessagingWebhook(verifyMessagingWebhook(parts[1] as "resend"|"whatsapp"|"openwa",await readRawBody(request),request.headers)));
       if(request.method==="POST"&&parts[1]==="mux")return success(await muxWebhook(await readRawBody(request),request.headers.get("mux-signature")??""));
     }
     if(!["GET","HEAD","OPTIONS"].includes(request.method))assertOrigin(request,process.env.APP_BASE_URL??"http://127.0.0.1:3000");

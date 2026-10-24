@@ -7,13 +7,13 @@ Updated 2026-10-24, Africa/Cairo. The full 1,415-line production handoff was rea
 | Milestone | Status | Evidence and remaining gate |
 |---|---|---|
 | M0 Foundation and five resources | VERIFIED_LOCAL | All five resources installed, pinned and used; clean `npm ci`, zero reported npm vulnerabilities, Next.js production build |
-| M1 Database and authorization | VERIFIED_LOCAL; external Auth onboarding pending |18 applied forward migrations,117 tables with matching generated types, real PostgreSQL17.11; current scopes, revocation and private grants tested; designated Supabase MFA onboarding remains external |
-| M2 Catalog, localization and design | VERIFIED_LOCAL; business publication pending | Data-backed public/admin screens, ten locales ×169 keys, RTL; approved variant/rate selection regression fixed; owner-requested illustrative imagery fills photo gaps; human content/translation approvals absent |
+| M1 Database and authorization | VERIFIED_LOCAL; external Auth onboarding pending |20 applied forward migrations,117 tables with matching generated types, real PostgreSQL17.11; current scopes, revocation, private grants and approved message-template immutability tested; designated Supabase MFA onboarding remains external |
+| M2 Catalog, localization and design | VERIFIED_LOCAL; business publication pending | Data-backed public/admin screens, ten locales ×213 keys, RTL; completed reviews page with actual aggregates and invitation form; owner-requested imagery fills photo gaps; human content/translation approvals absent |
 | M3 Reservations and inventory | VERIFIED_LOCAL | Quote/request/manual approval/revisions/fulfilment; independent-connection races and all-service browser journeys; private/shared transfers and physical stays |
-| M4 Finance, jobs and messaging | VERIFIED_LOCAL / BLOCKED_EXTERNAL | Ledger, source-bound refunds, verified webhook/inquiry adapters, leases, reminders and callback dedupe tested; actual Paymob/Meta/Resend accounts and provider evidence absent |
+| M4 Finance, jobs and messaging | VERIFIED_LOCAL / BLOCKED_EXTERNAL | Ledger, source-bound refunds, leases, reminders and callback dedupe tested; owner-selected OpenWA adapter with signed session-bound callbacks and conservative unknown-send handling; actual Paymob/OpenWA/Resend provider evidence absent |
 | M5 Media, reviews and contact | VERIFIED_LOCAL with disabled 3D accent | Real image/video processing, private entitlement checks, public-consent guards, retention, verified reviews and contact; static poster ships because current 3D form gate failed |
-| M6 Hardening and release candidate | VERIFIED_LOCAL / BLOCKED_EXTERNAL |170 domain tests and 29 browser tests passed in GitHub CI; local three-engine accessibility and real-media playback also passed; clean DB rebuild, DB/object recovery, 32-connection load, performance evidence and source/artifact scan recorded. Hosted staging, UAT, recovery objectives and alert routing require owner inputs |
-| M7 Production | BLOCKED_EXTERNAL — NOT DEPLOYED | Owner-designated GitHub repository verified; host, domain, Supabase and provider projects still absent; approved business content/secrets and live-test authorization absent |
+| M6 Hardening and release candidate | VERIFIED_LOCAL / BLOCKED_EXTERNAL |193 domain tests and 47 browser tests passed locally for the reviews/OpenWA/Vercel update;16 intentional browser skips. Prior GitHub CI passed for the media baseline; current remote verification is pending. Hosted staging, UAT, recovery objectives and alert routing require owner inputs |
+| M7 Production | BLOCKED_EXTERNAL — NOT DEPLOYED | GitHub repository verified; owner selected Vercel and will deploy using prepared runbooks. Exact host/project, domain, Supabase and OpenWA gateway identities/secrets still absent; approved business content and live-test authorization absent |
 
 ## Current application and verification
 
@@ -22,9 +22,9 @@ Updated 2026-10-24, Africa/Cairo. The full 1,415-line production handoff was rea
 - Next.js16.4.2, React19.3.1, Node22.22.2, npm10.9.7, TypeScript6.0.3 and exact root lockfile.
 - Release preview: `http://127.0.0.1:3002/en`, run with `node scripts/start-local-showcase.mjs`. It uses the separate synthetic showcase recorded in `.local/showcase.json`; the domain test database is preserved.
 - The initial operator token is in ignored `.local/operator-access.json`, expires after eight hours and is consumed once. No default password exists; do not print or commit it.
-- Current CI domain suite: unit 33, database 57, integration 34, contract 7, concurrency 7, security 32 — **170 passing tests**.
-- Current full release browser suite: **29 passed, 16 deliberate engine-specific skips** in both local and remote runs. The focused local accessibility suite also passed all six cases across three engines. No failed tests in these recorded runs. Final screenshots were visually inspected.
-- Current lint, TypeScript, production build, 169-key locale parity and 117-table type drift checks passed. Remote CI passed: https://github.com/ahmedbarakatt1/rshorizons/actions/runs/40044050864 .
+- Current local domain suite: **193 passing tests across40 files**, including real PostgreSQL constraints and concurrency. Prior CI baseline:170 passing tests.
+- Current full release browser suite: **47 passed,16 deliberate engine-specific skips** across Chromium, Firefox and WebKit. Reviews and large-upload checks run in all three engines; provider transports are explicitly mocked for those browser checks. Actual owner-video playback remains covered. Screenshots were visually inspected.
+- Current lint, TypeScript, production build,213-key locale parity and117-table type drift checks passed. Prior remote CI baseline: https://github.com/ahmedbarakatt1/rshorizons/actions/runs/40044050864 ; current candidate run pending.
 - Four cold performance samples measured LCP 1.124–2.436 seconds and CLS 0. Route payload budgets passed; no field INP or production performance claim.
 - Restore evidence:117 tables,44 bookings,20 ledger entries and116 outbox events matched. Separate synthetic storage object SHA-256 matched. Hosted recovery remains unverified.
 - Load evidence:32 simultaneous independent PostgreSQL connections requested16 seats;16 approvals,16 inventory conflicts,16 allocated seats.
@@ -33,7 +33,7 @@ Updated 2026-10-24, Africa/Cairo. The full 1,415-line production handoff was rea
 ## Continuation
 
 1. Read `docs/RELEASE_REPORT.md` for exact commands, outcomes, limitations and private browser evidence paths. Preserve the local implementation; do not recreate completed modules.
-2. The next task is to verify owner-designated hosting/domain/Supabase identities from E02–E04 in `docs/BLOCKERS.md`, then configure separate staging credentials through secret storage. No unrelated accounts may be reused. E01 repository designation/access is now verified; remaining infrastructure inputs are absent.
+2. The owner selected Vercel and will deploy. Follow `docs/runbooks/vercel-owner-setup.md` with the designated hosting/domain/Supabase identities from E02–E04, then configure separate staging credentials through secret storage. OpenWA needs a separate persistent gateway; see `docs/runbooks/openwa.md`. No unrelated accounts may be reused.
 3. With the remaining E05–E14 inputs, verify real provider sandboxes, hosted recovery, content/translation approval, staff MFA onboarding and UAT. Follow the deployment runbook and verify the actual production URL before marking M7 complete.
 
 All previous parallel workers have stopped. Root completed integration and recorded the local verification. Preserve originals, local secrets, profiles, private evidence and database files outside Git/deployment. Do not infer that an earlier scaffold-only status still applies.
@@ -51,3 +51,11 @@ Current verification: 31 unit tests and 32 security tests passed, plus the targe
 Exact next task: continue E02–E14 when owner-designated infrastructure/approvals arrive. Production is not deployed.
 
 Final remote result: **SUCCESS**, run `40044050864`, tested source `ce6a0a0ecf27f2049720e5293e28eb8b18f1f572`. The workflow rebuilt both isolated databases, ran all domain and browser checks against the production artifact, verified recovery and scanned deployment traces. E01 repository publication and CI are resolved. M7 remains blocked on the remaining owner inputs; no production URL exists.
+
+## Reviews, OpenWA and Vercel update — 2026-10-24
+
+The owner requested a full reviews page, selected `rmyndharis/OpenWA` for WhatsApp and will deploy on Vercel. The reviews page is linked in desktop/mobile navigation and implements published-only aggregates, filtering, pagination, replies and invitation-only submission with name privacy. The OpenWA adapter uses the pinned upstream API contract, local approved text, explicit consent, signed session-bound durable callbacks and conservative unknown-send reconciliation. Two forward migrations add provider support and permanently freeze approved template content. Existing Meta delivery history remains valid.
+
+Vercel uploads now bypass its request-body limit using immutable object-specific private upload capabilities; finalization still validates bytes and current authority. Downloads stream through current permission/consent checks with storage read capabilities kept on the server. Configuration/runbooks are in `docs/runbooks/vercel-owner-setup.md`, `docs/runbooks/openwa.md` and `deploy/openwa/compose.yaml`.
+
+Verified locally:193 domain tests,47 browser tests,16 documented skips,lint,types,build,213-key locale parity,117-table drift and zero source/artifact scan findings. A loopback HTTP gateway fixture verifies OpenWA protocol behavior; no actual gateway host/number has been connected. Exact next task: push this verified candidate and run remote CI, then owner performs designated hosted staging/provider setup and verification from E02–E14. Production is not deployed.

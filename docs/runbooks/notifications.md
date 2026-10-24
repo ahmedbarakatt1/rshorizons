@@ -2,7 +2,7 @@
 
 Outbox events commit with domain changes. The bounded worker materializes jobs, claims a lease immediately before processing and records complete/failed/dead outcomes. Restarting a process does not remove committed work.
 
-Templates are separate from UI translations. The operator must approve the event/channel/locale template and provider name before it can send. WhatsApp requires booking-update opt-in and approved Meta templates; email fallback uses a verified Resend sender. Marketing/publication consent is not inferred from a booking update preference.
+Templates are separate from UI translations. The operator must approve the event/channel/locale template and provider name before it can send. The owner selected OpenWA: WhatsApp requires booking-update opt-in and approved localized text; see [gateway setup](openwa.md). The retained Meta adapter requires Meta-approved templates if explicitly selected. Email fallback uses a verified Resend sender. Marketing/publication consent is not inferred from a booking update preference.
 
 Local adapters write synthetic `.invalid` previews under ignored `.local/outbox`. They do not send email or WhatsApp. Staging restricts recipients to the configured allowlist. Provider acceptance and actual delivery callbacks have distinct statuses; callbacks are signature-checked and deduplicated.
 

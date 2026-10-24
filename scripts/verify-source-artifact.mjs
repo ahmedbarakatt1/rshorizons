@@ -4,7 +4,7 @@ import {resolve,relative,dirname,join} from "node:path";
 import {parse} from "dotenv";
 
 const env={...(existsSync(".env.local")?parse(readFileSync(".env.local")):{}),...process.env};
-const sensitive=Object.entries(env).filter(([key,value])=>/(SECRET|PASSWORD|PEPPER|PRIVATE_KEY|DATABASE_URL|API_TOKEN|WHATSAPP_TOKEN|EMAIL_API_KEY)/.test(key)&&typeof value==="string"&&value.length>=20);
+const sensitive=Object.entries(env).filter(([key,value])=>/(SECRET|PASSWORD|PEPPER|PRIVATE_KEY|DATABASE_URL|API_TOKEN|API_KEY|WHATSAPP_TOKEN)/.test(key)&&typeof value==="string"&&value.length>=20);
 for(const key of ["DATABASE_URL","MIGRATION_DATABASE_URL"])if(env[key]){const url=new URL(env[key]);if(url.password.length>=20)sensitive.push([`${key}_PASSWORD`,decodeURIComponent(url.password)]);}
 const candidates=[...new Set(execFileSync("git",["ls-files","--cached","--others","--exclude-standard","-z"],{encoding:"utf8"}).split("\0").filter(Boolean))];
 const findings=[];

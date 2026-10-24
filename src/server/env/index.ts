@@ -1,3 +1,4 @@
+import {openWaOrigin,openWaSession} from "@/integrations/messaging/openwa-config";
 export type EnvironmentTarget = "development" | "test" | "staging" | "production";
 export type ValidatedEnvironment = {
   target: EnvironmentTarget;
@@ -11,7 +12,7 @@ export function readEnvironment(
   source: Record<string, string | undefined> = process.env
 ): ValidatedEnvironment {
   const problems: string[] = [];
-  const serverSecretNames = ["DATABASE_URL","SUPABASE_SECRET_KEY","PAYMOB_SECRET_KEY","PAYMOB_API_KEY","PAYMOB_HMAC_SECRET","WHATSAPP_TOKEN","META_APP_SECRET","EMAIL_API_KEY","CRON_SECRET","TOKEN_HASH_PEPPER","VIDEO_API_TOKEN","VIDEO_SIGNING_PRIVATE_KEY","VIDEO_WEBHOOK_SECRET","SENTRY_AUTH_TOKEN"];
+  const serverSecretNames = ["DATABASE_URL","SUPABASE_SECRET_KEY","PAYMOB_SECRET_KEY","PAYMOB_API_KEY","PAYMOB_HMAC_SECRET","WHATSAPP_TOKEN","META_APP_SECRET","OPENWA_API_KEY","OPENWA_WEBHOOK_SECRET","EMAIL_API_KEY","CRON_SECRET","TOKEN_HASH_PEPPER","VIDEO_API_TOKEN","VIDEO_SIGNING_PRIVATE_KEY","VIDEO_WEBHOOK_SECRET","SENTRY_AUTH_TOKEN"];
   for(const [name,value] of Object.entries(source)) {
     if(!name.startsWith("NEXT_PUBLIC_") || !value) continue;
     if(/SECRET|PASSWORD|PRIVATE|SERVICE_ROLE|DATABASE|TOKEN|PEPPER/i.test(name) ||
@@ -31,11 +32,10 @@ export function readEnvironment(
     const required=[
       "APP_BASE_URL","DATABASE_URL","NEXT_PUBLIC_SUPABASE_URL","NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY","SUPABASE_SECRET_KEY",
       "PAYMOB_API_BASE_URL","PAYMOB_SECRET_KEY","PAYMOB_HMAC_SECRET","PAYMOB_PUBLIC_KEY","PAYMOB_ACCOUNT_ID","PAYMOB_INTEGRATION_IDS",
-      "WHATSAPP_TOKEN","WHATSAPP_PHONE_NUMBER_ID","META_APP_SECRET","WHATSAPP_VERIFY_TOKEN","META_GRAPH_API_VERSION",
       "EMAIL_PROVIDER","EMAIL_API_KEY","EMAIL_FROM","EMAIL_WEBHOOK_SECRET","CRON_SECRET","TOKEN_HASH_PEPPER",
       "SENSITIVE_DATA_KEY_REFERENCE","VIDEO_PROVIDER","VIDEO_API_TOKEN","VIDEO_WEBHOOK_SECRET","MONITORING_ALERT_URL"
     ];
-    required.push("PAYMOB_API_KEY","VIDEO_API_TOKEN_ID","VIDEO_ENVIRONMENT_ID","VIDEO_SIGNING_KEY_ID","VIDEO_SIGNING_PRIVATE_KEY","RESEND_ACCOUNT_ID","WHATSAPP_BUSINESS_ACCOUNT_ID","STAFF_NOTIFICATION_EMAIL","STAFF_NOTIFICATION_LOCALE");
+    required.push("PAYMOB_API_KEY","VIDEO_API_TOKEN_ID","VIDEO_ENVIRONMENT_ID","VIDEO_SIGNING_KEY_ID","VIDEO_SIGNING_PRIVATE_KEY","RESEND_ACCOUNT_ID","STAFF_NOTIFICATION_EMAIL","STAFF_NOTIFICATION_LOCALE");
     for(const name of required) if(!source[name]?.trim()) problems.push(`${name} is required`);
     for(const name of ["CRON_SECRET","TOKEN_HASH_PEPPER"]) if((source[name]?.length??0)<32) problems.push(`${name} requires at least 32 characters`);
     for(const name of ["EMAIL_PROVIDER","VIDEO_PROVIDER"]) if(/^(local|demo|fake|mock)$/i.test(source[name]??"")) problems.push(`${name} cannot use a local adapter`);
@@ -66,6 +66,15 @@ export function readEnvironment(
     if(source.DATABASE_URL===source.MIGRATION_DATABASE_URL)problems.push("Runtime and migration credentials must differ");
   }
   if(target==="staging"||target==="production"){
+    const provider=source.WHATSAPP_PROVIDER;
+    if(!["openwa","meta"].includes(provider??""))problems.push("WHATSAPP_PROVIDER must be openwa or meta");
+    const required=provider==="openwa"?["OPENWA_BASE_URL","OPENWA_API_KEY","OPENWA_SESSION_ID","OPENWA_WEBHOOK_SECRET"]:provider==="meta"?["WHATSAPP_TOKEN","WHATSAPP_PHONE_NUMBER_ID","META_APP_SECRET","WHATSAPP_VERIFY_TOKEN","META_GRAPH_API_VERSION","WHATSAPP_BUSINESS_ACCOUNT_ID"]:[];
+    for(const name of required)if(!source[name]?.trim())problems.push(`${name} is required`);
+    if(provider==="openwa"){
+      try{openWaOrigin(source);}catch{problems.push("OPENWA_BASE_URL must be an HTTPS gateway origin without credentials, path or query");}
+      try{openWaSession(source);}catch{problems.push("OPENWA_SESSION_ID must contain 1–100 letters, numbers, hyphens or underscores");}
+      if((source.OPENWA_WEBHOOK_SECRET?.length??0)<32)problems.push("OPENWA_WEBHOOK_SECRET requires at least 32 characters");
+    }
     const retention=Number(source.MEDIA_RETENTION_DAYS);
     if(!Number.isInteger(retention)||retention<1||retention>3650)problems.push("MEDIA_RETENTION_DAYS requires an approved integer between 1 and 3650");
   }

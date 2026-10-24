@@ -1,5 +1,4 @@
 import {serveOwnerMedia} from "@/integrations/storage/owner-media";
-import {mediaResponse} from "@/server/http/byte-range";
 import {z} from "zod";
 import {query} from "@/server/db";
 import {AppError} from "@/server/http/errors";
@@ -10,8 +9,8 @@ import {getApartment,getCatalog,getDepartures,getDestinations,getService,searchA
 import {catalogFiltersSchema} from "@/modules/catalog/contracts";
 import {bookingInputSchema,dateSchema,localeSchema,quoteInputSchema,uuidSchema} from "@/modules/bookings/contracts";
 import {bookingDetails,createBookingRequest,createQuote,submitBooking} from "@/modules/bookings/service";
-import {getGalleryManifest,issueDownloadGrant,streamAsset,listPublicGalleries,streamPublicDerivative} from "@/modules/photography/service";
-import {submitReview,listPublishedReviews} from "@/modules/reviews/service";
+import {getGalleryManifest,issueDownloadGrant,servePrivateAsset,listPublicGalleries,servePublicDerivative} from "@/modules/photography/service";
+import {submitReview,listReviewPage,reviewPageInputSchema} from "@/modules/reviews/service";
 import {submitContact,getSocialLinks} from "@/modules/content/contact";
 
 const dateRangeSchema=z.object({from:dateSchema,to:dateSchema}).refine(v=>v.to>=v.from);
@@ -20,8 +19,7 @@ export async function publicRoute(request:Request,parts:string[]):Promise<Respon
   const [resource,id,action]=parts;
   if(resource==="demo-media"&&parts.length===2)return serveOwnerMedia(request,id);
   if(resource==="galleries"&&id==="public"&&action==="assets"&&parts.length===4&&["GET","HEAD"].includes(request.method)){
-    const asset=await streamPublicDerivative(uuidSchema.parse(parts[3]));
-    return mediaResponse(request,asset.bytes,asset.mimeType,asset.headers);
+    return servePublicDerivative(request,uuidSchema.parse(parts[3]));
   }
   if(request.method==="GET") {
     if(resource==="health") {
@@ -80,14 +78,14 @@ export async function publicRoute(request:Request,parts:string[]):Promise<Respon
       if(id) {
         const actor=await getGuest(request);
         if(action==="assets"&&parts[3]){
-          const asset=await streamAsset(actor,{galleryId:id,derivativeId:parts[3],downloadToken:request.headers.get("x-download-token")??undefined});
-          return new Response(new Uint8Array(asset.bytes),{headers:{"Content-Type":asset.mimeType,...asset.headers}});
+          return servePrivateAsset(request,actor,{galleryId:id,derivativeId:parts[3],downloadToken:request.headers.get("x-download-token")??undefined});
         }
         return success(await getGalleryManifest(actor,id));
       }
     }
     if(resource==="reviews"){
-      return success({items:await listPublishedReviews()});
+      const parameters=Object.fromEntries(url.searchParams);delete parameters.locale;
+      return success(await listReviewPage(reviewPageInputSchema.parse(parameters)));
     }
     if(resource==="social-links")return success({items:await getSocialLinks()});
     if(resource==="pages"&&id) {
