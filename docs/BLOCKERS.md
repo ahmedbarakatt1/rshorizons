@@ -19,4 +19,4 @@ E01 is resolved: the designated repository contains the source and its CI is pas
 | E13 | Operations owner | Designate the Mux account/environment and monitoring destination | Implemented signed private Mux playback/retention; actual account/billing approval, processing verification, alerts and cron ownership remain required |
 | E14 | Agency owner | Approve UAT, recovery/retention objectives and designated live-test transaction amount/contacts | M6 release gate and M7 authorized production journey |
 
-Working brand was resolved: owner confirmed **Red Sea Horizons** on 2026-10-20. Production deployment has not been attempted because E02–E14 remain unverified. E01 repository selection/access is resolved; see the release addendum for publication and CI results.
+Working brand was resolved: owner confirmed **Red Sea Horizons** on 2026-10-20. Production deployment has not been attempted because the remaining portions of E02–E14 are unverified. E01 repository selection/access is resolved; see the release addendum for publication and CI results.
