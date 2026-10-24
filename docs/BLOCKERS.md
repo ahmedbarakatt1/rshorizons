@@ -1,10 +1,10 @@
 # External launch dependencies
 
-E01 is now owner-designated and access-verified. Remaining rows are `BLOCKED_EXTERNAL` until their evidence is supplied and verified; these do not block independent implementation.
+E01 is resolved: the designated repository contains the source and its CI is passing. Remaining rows are `BLOCKED_EXTERNAL` until their evidence is supplied and verified; these do not block independent implementation.
 
 | ID | Owner | Required single next action | Impact / exact destination |
 |---|---|---|---|
-| E01 | Agency owner / implementation | Owner designated `ahmedbarakatt1/rshorizons` on 2026-10-24; repository identity, push access and enabled Actions verified; `origin` configured | Source published to `main`; First CI domain/build gates passed; corrected browser harness verification pending; deployment secrets/protected release environment depend on hosting inputs |
+| E01 | Resolved | Owner-designated `ahmedbarakatt1/rshorizons`; source published to `main`; [CI passed](https://github.com/ahmedbarakatt1/rshorizons/actions/runs/40044050864) | Production deployment secrets/environment configuration remain dependent on E02–E14 |
 | E02 | Agency owner | Designate an approved commercial Vercel account/project and billing plan | Production hosting, project IDs, deployment token; no purchase is authorized |
 | E03 | Agency owner | Designate the domain and DNS account | `APP_BASE_URL`, canonical domain, HTTPS and DNS verification |
 | E04 | Agency owner | Supply separate staging/production Supabase project access via secret storage | Runtime/migration DB roles, Auth, storage, redirect allowlists, backup rehearsal |

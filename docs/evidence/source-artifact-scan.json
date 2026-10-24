@@ -1,8 +1,8 @@
 {
-  "at": "2026-10-23T23:22:15.404Z",
-  "sourceFiles": 1000,
+  "at": "2026-10-24T00:20:23.849Z",
+  "sourceFiles": 1004,
   "buildDirectory": ".next-release",
-  "buildFiles": 559,
+  "buildFiles": 560,
   "fileTraces": 17,
   "findings": [],
   "limitations": "Exact configured credential and private-path scan; not a general secrets-detection or penetration-testing certification."

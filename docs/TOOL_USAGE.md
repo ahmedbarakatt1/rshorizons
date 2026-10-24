@@ -52,3 +52,7 @@ Taste's final rendered inspection retained 2 failures and 5 warnings. Increasing
 Impeccable's contrast/readability guidance informed the removal of opacity/color fades after real axe failures. Completed desktop, mobile gallery and Arabic screenshots were inspected after loaded-content assertions. The web-perf skill additionally informed actual Chromium CDP traces, responsive WebP sizing and loading-layout stability. No Chrome DevTools MCP trace or Lighthouse score is claimed; [PERFORMANCE.md](PERFORMANCE.md) describes the measured alternative.
 
 All five requested resources were acquired and applied. The img2threejs form failure and later incomplete gates remain recorded with a disabled feature flag and static fallback. External account, content, human translation and media publication approvals remain independent launch requirements.
+
+## Owner media extension — 2026-10-24
+
+The existing Taste direction and Impeccable readability guidance were retained while integrating actual boats, evening outings, car views and all 30 videos. Playwright Agent CLI session `owner-media` inspected the 1440×1000 gallery, saved gallery/vehicle/evening screenshots, and reported zero console errors or warnings. The session was closed after inspection. Playwright Test verified playback/seek/load-on-demand in all three engines and the full local/remote suite. CI results and retained harness findings are in the release report.
