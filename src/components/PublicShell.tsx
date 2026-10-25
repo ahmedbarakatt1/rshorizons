@@ -5,6 +5,7 @@ import Link from "next/link";
 import {usePathname} from "next/navigation";
 import {useTranslations} from "next-intl";
 import {localeNames,locales,type Locale} from "@/i18n/locales";
+import {TeamWhatsAppLinks} from "./WhatsAppLinks";
 
 export function Mark() {return <svg viewBox="0 0 48 48" className="brand-mark" aria-hidden="true"><path d="M3 29c7-16 18-19 26-9-13-4-12 17 14 15-18 13-36 4-32-4-4 0-6 0-8-2Z" fill="currentColor"/><path d="M7 15c11-13 31-6 31 7-6-8-16-10-31-7Z" fill="#15b1bc"/><circle cx="38" cy="12" r="5" fill="#ecc471"/></svg>;}
 export function Arrow() {return <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg>;}
@@ -24,6 +25,7 @@ export function PublicShell({children,locale}:{children:React.ReactNode;locale:L
   </header>
   {children}
   <footer className="site-footer">
+   <TeamWhatsAppLinks compact/>
    <div className="footer-top"><div><Mark/><p>{t("manualTitle")}</p><Link href={`/${locale}/contact`} className="text-link">{t("contact")} <Arrow/></Link></div><nav>{["experiences","destinations","apartments","gallery","reviews","about"].map(path=><Link key={path} href={`/${locale}/${path}`}>{t(path)}</Link>)}</nav><nav>{["privacy","terms","cancellation-policy","guest-access"].map((path,i)=><Link key={path} href={`/${locale}/${path}`}>{t(["privacy","terms","cancellation","manage"][i])}</Link>)}</nav></div>
    {social.length>0&&<nav className="social-links" aria-label={t("contact")}>{social.filter(link=>link.url.startsWith("https://")).map(link=><a key={link.platform} href={link.url} target="_blank" rel="noopener noreferrer">{link.platform}</a>)}</nav>}<p className="footer-name">Red Sea Horizons</p><div className="footer-bottom"><span>© {new Date().getFullYear()} Red Sea Horizons</span><span>Egypt · Red Sea</span><Link href="/admin">{t("staff")}</Link></div>
   </footer>

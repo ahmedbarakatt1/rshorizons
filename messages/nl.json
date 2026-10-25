@@ -211,5 +211,10 @@
   "review_invitationTitle": "Een persoonlijke uitnodiging, een echte ervaring",
   "review_invitationHelp": "Open de beveiligde link in je uitnodiging om je toegang te verifiëren en je beoordeling te schrijven. Een beveiligde toegangscode kun je hieronder gebruiken.",
   "review_accessError": "Deze uitnodiging is niet beschikbaar, al gebruikt of vereist beveiligde toegang. Open de oorspronkelijke link of neem contact op.",
-  "review_submitError": "Je beoordeling kon niet worden verstuurd. Je tekst staat hier nog. Probeer het opnieuw."
+  "review_submitError": "Je beoordeling kon niet worden verstuurd. Je tekst staat hier nog. Probeer het opnieuw.",
+  "whatsappTitle": "Stuur ons team een bericht",
+  "whatsappManual": "Kies een nummer om WhatsApp te openen. Controleer het concept en druk zelf op Verzenden.",
+  "whatsappDraft": "Hallo Red Sea Horizons, ik wil graag meer informatie.",
+  "whatsappBookingDraft": "Hallo Red Sea Horizons, ik neem contact op over reservering {reference}.",
+  "whatsappStaffDraft": "Hallo, dit is Red Sea Horizons over uw reservering {reference}."
 }

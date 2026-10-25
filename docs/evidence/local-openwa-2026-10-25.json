@@ -85,5 +85,7 @@
     "Approved message text and authorized test recipient",
     "Actual send and signed callback verification",
     "Existing independent application release gates"
-  ]
+  ],
+  "supersededAt": "2026-10-25T17:33:38.274Z",
+  "supersededBy": "Owner replaced OpenWA with manual WhatsApp links; historical setup evidence only"
 }

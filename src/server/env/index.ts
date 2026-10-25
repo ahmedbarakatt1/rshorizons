@@ -1,4 +1,3 @@
-import {openWaOrigin,openWaSession} from "@/integrations/messaging/openwa-config";
 export type EnvironmentTarget = "development" | "test" | "staging" | "production";
 export type ValidatedEnvironment = {
   target: EnvironmentTarget;
@@ -66,15 +65,7 @@ export function readEnvironment(
     if(source.DATABASE_URL===source.MIGRATION_DATABASE_URL)problems.push("Runtime and migration credentials must differ");
   }
   if(target==="staging"||target==="production"){
-    const provider=source.WHATSAPP_PROVIDER;
-    if(!["openwa","meta"].includes(provider??""))problems.push("WHATSAPP_PROVIDER must be openwa or meta");
-    const required=provider==="openwa"?["OPENWA_BASE_URL","OPENWA_API_KEY","OPENWA_SESSION_ID","OPENWA_WEBHOOK_SECRET"]:provider==="meta"?["WHATSAPP_TOKEN","WHATSAPP_PHONE_NUMBER_ID","META_APP_SECRET","WHATSAPP_VERIFY_TOKEN","META_GRAPH_API_VERSION","WHATSAPP_BUSINESS_ACCOUNT_ID"]:[];
-    for(const name of required)if(!source[name]?.trim())problems.push(`${name} is required`);
-    if(provider==="openwa"){
-      try{openWaOrigin(source);}catch{problems.push("OPENWA_BASE_URL must be an HTTPS gateway origin without credentials, path or query");}
-      try{openWaSession(source);}catch{problems.push("OPENWA_SESSION_ID must contain 1–100 letters, numbers, hyphens or underscores");}
-      if((source.OPENWA_WEBHOOK_SECRET?.length??0)<32)problems.push("OPENWA_WEBHOOK_SECRET requires at least 32 characters");
-    }
+    if(source.WHATSAPP_PROVIDER!=="links")problems.push("WHATSAPP_PROVIDER must be links; automated WhatsApp gateways are retired");
     const retention=Number(source.MEDIA_RETENTION_DAYS);
     if(!Number.isInteger(retention)||retention<1||retention>3650)problems.push("MEDIA_RETENTION_DAYS requires an approved integer between 1 and 3650");
   }

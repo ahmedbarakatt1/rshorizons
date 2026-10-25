@@ -211,5 +211,10 @@
   "review_invitationTitle": "Une invitation personnelle, une expérience réelle",
   "review_invitationHelp": "Ouvrez le lien sécurisé de votre invitation pour vérifier votre accès et rédiger votre avis. Si vous avez un code d’accès sécurisé, utilisez-le ci-dessous.",
   "review_accessError": "Cette invitation est indisponible, déjà utilisée ou nécessite un accès sécurisé. Ouvrez le lien d’origine ou contactez-nous.",
-  "review_submitError": "Votre avis n’a pas pu être envoyé. Votre texte est toujours ici. Veuillez réessayer."
+  "review_submitError": "Votre avis n’a pas pu être envoyé. Votre texte est toujours ici. Veuillez réessayer.",
+  "whatsappTitle": "Écrivez à notre équipe",
+  "whatsappManual": "Choisissez un numéro pour ouvrir WhatsApp. Vérifiez le brouillon et appuyez vous-même sur Envoyer.",
+  "whatsappDraft": "Bonjour Red Sea Horizons, je souhaite obtenir des renseignements.",
+  "whatsappBookingDraft": "Bonjour Red Sea Horizons, je vous contacte au sujet de la réservation {reference}.",
+  "whatsappStaffDraft": "Bonjour, ici Red Sea Horizons au sujet de votre réservation {reference}."
 }

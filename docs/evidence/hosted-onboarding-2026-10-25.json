@@ -181,7 +181,6 @@
     "Vercel compatible commercial/cron plan",
     "Supabase 64MiB upload capacity; paid-plan error402 verified",
     "Auth leaked-password protection",
-    "OpenWA owner QR pairing, paired recovery, stable HTTPS and actual signed delivery callbacks",
     "Resend account/owned sender domain and actual delivery callbacks",
     "Remaining Paymob/Mux/content/consent/translation/recovery/UAT gates"
   ],
@@ -235,5 +234,17 @@
     "evidence": "docs/evidence/local-openwa-2026-10-25.json"
   },
   "noSuccessfulProductionDeployment": true,
-  "updatedAt": "2026-10-25T16:51:10.535Z"
+  "updatedAt": "2026-10-25T16:51:10.535Z",
+  "supersededAt": "2026-10-25T17:33:38.281Z",
+  "supersededBy": "Owner replaced OpenWA with manual WhatsApp links; historical setup evidence only",
+  "whatsappCurrent": {
+    "mode": "manual-links",
+    "numbers": [
+      "+201099267451",
+      "+201220907478"
+    ],
+    "vercelProductionValue": "links",
+    "gatewayRemoved": true,
+    "actualMessageSent": false
+  }
 }

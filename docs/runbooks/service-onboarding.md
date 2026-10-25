@@ -8,7 +8,7 @@ This is the working sequence for the owner's Vercel deployment. Use the verified
 |---|---|---|
 | Supabase | Official CLI authenticated; owner designated production. 23 migrations/118 tables, required reference data, restricted login, verified TLS, invite-only Auth and administrator password are verified | Separate staging, authenticator enrollment,64MiB storage capacity and hosted recovery |
 | Vercel | Official CLI authenticated to `ahmedbarakatt1s-projects/rshorizons`; correct GitHub repository and `rshorizons.vercel.app` verified; Node22/build gate/core runtime variables configured | Hobby plan cannot satisfy commercial minute-cron deployment; remaining provider inputs and approvals still required |
-| OpenWA | Owner now selected this Windows computer. Pinned native image built; dedicated gateway healthy on loopback2786; authentication, scoped isolation and unpaired session/key restart passed | Scan the displayed QR, verify paired recovery, establish authenticated HTTPS for Vercel and verify approved real sends/callbacks; see [local setup](local-openwa.md) |
+| WhatsApp | Owner replaced OpenWA with manual links to two designated numbers and scoped staff-to-guest drafts; Vercel selects links | Hosted UAT verifies destinations; no host, QR, tunnel or gateway credential needed |
 | Resend | Application adapter prepared; no account/sender/key/callback configured | Designated account and owner-controlled sending domain |
 
 The existing Vercel Supabase integration points to the designated project. Added production-only `DATABASE_URL`, `DATABASE_SSL_CA`, `APP_ENV`, `APP_BASE_URL`, `DEMO_MODE`, `BOOKING_ENABLED`, `STORAGE_PROVIDER`, `CRON_SECRET`, `TOKEN_HASH_PEPPER`, `WHATSAPP_PROVIDER`, `EMAIL_PROVIDER` and `VIDEO_PROVIDER`. Sensitive values remain in Vercel secret storage and ignored operator files. Unused privileged integration variables `POSTGRES_PASSWORD`, `POSTGRES_URL`, `POSTGRES_PRISMA_URL`, `POSTGRES_URL_NON_POOLING`, `SUPABASE_JWT_SECRET` and legacy duplicate `SUPABASE_SERVICE_ROLE_KEY` were removed; restricted `DATABASE_URL` and required `SUPABASE_SECRET_KEY` remain. Recheck this separation after reconnecting an integration because it may reinstall defaults. Removal from Vercel does not rotate or revoke provider credentials. Bookings remain disabled. No synthetic catalog, policy approval, real guest message, payment, DNS operation or paid upgrade was performed.
@@ -25,7 +25,7 @@ The owner may use Gmail to register for Resend and receive tests. Resend's defau
 
 Provide only non-secret details in chat: Supabase project name/reference (or “new project”), Vercel team/project, domain, Resend account choice, and whether an OpenWA server exists. A temporary stable Vercel staging hostname can be used before final DNS; email still requires a verified sending domain. Never infer domain ownership from the administrator email.
 
-Use provider sign-in and secret settings for keys/passwords. Keep staging and production separate. Hosting purchases, paid plan upgrades, the WhatsApp QR scan and authenticator enrollment are owner steps; no purchase is authorized by this checklist.
+Use provider sign-in and secret settings for keys/passwords. Keep staging and production separate. Hosting purchases, paid plan upgrades, authenticator enrollment are owner steps; no purchase is authorized by this checklist.
 
 ## 2. Supabase and administrator
 
@@ -42,12 +42,12 @@ After the project is designated and accessible:
 
 Complete [Resend setup](email.md): verified domain, domain-scoped sending key, signed callback and the application's exact `EMAIL_*` variable names. Configure separate Supabase SMTP if Auth emails are needed.
 
-Complete [OpenWA setup](openwa.md): pinned Docker build on the designated persistent host, HTTPS gateway origin, owner QR pairing, ready session, session-scoped operator key and signed `message.ack`/`message.failed` callbacks. The master/admin key stays on that host. A sleeping/free web process is not a substitute for a continuously connected session.
+Use [manual WhatsApp links](whatsapp-links.md). Guests choose one of the two owner-designated team numbers. Staff prepare a draft for a saved, consented guest number from the reservation. The person presses Send; the website makes no WhatsApp delivery claim.
 
-Approve versioned message templates for the intended channels/locales and designate test recipients. Merely entering contact details does not send; a successful reservation submission creates the acknowledgement job. Staff approval is still required for every reservation.
+Approve versioned email templates for the intended locales and designate test recipients. Merely entering contact details does not send; a successful reservation submission creates the acknowledgement job. Staff approval is still required for every reservation.
 
 ## 4. Hosted verification
 
-Deploy the isolated staging environment after configuration validation passes. Confirm administrator login/MFA and permissions; an email-only booking receives one delivered email; a consented WhatsApp booking receives one delivered/read message; duplicate submission/callbacks do not duplicate effects; definite WhatsApp failure uses email fallback. Verify the minute worker in Vercel's Cron Jobs view. The current schedule needs a plan with per-minute cron support; Hobby is daily only. [Vercel cron limits](https://vercel.com/docs/cron-jobs/usage-and-pricing).
+Deploy the isolated staging environment after configuration validation passes. Confirm administrator login/MFA and permissions; a booking with an email receives one delivered email even when WhatsApp consent is given; duplicate submission/email callbacks do not duplicate effects; team links and authorized staff drafts open the intended WhatsApp destination without changing booking or delivery state. Verify the minute worker in Vercel's Cron Jobs view. The current schedule needs a plan with per-minute cron support; Hobby is daily only. [Vercel cron limits](https://vercel.com/docs/cron-jobs/usage-and-pricing).
 
 Record actual results and remaining failures in the release report. Production still requires the existing Paymob, media, business-content, translation, recovery and UAT gates. Configuring these three services alone does not satisfy those independent launch requirements. Do not change approval flags or bypass `verify:release` just to obtain a deployment.

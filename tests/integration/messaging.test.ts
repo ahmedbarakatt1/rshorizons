@@ -14,14 +14,13 @@ describe("notification provider boundaries",()=>{
     expect(()=>verifyMessagingWebhook("resend",body,new Headers({"svix-id":id,"svix-timestamp":timestamp,"svix-signature":`v1,${signature}`}))).toThrow("WEBHOOK_TIMESTAMP_INVALID");
   });
   it("accepts exact signed bytes and rejects tampering",()=>{
-    vi.stubEnv("META_APP_SECRET","synthetic-secret");
-    vi.stubEnv("WHATSAPP_PHONE_NUMBER_ID","12345");
-    vi.stubEnv("WHATSAPP_BUSINESS_ACCOUNT_ID","54321");
-    const body=JSON.stringify({object:"whatsapp_business_account",entry:[{id:"54321",changes:[{field:"messages",value:{metadata:{phone_number_id:"12345"},statuses:[{id:"wamid.test",status:"delivered",timestamp:String(Math.floor(Date.now()/1000))}]}}]}]});
-    const signature=createHmac("sha256","synthetic-secret").update(body).digest("hex");
-    const headers=new Headers({"x-hub-signature-256":`sha256=${signature}`});
-    expect(verifyMessagingWebhook("whatsapp",body,headers)[0]).toMatchObject({messageId:"wamid.test",status:"delivered"});
-    expect(()=>verifyMessagingWebhook("whatsapp",body+" ",headers)).toThrow("WEBHOOK_SIGNATURE_INVALID");
+    vi.stubEnv("EMAIL_WEBHOOK_SECRET",`whsec_${Buffer.from("synthetic-secret").toString("base64")}`);
+    vi.stubEnv("RESEND_ACCOUNT_ID","test-account");
+    const body=JSON.stringify({type:"email.delivered",data:{email_id:"test-email"}}),timestamp=String(Math.floor(Date.now()/1000)),id="test-event";
+    const signature=createHmac("sha256","synthetic-secret").update(`${id}.${timestamp}.${body}`).digest("base64");
+    const headers=new Headers({"svix-id":id,"svix-timestamp":timestamp,"svix-signature":`v1,${signature}`});
+    expect(verifyMessagingWebhook("resend",body,headers)[0]).toMatchObject({messageId:"test-email",status:"delivered"});
+    expect(()=>verifyMessagingWebhook("resend",body+" ",headers)).toThrow("WEBHOOK_SIGNATURE_INVALID");
   });
   it("fails closed before fetch without sandbox allowlist and rejects unapproved variables",async()=>{
     vi.stubEnv("EMAIL_PROVIDER","resend");

@@ -27,6 +27,7 @@ html[dir=rtl] body{font-family:Tahoma,Arial,sans-serif}.catalog-filters{flex-wra
 @media(prefers-reduced-motion:reduce){.section{animation:none!important}}
 
 .loading-page{min-height:100svh}
+.whatsapp-contacts{margin-block:24px;padding-block:8px}.whatsapp-contacts h2{margin-block:0 12px}.whatsapp-contact-links{display:flex;flex-wrap:wrap;gap:12px}.whatsapp-contact-links a{gap:8px;max-width:100%;white-space:normal}.whatsapp-contact-links bdi{white-space:nowrap}.whatsapp-contacts.compact{margin-block:0 28px}.site-footer .whatsapp-contact-links a{color:inherit}.contact-form{margin-block-start:28px}
 .illustrative-photo{display:block;position:relative;overflow:hidden}
 .illustrative-photo-image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:inherit}
 .illustrative-photo-caption{position:absolute;inset-inline-start:12px;inset-block-end:12px;max-width:calc(100% - 24px);padding:5px 9px;background:var(--ground);color:var(--ink);font-size:13px;font-weight:400;line-height:1.35}

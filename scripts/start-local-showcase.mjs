@@ -11,7 +11,7 @@ for(const key of ["DATABASE_URL","MIGRATION_DATABASE_URL"]){
 const bootstrap=spawnSync(process.execPath,["scripts/bootstrap-local-operator.mjs"],{env,windowsHide:true,stdio:"inherit"});if(bootstrap.status!==0)throw new Error("Showcase operator bootstrap failed");
 const seed=spawnSync(process.execPath,["scripts/seed-local-notifications.mjs"],{env,windowsHide:true,stdio:"inherit"});if(seed.status!==0)throw new Error("Showcase message preview setup failed");
 // The preview exercises the same durable worker as Vercel Cron. Providers remain local-only.
-const workerEnv={...env,EMAIL_PROVIDER:"local",VIDEO_PROVIDER:"local",PAYMOB_MODE:"local",MESSAGING_ACCOUNT_VERIFIED:"false",OPENWA_BASE_URL:""};
+const workerEnv={...env,EMAIL_PROVIDER:"local",VIDEO_PROVIDER:"local",PAYMOB_MODE:"local",MESSAGING_ACCOUNT_VERIFIED:"false",WHATSAPP_PROVIDER:"links"};
 let worker;
 function dispatch(){
  if(worker)return;

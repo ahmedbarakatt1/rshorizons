@@ -2,7 +2,11 @@
 
 The handoff is the approved specification and milestone execution plan. The user expressly requested implementation without another approval/planning stop.
 
-## Hosted configuration — 2026-10-25
+## WhatsApp links replace OpenWA — 2026-10-25
+
+The owner explicitly requested removal of OpenWA and manual links for both directions. Confirmed team numbers are +201099267451 (normalized from Egyptian local01099267451) and +201220907478. Public pages open editable drafts to these contacts; authorized staff prepare drafts to the saved booking guest number, subject to current booking scope and WhatsApp consent. The person presses Send. No gateway, automatic WhatsApp send, delivery claim, QR or tunnel is required. Automated email remains a separate requirement. Historical SQL migrations and receipt/consent records are preserved; no schema migration is needed for this UI/dispatch change. This decision supersedes previous Meta/OpenWA and automatic WhatsApp requirements, including the earlier local-host choice. See `docs/runbooks/whatsapp-links.md`.
+
+## Hosted configuration — 2026-10-25 (earlier setup history)
 
 The owner designated `ahmedbarakatt1s-projects/rshorizons` on Vercel and classified the supplied Supabase project as production. Official CLIs are authenticated; plugin reauthentication is no longer a setup blocker. Configure only these projects. Separate staging remains required. No paid upgrade, server purchase, DNS change or real guest-message test is authorized yet.
 

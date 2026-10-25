@@ -22754,298 +22754,6 @@
         }
       }
     },
-    "/api/v1/webhooks/whatsapp": {
-      "post": {
-        "operationId": "post__webhooks_whatsapp",
-        "summary": "Authenticate raw whatsapp callback and deduplicate effects",
-        "description": "Signature verified against the exact raw body before parsing. Timestamp/replay limits apply where supported. No unsigned client redirect can confirm delivery or payment.",
-        "tags": [
-          "webhooks"
-        ],
-        "parameters": [
-          {
-            "name": "x-hub-signature-256",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "security": [
-          {
-            "whatsappSignature": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful operation; private endpoints are no-store.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Success"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid input",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Missing/invalid session or signature",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Permission, scope or origin rejected",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Unavailable or unauthorized object",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Version, inventory, idempotency or state conflict",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "410": {
-            "description": "Expired quote or consumed/expired grant",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Business rule rejected",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Rate limited",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "Dependency/configuration unavailable; no simulated external success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        },
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "additionalProperties": false,
-                "required": [
-                  "object",
-                  "entry"
-                ],
-                "properties": {
-                  "object": {
-                    "const": "whatsapp_business_account"
-                  },
-                  "entry": {
-                    "type": "array",
-                    "items": {
-                      "type": "object"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "get": {
-        "operationId": "get__webhooks_whatsapp",
-        "summary": "Validate provider subscription challenge",
-        "description": "Validated server operation. All money, inventory, approval and authorization rules are enforced against the current database state.",
-        "tags": [
-          "webhooks"
-        ],
-        "parameters": [
-          {
-            "name": "hub.mode",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "hub.verify_token",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "hub.challenge",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "security": [
-          {
-            "whatsappVerify": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Validated numeric challenge",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "string",
-                  "pattern": "^[0-9]{1,100}$"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid input",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Missing/invalid session or signature",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Permission, scope or origin rejected",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Unavailable or unauthorized object",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Version, inventory, idempotency or state conflict",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "410": {
-            "description": "Expired quote or consumed/expired grant",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Business rule rejected",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Rate limited",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "Dependency/configuration unavailable; no simulated external success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/v1/webhooks/mux": {
       "post": {
         "operationId": "post__webhooks_mux",
@@ -23201,28 +22909,28 @@
         }
       }
     },
-    "/api/v1/webhooks/openwa": {
-      "post": {
-        "operationId": "post__webhooks_openwa",
-        "summary": "Verify signed OpenWA delivery acknowledgements",
-        "description": "Raw HMAC-SHA256 signature, exact configured session and signed idempotency key required. Delayed durable retries are allowed; future timestamps rejected. Statuses do not regress. No incoming chat processing.",
+    "/api/v1/admin/bookings/{id}/whatsapp-link": {
+      "get": {
+        "operationId": "get__admin_bookings__id__whatsapp_link",
+        "summary": "Prepare a manual WhatsApp draft for the saved guest number",
+        "description": "Current booking scope and WhatsApp consent are required. Returns a wa.me URL containing only a booking-reference draft; no send, token or delivery receipt is created.",
         "tags": [
-          "webhooks"
+          "admin"
         ],
         "parameters": [
           {
-            "name": "x-openwa-signature",
-            "in": "header",
+            "name": "id",
+            "in": "path",
             "required": true,
             "schema": {
               "type": "string",
-              "pattern": "^sha256=[0-9a-f]{64}$"
+              "format": "uuid"
             }
           }
         ],
         "security": [
           {
-            "openwaSignature": []
+            "staffAuth": []
           }
         ],
         "responses": {
@@ -23322,64 +23030,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        },
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "additionalProperties": false,
-                "required": [
-                  "event",
-                  "sessionId",
-                  "timestamp",
-                  "idempotencyKey",
-                  "data"
-                ],
-                "properties": {
-                  "event": {
-                    "enum": [
-                      "message.ack",
-                      "message.failed"
-                    ]
-                  },
-                  "sessionId": {
-                    "type": "string"
-                  },
-                  "timestamp": {
-                    "type": "string",
-                    "format": "date-time"
-                  },
-                  "idempotencyKey": {
-                    "type": "string"
-                  },
-                  "data": {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "required": [
-                      "messageId",
-                      "status"
-                    ],
-                    "properties": {
-                      "messageId": {
-                        "type": "string"
-                      },
-                      "status": {
-                        "enum": [
-                          "pending",
-                          "sent",
-                          "delivered",
-                          "read",
-                          "failed"
-                        ]
-                      }
-                    }
-                  }
                 }
               }
             }
@@ -26252,30 +25902,15 @@
         "name": "hmac",
         "description": "Paymob HMAC-SHA512 exact canonical transaction fields."
       },
-      "openwaSignature": {
-        "type": "apiKey",
-        "in": "header",
-        "name": "x-openwa-signature"
-      },
       "resendSignature": {
         "type": "apiKey",
         "in": "header",
         "name": "svix-signature"
       },
-      "whatsappSignature": {
-        "type": "apiKey",
-        "in": "header",
-        "name": "x-hub-signature-256"
-      },
       "muxSignature": {
         "type": "apiKey",
         "in": "header",
         "name": "mux-signature"
-      },
-      "whatsappVerify": {
-        "type": "apiKey",
-        "in": "query",
-        "name": "hub.verify_token"
       }
     }
   }

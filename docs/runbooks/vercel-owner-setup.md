@@ -42,11 +42,11 @@ Use separate owner-designated Vercel projects and Supabase projects for staging 
 | `STORAGE_PROVIDER` | `supabase` | `supabase` |
 | `VIDEO_PROVIDER` | `mux`, isolated environment | `mux`, designated production environment |
 | `EMAIL_PROVIDER` | `resend`, isolated sender/account | `resend`, verified production sender |
-| `WHATSAPP_PROVIDER` | `openwa`, isolated test session | `openwa`, designated agency session |
+| `WHATSAPP_PROVIDER` | `links` | `links` |
 
 Enter actual values through Vercel's environment-variable UI/secret storage. Use `.env.example` as the full name inventory. Do not upload `.env.local`, `.local`, `.tooling`, original media, profiles or private evidence. Those paths are excluded from deployment. Keep `MIGRATION_DATABASE_URL`, Supabase deployment tokens and account-management tokens in a separate operator/CI secret store; they are not web-runtime secrets.
 
-Only the Supabase URL and publishable key use `NEXT_PUBLIC_`. Database credentials, Supabase secret key, OpenWA API key, signing keys, Paymob/Resend/Mux secrets, cron secret and token pepper remain server-only. Set `CRON_SECRET` and `TOKEN_HASH_PEPPER` to separate random values of at least 32 characters. Approval flags are evidence acknowledgements; do not set them merely to make a build pass. Public environment values are compiled into browser assets, so rebuild for the correct target environment.
+Only the Supabase URL and publishable key use `NEXT_PUBLIC_`. Database credentials, Supabase secret key, signing keys, Paymob/Resend/Mux secrets, cron secret and token pepper remain server-only. Set `CRON_SECRET` and `TOKEN_HASH_PEPPER` to separate random values of at least 32 characters. Approval flags are evidence acknowledgements; do not set them merely to make a build pass. Public environment values are compiled into browser assets, so rebuild for the correct target environment.
 
 ## 3. Database, authentication and storage
 
@@ -63,18 +63,17 @@ For downloads and public gallery videos, the application rechecks current entitl
 
 ## 4. External services and callbacks
 
-OpenWA runs on a separately hosted persistent Docker server with persistent session storage; do not place it in a Vercel Function. Follow [OpenWA setup](openwa.md) and `deploy/openwa/compose.yaml`. Vercel calls that approved HTTPS origin using a session-scoped key. Keep the OpenWA administrative master key and WhatsApp session files on its host.
+WhatsApp uses [manual click-to-chat links](whatsapp-links.md). No gateway, QR, server, tunnel, WhatsApp API credentials or callback is required. The designated production variable is already `WHATSAPP_PROVIDER=links`; retain automated Resend email configuration.
 
 Production video processing uses Mux; the FFmpeg/FFprobe path is explicitly limited to development/test and is excluded from deployment. Configure the designated Mux environment, signing key and webhook secret. This app keeps its own private source and derivative objects in Supabase; Mux processing does not remove storage backup or retention requirements.
 
 | Provider | Callback below the environment's `APP_BASE_URL` |
 |---|---|
 | Paymob | `/api/v1/webhooks/paymob` (merchant-supported HMAC integration) |
-| OpenWA | `/api/v1/webhooks/openwa` (`x-openwa-signature`; session-correlated `message.ack` / `message.failed`) |
 | Resend | `/api/v1/webhooks/resend` |
 | Mux | `/api/v1/webhooks/mux` |
 
-Configure provider accounts and exact callbacks separately for staging and production. Test signatures, duplicate events, account/session/environment mismatch and failure paths. Accepted sends are not delivered/read messages. Keep WhatsApp consent and email fallback behavior. Complete actual sandbox delivery/receipt and payment evidence before production. Verify sender-domain email DNS without changing unrelated records.
+Configure provider accounts and exact callbacks separately for staging and production. Test signatures, duplicate events, account/session/environment mismatch and failure paths. Accepted sends are not delivered/read messages. Keep staff WhatsApp consent checks; automated jobs use email. Complete actual sandbox delivery/receipt and payment evidence before production. Verify sender-domain email DNS without changing unrelated records.
 
 ## 5. Cron, monitoring and release
 
@@ -96,4 +95,4 @@ After owner-approved UAT, promote and perform only the authorized live transacti
 
 ## Local evidence for the Vercel media transport change
 
-The added tests use real PostgreSQL for upload authorization/finalization and explicit provider-response mocks for Supabase. A 5 MiB browser upload is checked against mocked storage in Chromium, Firefox and WebKit; no external provider is contacted. Production host, Supabase storage, Mux and OpenWA journeys remain unverified until the owner configures the designated services. Exact command results belong in the release report; do not treat this guide as evidence of deployment.
+The added tests use real PostgreSQL for upload authorization/finalization and explicit provider-response mocks for Supabase. A 5 MiB browser upload is checked against mocked storage in Chromium, Firefox and WebKit; no external provider is contacted. Production host, Supabase storage, Mux and email journeys remain unverified until the owner configures the designated services. Exact command results belong in the release report; do not treat this guide as evidence of deployment.
