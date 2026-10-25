@@ -212,8 +212,15 @@
     "sourceArtifactScan": "passed"
   },
   "openwa": {
-    "selectedHost": "Oracle Always Free",
-    "accountStatus": "Owner needs to create account",
+    "selectedHost": null,
+    "previouslySelectedHost": "Oracle Always Free",
+    "accountStatus": "Oracle signup blocked by accepted-card requirement; no replacement designated",
+    "ownerHostingConstraints": {
+      "cloudOnly": true,
+      "monthlyBudget": 0,
+      "paymentCardAvailable": false,
+      "alwaysOnPersonalComputerAvailable": false
+    },
     "regionDesignated": false,
     "resourceCreated": false,
     "composeValidation": "passed",

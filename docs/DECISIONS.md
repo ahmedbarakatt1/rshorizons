@@ -12,7 +12,7 @@ Hosted PostgreSQL connections now verify the provider CA and hostname. The appli
 
 The administrator was created through Supabase Admin Auth using protected stdin, then granted the same active owner/all-scope/MFA-required authority as the provisioning script through transactional operator SQL. Its password sign-in passed; owner TOTP enrollment remains outstanding. No local credential hash was copied and no default password was committed.
 
-Gmail may be used for account registration/test receipt. It does not replace the existing Resend verified-domain requirement. The owner selected Oracle Always Free for OpenWA and is creating the account; tenancy, home region, instance and gateway hostname remain undesignated. The existing pinned gateway and Oracle setup guide are prepared. Keep production booking/publication gates closed while account, plan, provider, content and UAT dependencies remain.
+Gmail may be used for account registration/test receipt. It does not replace the existing Resend verified-domain requirement. Oracle Always Free was selected but its card verification blocks the owner. The owner requires OpenWA hosting to be cloud-only, completely free and without a payment card; an always-on personal computer is unavailable. No compatible replacement host has been verified or designated. Preserve the pinned integration and record this external blocker; do not reduce the automatic-message requirement or buy hosting. See `docs/runbooks/free-openwa-hosting.md`. Keep production booking/publication gates closed while account, plan, provider, content and UAT dependencies remain.
 
 | ID | Decision | Reason / consequence |
 |---|---|---|

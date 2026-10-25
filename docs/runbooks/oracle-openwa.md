@@ -1,6 +1,6 @@
 # OpenWA on Oracle Always Free
 
-The owner selected Oracle Always Free on 2026-10-25 and is creating the account. No tenancy, home region, instance, public address or gateway hostname has been designated yet. This guide prepares the existing pinned gateway; it does not claim a successful ARM build, WhatsApp pairing or delivery.
+Oracle is currently blocked: on2026-10-25 the owner reported no accepted payment card, ruled out an always-on personal computer and required completely free cloud hosting. See [current hosting assessment](free-openwa-hosting.md). The instructions below are retained for reference, not an instruction to retry signup. No tenancy, home region, instance, public address or gateway hostname has been designated. No successful ARM build, WhatsApp pairing or delivery is claimed.
 
 ## Account and instance
 

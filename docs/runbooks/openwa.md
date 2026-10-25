@@ -10,7 +10,7 @@ OpenWA uses unofficial WhatsApp clients. Its own guidance warns of number restri
 
 ### Owner-selected host — 2026-10-25
 
-The owner selected **Oracle Always Free** and is creating the account. Follow the [Oracle server setup guide](oracle-openwa.md). The existing pinned Compose service passes configuration parsing. Native ARM build, server operation, dedicated-number pairing and delivery remain pending; no Oracle resource has been created.
+The owner initially selected **Oracle Always Free**, but signup is blocked by payment-card verification. The owner subsequently ruled out an always-on computer and requires completely free cloud hosting. No compatible replacement host has been verified or designated; see the [current hosting assessment](free-openwa-hosting.md). The [Oracle guide](oracle-openwa.md) is retained for reference. The pinned Compose service passes configuration parsing; actual build/runtime/pairing/delivery remain pending. No Oracle resource has been created.
 
 ### Earlier paid alternatives — checked 2026-10-24
 
