@@ -8,6 +8,16 @@ OpenWA uses unofficial WhatsApp clients. Its own guidance warns of number restri
 
 ## Gateway host
 
+### Host choice — checked 2026-10-24
+
+The owner confirmed no server exists and asked for help choosing one. Recommended starting configuration: **DigitalOcean Basic / Regular, 2 vCPUs, 4 GiB RAM, 80 GiB disk**, an x86-64 Ubuntu LTS image and a European region. Base price is **$24/month**; daily percentage-based backups add 30%, for **$31.20/month before applicable tax**, excluding other services. This sizing is an engineering recommendation for one gateway with headroom around the committed 2 GiB container limit, not a measured hosted capacity claim. Confirm the actual region/checkout price before purchase. [Droplet pricing](https://www.digitalocean.com/pricing/droplets), [backup pricing](https://www.digitalocean.com/pricing/backups).
+
+Lower-cost alternative: Hetzner CX23, listed at **€5.49/month plus €0.50/month for IPv4**, before VAT and backups. Its public cost-optimized range currently shows unavailable, so do not assume it can be ordered. Recheck stock in the owner's account before selecting it. [Current price schedule](https://docs.hetzner.com/general/infrastructure-and-availability/price-adjustment/), [IPv4 pricing](https://docs.hetzner.com/cloud/servers/primary-ips/overview/), [availability](https://www.hetzner.com/cloud/).
+
+No hosting account, purchase, paid upgrade or server has been created. Once the owner chooses and creates the server, use an SSH key, keep SSH restricted to operator addresses, and expose HTTPS through the reverse proxy. The gateway's port2785 remains loopback-only. Provider disk backups supplement the application's consistent database/session backup and restore procedure; they do not prove that a live SQLite/session snapshot is recoverable.
+
+### Installation sequence
+
 1. Choose an always-on Docker host with persistent disk and a dedicated gateway HTTPS hostname. Use separate staging and production sessions/credentials. Vercel Functions do not host the Chromium session or its databases.
 2. Put a unique random `OPENWA_MASTER_KEY` in that host's secret store. It is the gateway administrator key; **do not place it in Vercel**. From the repository root, run `docker compose -f deploy/openwa/compose.yaml build` then `docker compose -f deploy/openwa/compose.yaml up -d`. The Compose file builds the exact inspected upstream commit. It mounts only gateway data, not the Docker socket.
 3. Put the loopback port2785 behind the designated HTTPS reverse proxy. Restrict dashboard access to operators; expose only the necessary authenticated API paths to the website. Do not expose an unauthenticated gateway or forward the primary site's cookies. Keep access logs free of bodies, Authorization headers and query secrets.
@@ -40,6 +50,14 @@ In the gateway session's webhook settings create one subscription:
 - Retries:5 total attempts; use gateway delivery-failure redrive when a longer outage exhausts retries.
 
 The application checks `X-OpenWA-Signature` against the raw bytes, binds the signed session id, deduplicates the signed idempotency key in PostgreSQL and advances statuses monotonically. A delayed signed retry is accepted; a future-dated or wrong-session event is rejected. A callback that beats the accepted-message database write returns an error so the gateway retries. Do not subscribe to incoming messages/QR events; this application does not process customer chat bodies.
+
+## Free hosting options — checked2026-10-25
+
+Oracle Cloud Always Free is a possible persistent host for the pinned Compose service. The current A1 allowance is1,500 OCPU-hours and9,000GB-hours per month, equivalent to2 OCPUs/12GB RAM, with200GB eligible block storage. Start with1–2 OCPUs and4GB RAM plus a50GB boot disk only if the console marks them Always Free eligible in the home region. Region capacity can be unavailable and idle instances can be reclaimed; this is not an uptime guarantee. ARM support is documented upstream, but this exact pinned gateway image still needs a real ARM build/session test. Account/phone/card verification and choosing the host belong to the owner; no account, resource or purchase has been created. [Oracle Always Free](https://docs.oracle.com/en-us/iaas/Content/FreeTier/freetier_topic-Always_Free_Resources.htm).
+
+An existing always-on computer avoids a separate hosting bill but depends on its power, internet and persistent secure HTTPS setup. Render Free sleeps after15 minutes and loses ephemeral files on restart; it cannot attach the persistent disk this WhatsApp session needs. Railway's current free allowance is$1/month after the trial, so it is not a dependable promise of a free24/7 Chromium service. [Render Free](https://render.com/docs/free), [Railway plans](https://docs.railway.com/pricing/plans).
+
+The website's verified Vercel Hobby plan also needs resolution independently: its commercial-use and daily-cron limitations do not satisfy the current application schedule. A free OpenWA server does not resolve that deployment gate.
 
 ## Templates and test journey
 

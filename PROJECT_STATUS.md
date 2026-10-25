@@ -1,19 +1,19 @@
 # Red Sea Horizons — execution status
 
-Updated 2026-10-24, Africa/Cairo. The full 1,415-line production handoff was read and used as the approved specification. The owner confirmed **Red Sea Horizons** and authorized the supplied trip media for the local gallery. Original files remain preserved.
+Updated2026-10-25, Africa/Cairo. The full1,415-line production handoff was read and used as the approved specification. The owner confirmed **Red Sea Horizons** and authorized the supplied trip media for the local gallery. Original files remain preserved.
 
 ## Milestones
 
 | Milestone | Status | Evidence and remaining gate |
 |---|---|---|
 | M0 Foundation and five resources | VERIFIED_LOCAL | All five resources installed, pinned and used; clean `npm ci`, zero reported npm vulnerabilities, Next.js production build |
-| M1 Database and authorization | VERIFIED_LOCAL; external Auth onboarding pending |21 applied forward migrations,118 tables with matching generated types, real PostgreSQL17.11; current scopes, revocation, private grants and approved message-template immutability tested; designated Supabase MFA onboarding remains external |
+| M1 Database and authorization | VERIFIED_LOCAL; hosted setup partially verified |23 migrations/118 tables in designated production Supabase; restricted runtime and verified TLS; real administrator password sign-in passed. MFA enrollment and hosted dashboard journey remain pending |
 | M2 Catalog, localization and design | VERIFIED_LOCAL; business publication pending | Data-backed public/admin screens, ten locales ×213 keys, RTL; completed reviews page with actual aggregates and invitation form; owner-requested imagery fills photo gaps; human content/translation approvals absent |
 | M3 Reservations and inventory | VERIFIED_LOCAL | Quote/request/manual approval/revisions/fulfilment; independent-connection races and all-service browser journeys; private/shared transfers and physical stays |
 | M4 Finance, jobs and messaging | VERIFIED_LOCAL / BLOCKED_EXTERNAL | Ledger, source-bound refunds, leases, reminders and callback dedupe tested; owner-selected OpenWA adapter with signed session-bound callbacks and conservative unknown-send handling; actual Paymob/OpenWA/Resend provider evidence absent |
 | M5 Media, reviews and contact | VERIFIED_LOCAL with disabled 3D accent | Real image/video processing, private entitlement checks, public-consent guards, retention, verified reviews and contact; static poster ships because current 3D form gate failed |
-| M6 Hardening and release candidate | VERIFIED_LOCAL_AND_CI / BLOCKED_EXTERNAL |202 domain tests pass locally; administrator browser workflow and automatic message preview verified. 51 browser checks passed with18 intentional skips. GitHub CI run40100451679 passed for implementation50dde72. Hosted staging, UAT, recovery objectives and alert routing require owner inputs |
-| M7 Production | BLOCKED_EXTERNAL — NOT DEPLOYED | GitHub repository verified; owner selected Vercel and will deploy using prepared runbooks. Exact host/project, domain, Supabase and OpenWA gateway identities/secrets still absent; approved business content and live-test authorization absent |
+| M6 Hardening and release candidate | VERIFIED_LOCAL; prior candidate VERIFIED_CI / BLOCKED_EXTERNAL |209 current domain tests and3 targeted current browser checks pass. Earlier full browser sweep passed51 with18 intentional skips; CI40100451679 passed for50dde72. New hosted-setup changes need their own remote CI. Hosted staging/UAT/recovery/alerts require owner inputs |
+| M7 Production | BLOCKED_EXTERNAL — NOT DEPLOYED | Exact Vercel project/hostname and production Supabase are configured. Hobby cron/commercial limits, Supabase64MiB storage limit, separate staging, provider accounts, approved content and UAT remain outstanding |
 
 ## Current application and verification
 
@@ -21,8 +21,8 @@ Updated 2026-10-24, Africa/Cairo. The full 1,415-line production handoff was rea
 - Local PostgreSQL17.11 uses loopback55432 and ignored `.local/postgres`; the existing host PostgreSQL17.2 is untouched.
 - Next.js16.4.2, React19.3.1, Node22.22.2, npm10.9.7, TypeScript6.0.3 and exact root lockfile.
 - Release preview: `http://127.0.0.1:3002/en`, run with `node scripts/start-local-showcase.mjs`. It uses the separate synthetic showcase recorded in `.local/showcase.json`; the domain test database is preserved.
-- The owner-designated administrator account is provisioned in the local showcase and browser verified at `/admin`. Its supplied password is stored only as a salted scrypt hash. Hosted Supabase/MFA provisioning remains external. The separate one-use operator grant in ignored `.local/operator-access.json` expires after eight hours; no default credential is seeded.
-- Current local domain suite: **202 passing tests across44 files**, including real PostgreSQL constraints/concurrency, password/session boundaries, credential rotation and booking acknowledgement deduplication. The new GitHub CI run passed the same domain categories on a clean Linux/PostgreSQL database.
+- The owner-designated administrator is provisioned locally and in designated production Supabase. The hosted password was verified, owner/all scope/MFA requirement persisted and verification session signed out; authenticator enrollment/hosted dashboard verification remain external. No default credential is seeded. The separate ignored local operator grant expires after eight hours.
+- Current local domain suite: **209 passing tests across46 files**, including real PostgreSQL constraints/concurrency, managed Auth initialization, production reference data, TLS settings, password/session boundaries and booking acknowledgement deduplication. Earlier GitHub CI passed202 tests; new hosted-setup CI is recorded separately when run.
 - The administrator browser journey signs in with a provisioned password account, changes a seasonal rate, confirms that a new real SQL quote uses it, uploads a photo and signs out. The actual designated account and automatic local booking acknowledgement were separately verified without recording its password. The final three-engine browser sweep passed **51 tests with18 intentional engine-specific skips** against the stable final build.
 - Current lint, TypeScript, production build,213-key locale parity and118-table type drift checks passed. Latest remote CI: https://github.com/ahmedbarakatt1/rshorizons/actions/runs/40100451679 .
 - Four fresh cold performance samples measured LCP0.872–2.480 seconds and CLS0. Unchanged route payload budgets passed; no field INP or production performance claim.
@@ -32,11 +32,23 @@ Updated 2026-10-24, Africa/Cairo. The full 1,415-line production handoff was rea
 
 ## Continuation
 
+Current next task (2026-10-25): finish external onboarding from `docs/runbooks/service-onboarding.md`. Supabase/Vercel official CLI authentication now works; do not ask the owner to reconnect or re-designate these accounts. The owner classified Supabase as production. Its schema, required reference data, restricted TLS runtime, private bucket and administrator password are verified. Vercel core production settings/secrets are configured. Resolve the Hobby minute-cron/commercial limit and Supabase64MiB upload-plan limit without purchasing automatically; designate separate staging, an OpenWA host/session and Resend sender domain/account. The owner asked about regular Gmail: it can receive tests/register with Resend, but current customer sending needs an owned verified domain. Then complete MFA, provider delivery/callbacks and existing release approvals. No live deployment, guest message, payment, DNS operation or paid upgrade has occurred.
+
 1. Read `docs/RELEASE_REPORT.md` for exact commands, outcomes, limitations and private browser evidence paths. Preserve the local implementation; do not recreate completed modules.
 2. The owner selected Vercel and will deploy. Follow `docs/runbooks/vercel-owner-setup.md` with the designated hosting/domain/Supabase identities from E02–E04, then configure separate staging credentials through secret storage. OpenWA needs a separate persistent gateway; see `docs/runbooks/openwa.md`. No unrelated accounts may be reused.
 3. The initial administrator identity/scope is now designated; follow `docs/runbooks/staff.md` to provision its hosted Supabase account and enroll MFA. With the remaining E05–E14 inputs, verify real provider sandboxes, hosted recovery, content/translation approval, staff MFA onboarding and UAT. Follow the deployment runbook and verify the actual production URL before marking M7 complete.
 
 All previous parallel workers have stopped. Root completed integration and recorded the local verification. Preserve originals, local secrets, profiles, private evidence and database files outside Git/deployment. Do not infer that an earlier scaffold-only status still applies.
+
+## Hosted onboarding — 2026-10-25
+
+- Supabase production project designated by the owner; all23 migration checksums recorded. Fresh restricted-role regression proves managed Auth ownership/data stay unchanged and no synthetic catalog or accounts are seeded. Required roles/permissions/currencies/locales are now authoritative migration data.
+- Vercel `ahmedbarakatt1s-projects/rshorizons`, GitHub source, verified `rshorizons.vercel.app`, Node22 and release-gated build configured. Twelve additional production-only runtime variables installed; credentials are sensitive server-only values. Bookings remain disabled.
+- Actual hosted administrator password verified, active owner/all scope/MFA requirement persisted, test session signed out. Auth public signup disabled while password provider/TOTP remain enabled. Owner authenticator enrollment and browser verification after deployment remain outstanding.
+- Runtime as `tourism_app` passed certificate/hostname verification; wrong CA/hostname failed; Supabase SSL enforcement and PostgreSQL backend TLS verified. No runtime Auth-schema CREATE or superuser/BYPASSRLS/role/database-creation privileges.
+- Private bucket upload/download passed; anonymous/public access denied; temporary probe removed. The64MiB setting returned HTTP402 requiring a paid plan. Bucket remains private at50MiB and the original64MiB release requirement remains unresolved.
+- Current security advisor: extension placement warning resolved; Auth leaked-password protection remains disabled. No paid add-on was enabled.
+- Current code verification:209 tests across46 files, lint, types and production build passed. Read-only review approved the scoped migrations/TLS changes with no findings. See release-report addendum for final browser and source/artifact results. Historical verification entries below describe earlier commits.
 
 ## Latest scoped update
 

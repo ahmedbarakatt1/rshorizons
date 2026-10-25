@@ -2,6 +2,18 @@
 
 The handoff is the approved specification and milestone execution plan. The user expressly requested implementation without another approval/planning stop.
 
+## Hosted configuration — 2026-10-25
+
+The owner designated `ahmedbarakatt1s-projects/rshorizons` on Vercel and classified the supplied Supabase project as production. Official CLIs are authenticated; plugin reauthentication is no longer a setup blocker. Configure only these projects. Separate staging remains required. No paid upgrade, server purchase, DNS change or real guest-message test is authorized yet.
+
+Fresh Supabase initialization exposed two release defects: the local harness attempted CREATE against managed Auth, and required reference data existed only in the synthetic seed. The baseline Auth guard was corrected before its first hosted application. Only two known loopback databases had their exact old baseline checksum reconciled to the guard-only checksum; generic drift validation is unchanged. A forward migration now installs reference data without any staff identity, inventory, price, policy approval or message template. Another forward migration relocates btree_gist into extensions without dropping constraints/data.
+
+Hosted PostgreSQL connections now verify the provider CA and hostname. The application accepts the provider certificate through server-only `DATABASE_SSL_CA` and rejects conflicting URL TLS options. The actual restricted Supavisor connection, invalid CA/hostname rejection, SSL enforcement and backend TLS were tested. Existing local loopback tests remain supported.
+
+The administrator was created through Supabase Admin Auth using protected stdin, then granted the same active owner/all-scope/MFA-required authority as the provisioning script through transactional operator SQL. Its password sign-in passed; owner TOTP enrollment remains outstanding. No local credential hash was copied and no default password was committed.
+
+Gmail may be used for account registration/test receipt. It does not replace the existing Resend verified-domain requirement. Oracle Always Free is an option under consideration for OpenWA; no host/account has been chosen. Keep production booking/publication gates closed while account, plan, provider, content and UAT dependencies remain.
+
 | ID | Decision | Reason / consequence |
 |---|---|---|
 | D01 | Initialize this workspace, npm only, exact pinned versions, SQL migrations authoritative | No existing application or repository to preserve beyond supplied files |

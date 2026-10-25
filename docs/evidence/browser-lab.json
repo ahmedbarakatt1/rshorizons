@@ -1,12 +1,12 @@
 {
-  "at": "2026-10-24T13:56:07.745Z",
+  "at": "2026-10-25T15:37:51.188Z",
   "environment": "Local production build, Chromium, no CPU/network throttle; lab diagnostics only, not field Core Web Vitals.",
   "measurements": [
     {
       "path": "/en",
       "navigation": [
         {
-          "duration": 182.80000001192093
+          "duration": 143.10000002384186
         }
       ],
       "resources": [
@@ -15,36 +15,36 @@
           "bytes": 48345
         },
         {
-          "name": "0umf92h1sb77c.js",
-          "bytes": 3514
+          "name": "2gvu8dyrhibpa.js",
+          "bytes": 71899
         },
         {
           "name": "turbopack-2c3mg3r-05n1w.js",
           "bytes": 4390
         },
         {
-          "name": "2gvu8dyrhibpa.js",
-          "bytes": 71899
+          "name": "0umf92h1sb77c.js",
+          "bytes": 3514
         },
         {
           "name": "0r-swioa0mbxu.js",
           "bytes": 5261
         },
         {
-          "name": "41oa5yrv8czhv.js",
-          "bytes": 2772
-        },
-        {
           "name": "0_v_2027x3jgl.js",
           "bytes": 12107
         },
         {
-          "name": "0ajc4qd6vlfv7.js",
-          "bytes": 415
+          "name": "41oa5yrv8czhv.js",
+          "bytes": 2772
         },
         {
           "name": "1qgh90xesoiuo.js",
           "bytes": 10076
+        },
+        {
+          "name": "0ajc4qd6vlfv7.js",
+          "bytes": 415
         }
       ]
     },
@@ -52,7 +52,7 @@
       "path": "/ar/contact",
       "navigation": [
         {
-          "duration": 108.79999999701977
+          "duration": 135.40000000596046
         }
       ],
       "resources": [
@@ -98,7 +98,7 @@
       "path": "/en/experiences/boat-tours",
       "navigation": [
         {
-          "duration": 73.5
+          "duration": 80.90000000596046
         }
       ],
       "resources": [
@@ -144,7 +144,7 @@
       "path": "/en/booking/request?service=boat-tours",
       "navigation": [
         {
-          "duration": 64.20000000298023
+          "duration": 75.7999999821186
         }
       ],
       "resources": [
