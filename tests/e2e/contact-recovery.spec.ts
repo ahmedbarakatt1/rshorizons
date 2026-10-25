@@ -7,9 +7,12 @@ import {deliverNotification} from "../../src/integrations/messaging/notification
 test.use({trace:"off"}); // One-time links remain private, including on failed assertions.
 test("guest contact reaches the staff inbox and resolves without changing the message",async({page},info)=>{
  test.skip(info.project.name!=="chromium"||process.env.E2E_LOCAL_STAFF!=="1","Authenticated local fixture runs once.");
+ const rateDb=new pg.Client({connectionString:process.env.MIGRATION_DATABASE_URL});await rateDb.connect();
+ try{await rateDb.query("DELETE FROM app.rate_limit_buckets WHERE operation='contact'");}finally{await rateDb.end();}
  const name=`Synthetic contact ${Date.now()}`,message="Please confirm accessible pickup for our group.";
  await page.goto("/en/contact");await page.getByLabel("Full name",{exact:true}).fill(name);await page.getByLabel("Email",{exact:true}).fill("contact-browser@example.invalid");await page.getByLabel("Message",{exact:true}).fill(message);await page.locator('form.contact-form input[type="checkbox"]').check();
- await page.getByRole("button",{name:"Send message",exact:true}).click();await expect(page.getByRole("status")).toContainText("Your message has been received.");
+ const submitted=page.waitForResponse(response=>response.url().endsWith("/api/v1/contact")&&response.request().method()==="POST");
+ await page.getByRole("button",{name:"Send message",exact:true}).click();expect((await submitted).status()).toBe(202);await expect(page.getByRole("status")).toContainText("Your message has been received.");
  const bootstrap=spawnSync(process.execPath,["scripts/bootstrap-local-operator.mjs"],{encoding:"utf8",env:process.env,windowsHide:true});expect(bootstrap.status,bootstrap.stderr).toBe(0);
  const grant=JSON.parse(readFileSync(".local/operator-access.json","utf8"));
  await page.goto("/admin/contact");await page.getByText("Local operator access",{exact:true}).click();await page.getByLabel("Local operator token").fill(grant.token);await page.getByRole("button",{name:"Open local workspace"}).click();

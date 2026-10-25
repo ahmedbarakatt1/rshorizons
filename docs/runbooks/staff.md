@@ -42,6 +42,7 @@ The owner designates staff addresses and least-privilege roles/scopes. Invite fr
 - **Finance:** verify offline receipts, review exceptions and follow the separate request/approval/execution refund workflow. Reconcile unknown provider outcomes.
 - **Photography:** upload to quarantine, inspect processing, attach purchased package entitlements and current photographer assignments. Review source rights and every subject/guardian consent before public publication. Private delivery rights do not authorize marketing.
 - **Content:** edit drafts, review each enabled translation and record approval before publication. Use actual operator-approved itineraries, restrictions, policies and social/contact destinations.
+- **Contact inbox:** owners can read retained enquiries, filter by state and load older pages. Open the detail, respond through the designated team channel, then record Replied or Closed. Saving a status sends nothing. Changes require the current record version; refresh after a conflict. Delegation requires explicit `contacts.read`/`contacts.manage` permissions and global scope because these enquiries have no destination association. Expired records are hidden and approved retention removes their PII in bounded batches.
 - **Jobs:** correct the underlying dependency/template issue before retrying. Inspect current status afterward.
 
 Deactivate staff when their role ends; revoke inappropriate scopes and grants. Do not share operator sessions, MFA codes or customer links. The last active all-scope owner cannot be removed accidentally.

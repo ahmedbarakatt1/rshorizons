@@ -23,7 +23,7 @@ The owner may use Gmail to register for Resend and receive tests. Resend's defau
 
 ## 1. Designate the services
 
-Provide only non-secret details in chat: Supabase project name/reference (or “new project”), Vercel team/project, domain, Resend account choice, and whether an OpenWA server exists. A temporary stable Vercel staging hostname can be used before final DNS; email still requires a verified sending domain. Never infer domain ownership from the administrator email.
+The production Supabase project and Vercel team/project are already designated. Remaining non-secret inputs include the separate staging destination, eligible hosting plan, domain and Resend account choice. A stable designated Vercel staging hostname can be used before final DNS; email still requires a verified sending domain. Never infer domain ownership from the administrator email. OpenWA hosting is retired and must not be requested again.
 
 Use provider sign-in and secret settings for keys/passwords. Keep staging and production separate. Hosting purchases, paid plan upgrades, authenticator enrollment are owner steps; no purchase is authorized by this checklist.
 
