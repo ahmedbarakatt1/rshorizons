@@ -7,7 +7,7 @@ Updated2026-10-25, Africa/Cairo. The complete1,415-line production handoff and c
 | Milestone | Current status | Evidence / remaining gate |
 |---|---|---|
 | M0 Foundation and five resources | VERIFIED_LOCAL | All five resources installed, pinned and used; existing exact npm lockfile preserved |
-| M1 Database and authorization | VERIFIED_LOCAL; hosted configured |25 authoritative migrations/118 tables locally; production has23 pending this pass's two forward migrations. Restricted runtime/TLS, hosted owner password verified; owner MFA enrollment outstanding |
+| M1 Database and authorization | VERIFIED_LOCAL; hosted configured |25 authoritative migrations/118 tables locally and in designated production. Restricted runtime/TLS, hosted owner password verified; owner MFA enrollment outstanding |
 | M2 Catalog, localization and design | VERIFIED_LOCAL; publication pending | Real catalog/admin editors,10 locales ×218 keys, Arabic RTL, genuine reviews and owner-requested imagery. Approved business content and native translation review missing |
 | M3 Reservations and inventory | VERIFIED_LOCAL | Server quotes, requests, manual approval, inventory races, changes, fulfilment, physical stays and private/shared transfers. Recovery and emailed payment permissions repaired |
 | M4 Finance, jobs and messaging | VERIFIED_LOCAL / BLOCKED_EXTERNAL | Server-priced obligations, immutable ledger/refunds, durable jobs, email recovery/receipts, manual WhatsApp both directions. Real Paymob/Resend evidence missing |
@@ -37,7 +37,7 @@ Updated2026-10-25, Africa/Cairo. The complete1,415-line production handoff and c
 
 ## Exact continuation
 
-1. Finish publishing this verified pass to existingPR1 and follow its fresh CI. Apply/verify only the two reviewed forward migrations against the designated empty production database; do not seed synthetic data.
+1. Source is published to existingPR1; follow fresh CI after the isolated-test cleanup correction. Both forward migrations are applied and restricted-runtime permissions verified in the designated production database. Do not seed synthetic data.
 2. Resolve the pending owner hosting direction and email domain/Resend questions. Current Hobby cannot satisfy the existing minute-worker/commercial requirements. The production storage64MiB requirement previously returned HTTP402 and remains unmet at50MiB.
 3. With designated staging, provider secrets and approved content, execute the real sandbox,large-upload/video,callback,recovery,MFA and UAT journeys from `docs/runbooks/deployment.md`. Only then promote and verify the actual production URL and specifically authorized live transaction.
 

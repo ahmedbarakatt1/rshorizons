@@ -45,7 +45,7 @@ describe("guest recovery and emailed booking access",()=>{
       const actor=await getGuest(new Request(`${base}/api/v1/bookings/${booking.reference}`,{headers:{cookie:`rsh_guest=${redeemed.sessionToken}`}}),booking.reference);
       expect(actor.bookingId).toBe(booking.id);
       await expect(getGuest(new Request(`${base}/api/v1/bookings/OTHER`,{headers:{cookie:`rsh_guest=${redeemed.sessionToken}`}}),"OTHER")).rejects.toMatchObject({status:404});
-    }finally{await db.end();}
+    }finally{await db.query("DELETE FROM app.rate_limit_buckets WHERE operation='guest-access'");await db.end();}
   });
   it("allows a guest arriving from an approval email to create only the approved server-priced checkout",async()=>{
     const db=admin();await db.connect();
