@@ -1,6 +1,8 @@
 # Red Sea Horizons — execution status
 
-Updated 2026-10-25, Africa/Cairo. The complete 1,415-line production handoff and confirmed owner decisions remain authoritative. **Production is not live or approved for launch.** Independent application work is implemented and locally verified; outstanding external gates are in `docs/BLOCKERS.md`.
+Updated 2026-10-26, Africa/Cairo. The complete 1,415-line production handoff and confirmed owner decisions remain authoritative. **Production is not live or approved for launch.** Independent application work is implemented and locally verified; outstanding external gates are in `docs/BLOCKERS.md`.
+
+Current change: owner requires completely free services and asked to adapt the worker for Vercel. Native Vercel cron registration is removed. `scripts/prepare-supabase-scheduler.ts` prepares paused Supabase schedules at the original frequencies; no hosted extension, secret or schedule is activated. Vercel Hobby's commercial-use restriction remains independent. Business inbox: `horizonsredsea@gmail.com`; no sender domain or Resend account is confirmed. See `docs/runbooks/external-scheduler.md`. Prior CI below applies to the previous application commit; new focused verification is recorded in the release report.
 
 ## Milestones
 
@@ -38,7 +40,7 @@ Updated 2026-10-25, Africa/Cairo. The complete 1,415-line production handoff and
 ## Exact continuation
 
 1. Source 9ef467d8e73c029bffb21249834fb5607cc84499 is published in existing PR1 and passed CI 40223344217. Both forward migrations are applied and restricted-runtime permissions verified in the designated production database. Continue only the external launch tasks below; do not seed synthetic data.
-2. Resolve the pending owner hosting direction and email domain/Resend questions. Current Hobby cannot satisfy the existing minute-worker/commercial requirements. The production storage 64 MiB requirement previously returned HTTP 402 and remains unmet at 50 MiB.
+2. Preserve the owner's free-only budget. The worker now uses external scheduling, prepared but inactive. Resolve commercially eligible hosting, sender setup and the other launch inputs; Hobby's commercial restriction is not removed by changing cron. The production storage 64 MiB requirement previously returned HTTP 402 and remains unmet at 50 MiB.
 3. With designated staging, provider secrets and approved content, execute the real sandbox, large-upload/video, callback, recovery, MFA and UAT journeys from `docs/runbooks/deployment.md`. Only then promote and verify the actual production URL and specifically authorized live transaction.
 
 Details and review rulings: `docs/PRODUCTION_READINESS_PASS.md`. Earlier counts/history remain in `docs/RELEASE_REPORT.md`; they do not override this current status. Do not recreate modules or resume OpenWA onboarding.

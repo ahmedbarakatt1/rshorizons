@@ -3,10 +3,5 @@
   "framework": "nextjs",
   "installCommand": "npm ci",
   "buildCommand": "npm run verify:release && npm run build",
-  "crons": [
-    {"path":"/api/internal/worker","schedule":"* * * * *"},
-    {"path":"/api/internal/monitor","schedule":"*/5 * * * *"},
-    {"path":"/api/internal/retention","schedule":"30 2 * * *"}
-  ],
   "regions": ["fra1"]
 }

@@ -2,6 +2,8 @@
 
 This is the working sequence for the owner's Vercel deployment. Use the verified current state below and the detailed linked guides. Configuration is partly complete; production has not been deployed.
 
+2026-10-26: owner requires completely free services and designated `horizonsredsea@gmail.com` as the business inbox. Native Vercel cron entries were removed; use [external scheduling](external-scheduler.md). The earlier cron deployment errors below are historical. Commercial hosting eligibility, email sender setup and the other launch requirements remain unresolved.
+
 ## Current access check — 2026-10-25
 
 | Service | Actual result | Next owner input |
@@ -48,7 +50,7 @@ Review the [English email draft pack](../launch/email-templates.en.draft.json), 
 
 ## 4. Hosted verification
 
-Deploy the isolated staging environment after configuration validation passes. Confirm administrator login/MFA and permissions; a booking with an email receives one delivered email even when WhatsApp consent is given; duplicate submission/email callbacks do not duplicate effects; team links and authorized staff drafts open the intended WhatsApp destination without changing booking or delivery state. Verify the minute worker in Vercel's Cron Jobs view. The current schedule needs a plan with per-minute cron support; Hobby is daily only. [Vercel cron limits](https://vercel.com/docs/cron-jobs/usage-and-pricing).
+Deploy the isolated staging environment after configuration validation passes. Confirm administrator login/MFA and permissions; a booking with an email receives one delivered email even when WhatsApp consent is given; duplicate submission/email callbacks do not duplicate effects; team links and authorized staff drafts open the intended WhatsApp destination without changing booking or delivery state. Verify the minute worker through the [external scheduler's actual HTTP results](external-scheduler.md); Vercel's Cron Jobs view is intentionally empty.
 
 Record actual results and remaining failures in the release report. Production still requires the existing Paymob, media, business-content, translation, recovery and UAT gates. Configuring these three services alone does not satisfy those independent launch requirements. Do not change approval flags or bypass `verify:release` just to obtain a deployment.
 

@@ -8,7 +8,7 @@ Verified2026-10-25: `ahmedbarakatt1s-projects/rshorizons` is linked to the corre
 
 ## 1. Project settings
 
-Import the designated repository into the agency's approved Vercel team. Use a commercially eligible plan that supports the committed cron frequencies. Hobby is restricted to noncommercial personal use and cannot run the per-minute worker. Review current charges before approving a plan. [Vercel Hobby](https://vercel.com/docs/plans/hobby), [cron limits](https://vercel.com/docs/cron-jobs/usage-and-pricing).
+Import the designated repository into the agency's approved Vercel team. Native Vercel Cron entries have been removed; use the [external scheduler](external-scheduler.md) for the required frequencies. Hobby remains restricted to noncommercial personal use, independently of cron. The owner requires a completely free setup; no paid upgrade is authorized and commercial eligibility remains unresolved. [Vercel Hobby](https://vercel.com/docs/plans/hobby), [cron limits](https://vercel.com/docs/cron-jobs/usage-and-pricing).
 
 | Setting | Value |
 |---|---|
@@ -85,7 +85,7 @@ The committed schedule is UTC:
 | `/api/internal/monitor` | Every five minutes | Redacted operational alerting |
 | `/api/internal/retention` | Daily at 02:30 UTC | Approved media retention; dry-run without approval |
 
-Verify these jobs appear and actually execute in the target project's Cron Jobs view. Vercel supplies `Authorization: Bearer <CRON_SECRET>` automatically; the endpoints reject missing/short/wrong secrets. Do not put the secret in a URL. Confirm `MONITORING_ALERT_URL` reaches the designated HTTPS receiver and test a controlled failure alert. Cron invocations can overlap; durable leases and idempotent processing remain necessary. [Vercel cron management](https://vercel.com/docs/cron-jobs/manage-cron-jobs).
+Install and verify these jobs using the [Supabase external scheduler procedure](external-scheduler.md). Vercel's Cron Jobs view will be empty. The scheduler must supply `Authorization: Bearer <CRON_SECRET>`; the endpoints reject missing/short/wrong secrets. Do not put the secret in a URL. Confirm `MONITORING_ALERT_URL` reaches the designated HTTPS receiver and test a controlled failure alert. Invocations can overlap; durable leases and idempotent processing remain necessary.
 
 Follow [the release procedure](deployment.md) after all release inputs are available. Keep automatic assignment of the public domain disabled until the staged production candidate is checked. With an inspected, pinned Vercel CLI in the owner environment, confirm the project identity, deploy the production candidate using `vercel --prod --skip-domain`, verify the actual returned URL, then promote that exact deployment with `vercel promote <verified-deployment-url>`. Do not reuse a staging build carrying staging variables. Record the CLI version and output. [Vercel CLI deployment](https://vercel.com/docs/cli/deploying-from-cli).
 

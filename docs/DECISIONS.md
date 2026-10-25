@@ -2,6 +2,10 @@
 
 The handoff is the approved specification and milestone execution plan. The user expressly requested implementation without another approval/planning stop.
 
+## Free-only budget and external scheduling — 2026-10-26
+
+The owner requires completely free services and designated `horizonsredsea@gmail.com` as the business inbox. This does not verify a Resend sending domain or authorize a new email adapter. After requesting free-host research, the owner specifically asked to modify the worker for Vercel. Native Vercel Cron registration is removed; Supabase Cron/pg_net can invoke the existing bearer-protected endpoints at the same cadence. An operator-script generator prepares three paused jobs with a Vault reference and checks for unsafe secret-table read privileges. No hosted schedule, extension or secret was installed or activated. Existing releases, provider approvals and job semantics remain unchanged. Hobby's independent noncommercial-use restriction still prevents treating this as an approved commercial deployment; no paid upgrade is authorized. See `runbooks/external-scheduler.md`.
+
 ## WhatsApp links replace OpenWA — 2026-10-25
 
 The owner explicitly requested removal of OpenWA and manual links for both directions. Confirmed team numbers are +201099267451 (normalized from Egyptian local01099267451) and +201220907478. Public pages open editable drafts to these contacts; authorized staff prepare drafts to the saved booking guest number, subject to current booking scope and WhatsApp consent. The person presses Send. No gateway, automatic WhatsApp send, delivery claim, QR or tunnel is required. Automated email remains a separate requirement. Historical SQL migrations and receipt/consent records are preserved; no schema migration is needed for this UI/dispatch change. This decision supersedes previous Meta/OpenWA and automatic WhatsApp requirements, including the earlier local-host choice. See `docs/runbooks/whatsapp-links.md`.
