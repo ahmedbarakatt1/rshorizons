@@ -12,7 +12,7 @@ Updated2026-10-25, Africa/Cairo. The full1,415-line production handoff was read 
 | M3 Reservations and inventory | VERIFIED_LOCAL | Quote/request/manual approval/revisions/fulfilment; independent-connection races and all-service browser journeys; private/shared transfers and physical stays |
 | M4 Finance, jobs and messaging | VERIFIED_LOCAL / BLOCKED_EXTERNAL | Ledger, source-bound refunds, leases, reminders and callback dedupe tested; manual WhatsApp links replace gateway sends; email jobs and conservative historical-send reconciliation preserved; actual Paymob/Resend provider evidence absent |
 | M5 Media, reviews and contact | VERIFIED_LOCAL with disabled 3D accent | Real image/video processing, private entitlement checks, public-consent guards, retention, verified reviews and contact; static poster ships because current 3D form gate failed |
-| M6 Hardening and release candidate | VERIFIED_LOCAL / VERIFIED_CI / BLOCKED_EXTERNAL | CI40208411106 passed forab0f80b:209 domain tests,51 browser passes/18 intentional skips, lint/types/build/recovery/scan. Hosted staging/UAT/recovery/alerts require owner inputs |
+| M6 Hardening and release candidate | VERIFIED_LOCAL / VERIFIED_CI / BLOCKED_EXTERNAL | CI40218131276 passed for35fc3c6:209 domain tests,55 browser passes/20 intentional skips, lint/types/build/recovery/scan. Hosted staging/UAT/recovery/alerts require owner inputs |
 | M7 Production | BLOCKED_EXTERNAL — NOT DEPLOYED | Exact Vercel project/hostname and production Supabase are configured. Hobby cron/commercial limits, Supabase64MiB storage limit, separate staging, provider accounts, approved content and UAT remain outstanding |
 
 ## Current application and verification

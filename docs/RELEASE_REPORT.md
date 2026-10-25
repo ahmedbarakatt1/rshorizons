@@ -222,3 +222,8 @@ Verification: **209 domain tests across47 files passed** against real local Post
 Fresh lint,TypeScript/production build,218-key parity across10 locales and118-table drift passed. The configured-secret/private-path scan found zero matches; this is not a general security certification. Independent review found one P2 manual-contact visibility issue; the query/UI fix and scope test passed re-review with no remaining Critical or Important scoped findings. [Redacted evidence](evidence/whatsapp-links-2026-10-25.json) records outcomes and limits. Prior GitHub CI results above are historical; new CI is recorded after publishing this change.
 
 Review also identified a pre-existing guest-access reissue event/template mismatch (guest_access_requested is not supported by eventTemplates). This was present at the base revision and is the next independent regression/fix task. Production remains unlaunched and subject to the existing Vercel plan/cron,separate staging,Supabase64MiB,email/payment/video providers,MFA,content/rights/translations,recovery and UAT gates. No WhatsApp API hosting or pairing gate remains.
+
+
+### Final remote result for manual WhatsApp — SUCCESS
+
+[GitHub run40218131276](https://github.com/ahmedbarakatt1/rshorizons/actions/runs/40218131276) passed for source `35fc3c60651cb02caa65194ac6fa6cd37a504a50`:209 domain tests and55 browser tests,20 intentional skips. The clean Linux job also passed migrations/restricted runtime,118-table drift,lint/types,218-key locale parity,recovery,production build and configured-secret/private-path scans. This supersedes the scoped-only browser result for the tested source. This follow-up changes evidence only; production remains unlaunched and the existing review branch remains unmerged.
