@@ -1,6 +1,6 @@
 {
-  "at": "2026-10-25T15:42:23.853Z",
-  "scope": "Owner-designated production Supabase and Vercel; no deployment",
+  "at": "2026-10-25T15:57:25.819Z",
+  "scope": "Owner-designated production Supabase and Vercel; no successful/live deployment",
   "supabase": {
     "migrations": 23,
     "tables": 118,
@@ -140,7 +140,30 @@
         ]
       }
     ],
-    "deployed": false
+    "deployed": false,
+    "removedUnusedPrivilegedVariableNames": [
+      "POSTGRES_PASSWORD",
+      "POSTGRES_URL",
+      "POSTGRES_PRISMA_URL",
+      "POSTGRES_URL_NON_POOLING",
+      "SUPABASE_JWT_SECRET",
+      "SUPABASE_SERVICE_ROLE_KEY"
+    ],
+    "requiredSensitiveCredentialsRetained": true,
+    "automaticDeploymentAttempts": [
+      {
+        "id": "dpl_6jrZurHc24w7LP6dct76oCXqDAb9",
+        "target": "preview",
+        "state": "ERROR",
+        "error": "Hobby accounts are limited to daily cron jobs. This cron expression (* * * * *) would run more than once per day. Upgrade to the Pro plan to unlock all Cron Jobs features on Vercel."
+      },
+      {
+        "id": "dpl_DgHQKmbUTp3D4smHX1xMuaJBujb2",
+        "target": "production",
+        "state": "ERROR",
+        "error": "Hobby accounts are limited to daily cron jobs. This cron expression (* * * * *) would run more than once per day. Upgrade to the Pro plan to unlock all Cron Jobs features on Vercel."
+      }
+    ]
   },
   "localVerification": {
     "domainTests": 209,
@@ -162,7 +185,41 @@
     "Resend account/owned sender domain and actual delivery callbacks",
     "Remaining Paymob/Mux/content/consent/translation/recovery/UAT gates"
   ],
-  "noProductionDeployment": true,
   "noRealGuestMessages": true,
-  "noPurchases": true
+  "noPurchases": true,
+  "ci": {
+    "source": "ab0f80bc54ba25b06ec7d454566a0660d3f1c532",
+    "url": "https://github.com/ahmedbarakatt1/rshorizons/actions/runs/40208411106",
+    "status": "success",
+    "domainTests": {
+      "unit": 41,
+      "database": 62,
+      "concurrency": 7,
+      "integration": 55,
+      "contract": 7,
+      "security": 37,
+      "total": 209
+    },
+    "browserTests": {
+      "passed": 51,
+      "intentionalSkips": 18
+    },
+    "cleanMigrations": "passed",
+    "lint": "passed",
+    "types": "passed",
+    "build": "passed",
+    "recovery": "passed",
+    "sourceArtifactScan": "passed"
+  },
+  "openwa": {
+    "selectedHost": "Oracle Always Free",
+    "accountStatus": "Owner needs to create account",
+    "regionDesignated": false,
+    "resourceCreated": false,
+    "composeValidation": "passed",
+    "composeSha256": "b82ec6a344fe51b1ad856dad2ec3cca6dc8e5c488ee164f4c33d0f6b87e5520c",
+    "nativeArmBuild": "not run; no designated server and local Docker Linux engine unavailable",
+    "pairingAndDelivery": "not run"
+  },
+  "noSuccessfulProductionDeployment": true
 }

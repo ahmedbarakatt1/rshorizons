@@ -8,9 +8,13 @@ OpenWA uses unofficial WhatsApp clients. Its own guidance warns of number restri
 
 ## Gateway host
 
-### Host choice — checked 2026-10-24
+### Owner-selected host — 2026-10-25
 
-The owner confirmed no server exists and asked for help choosing one. Recommended starting configuration: **DigitalOcean Basic / Regular, 2 vCPUs, 4 GiB RAM, 80 GiB disk**, an x86-64 Ubuntu LTS image and a European region. Base price is **$24/month**; daily percentage-based backups add 30%, for **$31.20/month before applicable tax**, excluding other services. This sizing is an engineering recommendation for one gateway with headroom around the committed 2 GiB container limit, not a measured hosted capacity claim. Confirm the actual region/checkout price before purchase. [Droplet pricing](https://www.digitalocean.com/pricing/droplets), [backup pricing](https://www.digitalocean.com/pricing/backups).
+The owner selected **Oracle Always Free** and is creating the account. Follow the [Oracle server setup guide](oracle-openwa.md). The existing pinned Compose service passes configuration parsing. Native ARM build, server operation, dedicated-number pairing and delivery remain pending; no Oracle resource has been created.
+
+### Earlier paid alternatives — checked 2026-10-24
+
+Earlier researched option, not the owner's selected host: **DigitalOcean Basic / Regular, 2 vCPUs, 4 GiB RAM, 80 GiB disk**, an x86-64 Ubuntu LTS image and a European region. Base price was **$24/month**; daily percentage-based backups add 30%, for **$31.20/month before applicable tax**, excluding other services. This sizing is an engineering recommendation for one gateway with headroom around the committed 2 GiB container limit, not a measured hosted capacity claim. Recheck actual region/checkout pricing if the owner later chooses it. [Droplet pricing](https://www.digitalocean.com/pricing/droplets), [backup pricing](https://www.digitalocean.com/pricing/backups).
 
 Lower-cost alternative: Hetzner CX23, listed at **€5.49/month plus €0.50/month for IPv4**, before VAT and backups. Its public cost-optimized range currently shows unavailable, so do not assume it can be ordered. Recheck stock in the owner's account before selecting it. [Current price schedule](https://docs.hetzner.com/general/infrastructure-and-availability/price-adjustment/), [IPv4 pricing](https://docs.hetzner.com/cloud/servers/primary-ips/overview/), [availability](https://www.hetzner.com/cloud/).
 
