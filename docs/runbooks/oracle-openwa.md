@@ -1,6 +1,6 @@
 # OpenWA on Oracle Always Free
 
-Oracle is currently blocked: on2026-10-25 the owner reported no accepted payment card, ruled out an always-on personal computer and required completely free cloud hosting. See [current hosting assessment](free-openwa-hosting.md). The instructions below are retained for reference, not an instruction to retry signup. No tenancy, home region, instance, public address or gateway hostname has been designated. No successful ARM build, WhatsApp pairing or delivery is claimed.
+Oracle signup remains blocked by the owner's available payment card. The owner's later **host locally** instruction supersedes the intervening cloud-only preference; the Windows gateway is now running as recorded in [local setup](local-openwa.md). The instructions below and [cloud assessment](free-openwa-hosting.md) are retained for reference, not an instruction to retry signup. No Oracle tenancy, home region, instance, public address or gateway hostname has been designated. No successful ARM build, WhatsApp pairing or delivery is claimed.
 
 ## Account and instance
 

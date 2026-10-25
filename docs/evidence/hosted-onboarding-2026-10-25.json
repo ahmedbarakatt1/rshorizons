@@ -181,7 +181,7 @@
     "Vercel compatible commercial/cron plan",
     "Supabase 64MiB upload capacity; paid-plan error402 verified",
     "Auth leaked-password protection",
-    "OpenWA host/session/number and actual signed delivery callbacks",
+    "OpenWA owner QR pairing, paired recovery, stable HTTPS and actual signed delivery callbacks",
     "Resend account/owned sender domain and actual delivery callbacks",
     "Remaining Paymob/Mux/content/consent/translation/recovery/UAT gates"
   ],
@@ -212,21 +212,28 @@
     "sourceArtifactScan": "passed"
   },
   "openwa": {
-    "selectedHost": null,
-    "previouslySelectedHost": "Oracle Always Free",
-    "accountStatus": "Oracle signup blocked by accepted-card requirement; no replacement designated",
+    "selectedHost": "Owner Windows computer",
+    "previouslySelectedHost": "Oracle Always Free; signup blocked by accepted-card requirement",
+    "decision": "Owner instructed host locally, superseding cloud-only restriction",
     "ownerHostingConstraints": {
-      "cloudOnly": true,
-      "monthlyBudget": 0,
+      "cloudOnly": false,
+      "hostingPurchaseAuthorized": false,
       "paymentCardAvailable": false,
-      "alwaysOnPersonalComputerAvailable": false
+      "localHostNowDesignated": true
     },
-    "regionDesignated": false,
-    "resourceCreated": false,
+    "cloudResourceCreated": false,
+    "localContainerCreated": true,
     "composeValidation": "passed",
     "composeSha256": "b82ec6a344fe51b1ad856dad2ec3cca6dc8e5c488ee164f4c33d0f6b87e5520c",
-    "nativeArmBuild": "not run; no designated server and local Docker Linux engine unavailable",
-    "pairingAndDelivery": "not run"
+    "nativeX64Build": "passed",
+    "nativeArmBuild": "not required for designated x86_64 host; not run",
+    "runtimeHealth": "passed",
+    "authenticationAndScope": "passed",
+    "unpairedRestartPersistence": "passed",
+    "qrDisplay": "verified in headed Edge browser",
+    "pairingAndDelivery": "pending owner QR scan, paired recovery, HTTPS and approved recipient/template",
+    "evidence": "docs/evidence/local-openwa-2026-10-25.json"
   },
-  "noSuccessfulProductionDeployment": true
+  "noSuccessfulProductionDeployment": true,
+  "updatedAt": "2026-10-25T16:51:10.535Z"
 }

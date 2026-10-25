@@ -10,7 +10,7 @@ OpenWA uses unofficial WhatsApp clients. Its own guidance warns of number restri
 
 ### Owner-selected host — 2026-10-25
 
-The owner initially selected **Oracle Always Free**, but signup is blocked by payment-card verification. The owner subsequently ruled out an always-on computer and requires completely free cloud hosting. No compatible replacement host has been verified or designated; see the [current hosting assessment](free-openwa-hosting.md). The [Oracle guide](oracle-openwa.md) is retained for reference. The pinned Compose service passes configuration parsing; actual build/runtime/pairing/delivery remain pending. No Oracle resource has been created.
+The owner's latest instruction, **host locally**, designates this Windows computer and supersedes the earlier cloud-only constraint. The pinned gateway is built and healthy at `http://127.0.0.1:2786`, with a dedicated RSH volume/session and scoped operator key. Authentication, isolation and unpaired session/key persistence through restart passed; the owner must scan the displayed QR. Follow [local setup](local-openwa.md). Vercel still requires a stable authenticated HTTPS route, paired recovery and actual delivery evidence. The earlier [cloud assessment](free-openwa-hosting.md) and [Oracle guide](oracle-openwa.md) are historical alternatives; no Oracle resource was created.
 
 ### Earlier paid alternatives — checked 2026-10-24
 
@@ -18,7 +18,7 @@ Earlier researched option, not the owner's selected host: **DigitalOcean Basic /
 
 Lower-cost alternative: Hetzner CX23, listed at **€5.49/month plus €0.50/month for IPv4**, before VAT and backups. Its public cost-optimized range currently shows unavailable, so do not assume it can be ordered. Recheck stock in the owner's account before selecting it. [Current price schedule](https://docs.hetzner.com/general/infrastructure-and-availability/price-adjustment/), [IPv4 pricing](https://docs.hetzner.com/cloud/servers/primary-ips/overview/), [availability](https://www.hetzner.com/cloud/).
 
-No hosting account, purchase, paid upgrade or server has been created. Once the owner chooses and creates the server, use an SSH key, keep SSH restricted to operator addresses, and expose HTTPS through the reverse proxy. The gateway's port2785 remains loopback-only. Provider disk backups supplement the application's consistent database/session backup and restore procedure; they do not prove that a live SQLite/session snapshot is recoverable.
+No cloud hosting account, purchase, paid upgrade or cloud server has been created. If the owner later selects a remote server, use an SSH key, keep SSH restricted to operator addresses, and expose HTTPS through the reverse proxy. The gateway remains loopback-only (2786 on the current Windows host). Provider disk backups supplement the application's consistent database/session backup and restore procedure; they do not prove that a live SQLite/session snapshot is recoverable.
 
 ### Installation sequence
 
@@ -28,7 +28,7 @@ No hosting account, purchase, paid upgrade or server has been created. Once the 
 4. Open the gateway dashboard, create one session using `whatsapp-web.js`, then the owner scans its QR on the dedicated number. Record the returned session **id** in a restricted release record. Check status `ready` and `engineLoaded=true`. QR/session keys contain credentials: keep them out of Git, screenshots and public evidence.
 5. Create an **operator** API key scoped to that session. For staging, also restrict the key's chats to the authorized test recipients. Retain the admin key only on the gateway host. Configure backups of the persistent volume using upstream's online-consistent backup procedure; verify restart and restore preserve the intended session without duplicate messages.
 
-The supplied Compose configuration has not been built on an owner-designated host yet. Gateway operation, QR pairing and real delivery remain external verification steps; local tests exercise the documented HTTP contract with a loopback test server.
+The exact pinned Compose image has now been built and started on the owner-designated Windows host. Health, actual API authorization, browser login/QR display and unpaired session/key restart persistence passed. Paired restart/restore, stable HTTPS and real send/callback checks remain pending. Earlier application tests exercise the documented HTTP contract with a loopback test server and do not prove WhatsApp delivery.
 
 ## Website configuration
 

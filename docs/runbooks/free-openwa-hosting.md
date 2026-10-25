@@ -1,6 +1,6 @@
-# OpenWA hosting constraints — 2026-10-25
+# Earlier OpenWA cloud-hosting assessment — 2026-10-25
 
-The owner cannot complete Oracle's payment-card verification, cannot provide an always-on computer, and requires **cloud hosting at zero monthly cost without a payment card**. This constraint applies to the OpenWA host. Do not ask the owner to repeat Oracle signup, recommend their computer again, or purchase a server. No replacement provider is designated.
+This records the earlier request for cloud hosting at zero monthly cost without a payment card, after Oracle signup failed. The owner's subsequent **host locally** instruction supersedes the cloud-only restriction. The designated Windows gateway is now running; follow [local setup](local-openwa.md) for current status. The research below is retained as history, not a direction to restart the cloud search or reject local hosting. No purchase is authorized.
 
 ## Current research
 
@@ -16,10 +16,10 @@ The owner cannot complete Oracle's payment-card verification, cannot provide an 
 
 No currently available host satisfying all three owner constraints and this gateway's needs has been verified. This is a bounded research result, not proof that no such service can ever exist. Do not weaken persistent storage, restart recovery, authenticated HTTPS or delivery verification just to obtain a free deployment. Do not use trial-account cycling or synthetic keep-alive traffic to evade provider limits.
 
-## Preserved implementation and exact continuation
+## Result of the earlier search
 
-The pinned OpenWA adapter, signed callbacks, idempotency rules, email fallback and Compose configuration remain intact. No host was created, phone paired, credential shared or message sent. Local protocol tests and earlier CI results remain valid; actual gateway operation remains unverified.
+At the end of this cloud search, no host had been created, phone paired, credential shared or message sent. The pinned adapter, signed callbacks, idempotency rules, email fallback and Compose configuration were preserved. Subsequent native local build/runtime/authorization/persistence checks are recorded in [local setup](local-openwa.md); pairing and real delivery remain pending.
 
-Next executable hosting step requires a genuinely eligible no-card free provider or an owner-designated sponsored server. Verify its current account eligibility, continuous execution, persistent disk, resource capacity, HTTPS, backup/restore and actual gateway send/callback journey before choosing it. If no qualifying host becomes available, production WhatsApp automation remains blocked; any reduced launch scope requires the owner's explicit decision. The existing email integration can be configured independently once its sender domain/account and other release inputs arrive.
+If the owner later returns to cloud hosting, verify current account eligibility, continuous execution, persistent disk, resource capacity, HTTPS, backup/restore and the actual gateway send/callback journey before choosing a provider. The current continuation is owner pairing of the local gateway, then paired recovery and authenticated HTTPS for Vercel. Email configuration can proceed independently when its sender domain/account and other release inputs arrive.
 
 The separate Vercel cron/commercial, Supabase64MiB storage and business/provider/UAT launch gates are unchanged. A WhatsApp host alone does not resolve them.
