@@ -31,6 +31,8 @@ Create a Resend webhook pointing to the stable environment origin plus `/api/v1/
 
 Keep `CRON_SECRET` set and verify the committed `/api/internal/worker` cron actually runs every minute. The worker sends approved database templates after booking submission; adding an API key alone does not approve template text or start scheduled jobs. See [Vercel setup](vercel-owner-setup.md) and [notification operations](notifications.md).
 
+Production requires approved Resend templates for request receipt/rejection, payment request/receipt, confirmation, booking changes/completion, pickup reminder, cancellation/refund update, private gallery, review invitation and guest-access recovery in all10 enabled guest languages. The staff contact alert requires the configured staff language and opens the authenticated request detail. Launch validation checks approved versions, supported variables, usable subject/body and an access link. Review invitations may retain a reviewed marketing classification; the dispatcher requires marketing consent. Other required operational templates are transactional. Put `{{access_url}}` on its own line to avoid adjoining punctuation in plain-text email clients. The English local-preview templates are drafts for review, not approved production content.
+
 ## Optional Supabase Auth email transport
 
 Supabase SMTP configuration handles Auth email, independently of the application's booking API. In Supabase **Authentication → Email → SMTP Settings**, enable custom SMTP with:

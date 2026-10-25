@@ -122,7 +122,7 @@ export async function publicRoute(request:Request,parts:string[]):Promise<Respon
         const result=await query(`SELECT b.id,b.version FROM app.bookings b JOIN app.guests g ON g.id=b.primary_guest_id WHERE b.reference=$1 AND (lower(g.email)=lower($2) OR g.phone_e164=$2)`,[body.reference,body.contact]);
         if(result.rows[0]){
           const b=result.rows[0],key=`access:${b.id}:${Math.floor(Date.now()/300000)}`;
-          await query(`WITH event AS (INSERT INTO app.outbox_events(aggregate_type,aggregate_id,aggregate_version,event_type,event_key,payload) VALUES('booking',$1,$2,'guest_access_requested',$3,jsonb_build_object('bookingId',$1::text)) ON CONFLICT DO NOTHING RETURNING id) INSERT INTO app.jobs(event_id,kind,job_key) SELECT id,'notification',id||':notification' FROM event`,[b.id,b.version,key]);
+          await query(`WITH event AS (INSERT INTO app.outbox_events(aggregate_type,aggregate_id,aggregate_version,event_type,event_key,payload) VALUES('booking',$1,$2,'guest_access_requested',$3,jsonb_build_object('bookingId',$1::uuid)) ON CONFLICT DO NOTHING RETURNING id) INSERT INTO app.jobs(event_id,kind,job_key) SELECT id,'notification',id||':notification' FROM event`,[b.id,b.version,key]);
         }
         return success({message:"If the details match, a secure access link will be sent."},202);
       }

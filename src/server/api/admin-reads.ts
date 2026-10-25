@@ -7,6 +7,7 @@ import {uuidSchema} from "@/modules/bookings/contracts";
 import {readReport} from "@/modules/reports/service";
 import {whatsappLink} from "@/modules/content/whatsapp";
 import {isLocale} from "@/i18n/locales";
+import {z} from "zod";
 
 const scopedBooking=`NOT EXISTS(SELECT 1 FROM app.booking_items bi JOIN app.quote_items qi ON qi.id=bi.quote_item_id LEFT JOIN app.service_variants v ON v.id=qi.variant_id LEFT JOIN app.services sv ON sv.id=v.service_id LEFT JOIN app.apartments ap ON ap.id=qi.apartment_id LEFT JOIN app.properties pr ON pr.id=ap.property_id WHERE bi.booking_id=b.id AND NOT app.scope_allows($1,coalesce(sv.destination_id,pr.destination_id),pr.id))`;
 async function operationalOnly(actor:StaffActor) {
@@ -16,6 +17,25 @@ async function operationalOnly(actor:StaffActor) {
 export async function adminReads(request:Request,parts:string[]) {
   if(request.method!=="GET")return undefined;
   const [,resource,id]=parts;
+  if(resource==="contact") {
+    const actor=await getStaff(request,"contacts.read");
+    const scope=await query("SELECT app.scope_allows($1,NULL,NULL) AS allowed",[actor.id]);
+    if(!scope.rows[0].allowed)throw new AppError("FORBIDDEN",403);
+    if(id) {
+      const {rows}=await query("SELECT id,sender_name,email,phone_e164,locale,message,state,version,created_at FROM app.contact_requests WHERE id=$1 AND retention_deadline>now()",[uuidSchema.parse(id)]);
+      if(!rows[0])throw new AppError("NOT_FOUND",404);
+      return success(rows[0]);
+    }
+    const params=new URL(request.url).searchParams;
+    const state=z.enum(["new","assigned","replied","closed","spam"]).nullable().parse(params.get("state"));
+    const after=params.get("after")?uuidSchema.parse(params.get("after")):null;
+    if(after&&!(await query("SELECT 1 FROM app.contact_requests WHERE id=$1",[after])).rowCount)throw new AppError("INVALID_CURSOR",400,"Refresh the inbox to continue.");
+    const {rows}=await query(`SELECT id,sender_name,locale,state,created_at FROM app.contact_requests
+      WHERE retention_deadline>now() AND ($1::text IS NULL OR state=$1)
+      AND ($2::uuid IS NULL OR (created_at,id)<(SELECT created_at,id FROM app.contact_requests WHERE id=$2))
+      ORDER BY created_at DESC,id DESC LIMIT 51`,[state,after]);
+    return success({items:rows.slice(0,50),nextCursor:rows.length>50?rows[49].id:null});
+  }
   if(resource==="session") {
     const actor=await getStaff(request);
     const {rows}=await query(`SELECT p.code FROM app.permissions p WHERE app.has_permission($1,p.code)`,[actor.id]);

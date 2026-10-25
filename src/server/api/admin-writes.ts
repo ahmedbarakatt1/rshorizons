@@ -56,6 +56,11 @@ async function readBytes(request:Request) {
 export async function adminWrites(request:Request,parts:string[]) {
   if(!["POST","PATCH","PUT"].includes(request.method))return undefined;
   const [,resource,id,action]=parts;
+  if(resource==="contact"&&id&&!action&&request.method==="PATCH") {
+    const actor=await getStaff(request,"contacts.manage");
+    const input=z.object({state:z.enum(["new","replied","closed","spam"]),expectedVersion:version}).strict().parse(await readJson(request));
+    return success(await routine(actor,"SELECT app.update_contact_state($1,$2,$3,$4) AS result",[uuidSchema.parse(id),input.expectedVersion,input.state,actor.id]));
+  }
   if(resource==="staff"&&id==="invitations"&&request.method==="POST"){
     const actor=await getStaff(request,"staff.manage"),input=staffInvitationSchema.parse(await readJson(request));
     return success(await inviteStaff(actor,input),201);

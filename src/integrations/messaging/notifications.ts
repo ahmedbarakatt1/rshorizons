@@ -19,8 +19,9 @@ const eventTemplates:Record<string,string>={
   payment_reminder:"approved_payment_required",
   pickup_updated:"booking_changed",booking_expired:"cancellation_update",booking_completed:"booking_completed",cancellation_update:"cancellation_update",
   refund_update:"refund_update",refund_completed:"refund_update",refund_approved:"refund_approved",
-  gallery_ready:"gallery_ready",review_invitation:"review_invitation",contact_received:"contact_received"
+  gallery_ready:"gallery_ready",review_invitation:"review_invitation",contact_received:"contact_received",guest_access_requested:"guest_access_requested"
 };
+export const requiredGuestEmailTemplates=[...new Set(Object.values(eventTemplates))].filter(event=>!['contact_received','refund_approved'].includes(event));
 const emailSchema=z.email().max(254);
 function fail(code:string):never{throw new NotificationError(code);}
 const configured=(key:string)=>process.env[key]?.trim()||fail(`${key}_REQUIRED`);
@@ -122,7 +123,7 @@ async function grantUrl(tx:Transaction,job:Job,recipient:Recipient){
   const secret=createHmac("sha256",configured("TOKEN_HASH_PEPPER")).update(`notification-access-v1:${job.event.id}:${recipient.booking_id}:${recipient.gallery_id??recipient.invitation_id??"booking"}`).digest("base64url");
   const hash=digestSecret(secret);
   const purpose=recipient.gallery_id?"gallery":recipient.invitation_id?"review":"booking";
-  const scope=purpose==="gallery"?["gallery:read"]:purpose==="review"?["review:submit"]:["booking:read","booking:request","gallery:read"];
+  const scope=purpose==="gallery"?["gallery:read"]:purpose==="review"?["review:submit"]:["booking:read","booking:request","payment:create","gallery:read"];
   const expires=new Date(Math.min(Date.now()+48*3600_000,recipient.target_expiry?.getTime()??Infinity));
   await tx.query(`INSERT INTO app.access_grants(token_hash,purpose,booking_id,gallery_id,review_invitation_id,scope,expires_at) VALUES($1,$2,$3,$4,$5,$6,$7) ON CONFLICT(token_hash) DO NOTHING`,[hash,purpose,recipient.booking_id,recipient.gallery_id??null,recipient.invitation_id??null,scope,expires]);
   const grant=(await tx.query("SELECT id FROM app.access_grants WHERE token_hash=$1 AND expires_at>now() AND revoked_at IS NULL AND used_at IS NULL",[hash])).rows[0];
@@ -170,7 +171,7 @@ export async function deliverNotification(job:Job):Promise<unknown>{
       if(!template)fail("NOTIFICATION_TEMPLATE_UNAVAILABLE");
       if(template.category!=="transactional")fail("CONTACT_TEMPLATE_CATEGORY_INVALID");
       // Staff alert contains only an opaque reference and authenticated admin URL, never form content/contact details.
-      const values={reference:job.event.aggregate_id,access_url:`${origin()}/admin/contact`};
+      const values={reference:job.event.aggregate_id,access_url:`${origin()}/admin/contact/${job.event.aggregate_id}`};
       return {alreadyProcessed:false as const,template,values,to:configured("STAFF_NOTIFICATION_EMAIL"),synthetic:false,recipient:null};
     }
     const recipient=await getRecipient(tx,job);

@@ -1,4 +1,5 @@
 import {query} from "@/server/db";
+import {requiredGuestEmailTemplates,renderTemplate} from "@/integrations/messaging/notifications";
 /** Read-only launch checks. Flags are not a substitute for persisted content approval. */
 export async function productionDataProblems(){
  const {rows}=await query(`SELECT
@@ -14,5 +15,22 @@ export async function productionDataProblems(){
   NOT EXISTS(SELECT 1 FROM app.payment_policies WHERE approved_at IS NOT NULL) AS payment_policy_missing,
   EXISTS(SELECT 1 FROM app.media_assets WHERE classification='public' AND (rights_evidence_ref IS NULL OR subjects_reviewed_at IS NULL)) AS media_approval_missing`);
  const checks=rows[0] as Record<string,unknown>;
+ const templates=await query(`WITH required AS (
+   SELECT event_type,l.code AS locale FROM unnest($1::text[]) event_type CROSS JOIN app.locales l WHERE l.enabled
+   UNION SELECT 'contact_received',$2::text
+  ) SELECT r.event_type,t.id,t.category,t.subject_template,t.body_template FROM required r LEFT JOIN LATERAL (
+   SELECT id,category,subject_template,body_template FROM app.notification_templates
+   WHERE event_type=r.event_type AND locale=r.locale AND channel='email' AND provider='resend' AND approval_status='approved'
+   ORDER BY template_version DESC LIMIT 1
+  ) t ON true`,[requiredGuestEmailTemplates,process.env.STAFF_NOTIFICATION_LOCALE??"en"]);
+ checks.notification_templates_missing=templates.rows.some(template=>{
+  const categoryAllowed=template.category==="transactional"||(template.event_type==="review_invitation"&&template.category==="marketing");
+  if(!template.id||!categoryAllowed||!template.subject_template?.trim()||!template.body_template?.trim())return true;
+  try{
+   const values={reference:"RSH-REFERENCE",access_url:"https://example.invalid/private-access"};
+   const subject=renderTemplate(template.subject_template,values),body=renderTemplate(template.body_template,values);
+   return /[\r\n]/.test(subject)||subject.length>500||body.length>20000||!body.includes(values.access_url);
+  }catch{return true;}
+ });
  return Object.entries(checks).filter(([,value])=>!!value).map(([name])=>name);
 }

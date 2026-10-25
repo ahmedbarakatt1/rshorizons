@@ -1,8 +1,11 @@
 import {test, expect} from "@playwright/test";
 import {readFileSync} from "node:fs";
+import {spawnSync} from "node:child_process";
 
 test("staff operates a real resource and reviews a pending request", async ({page},info) => {
   test.skip(info.project.name!=="chromium" || process.env.E2E_LOCAL_STAFF!=="1","Local operator grant is an explicit development-only fixture.");
+  const bootstrap=spawnSync(process.execPath,["scripts/bootstrap-local-operator.mjs"],{encoding:"utf8",env:process.env,windowsHide:true});
+  expect(bootstrap.status,bootstrap.stderr).toBe(0);
   // Create this journey's own plain tour request. An unrelated photography
   // request legitimately needs a staffed photographer before approval.
   await page.goto("/en/experiences/boat-tours");
