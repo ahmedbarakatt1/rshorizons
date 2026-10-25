@@ -2,7 +2,7 @@
 
 Checked against the current Resend documentation on 2026-10-24. The adapter exists, but no designated account, sender domain, key or real delivery has been verified. This setup is separate from local `.invalid` message previews.
 
-Owner question on2026-10-25: a regular Gmail account can register for Resend and receive its test emails. Resend's `onboarding@resend.dev` sender is restricted to the account email. Customer delivery through this implementation needs an owned, verified domain; a Gmail address cannot supply DNS ownership for `gmail.com`, and the Vercel project hostname does not provide email-domain control. No Gmail SMTP adapter has been selected or installed. [Resend test sender restrictions](https://resend.com/docs/knowledge-base/403-error-resend-dev-domain).
+Owner question on 2026-10-25: a regular Gmail account can register for Resend and receive its test emails. Resend's `onboarding@resend.dev` sender is restricted to the account email. Customer delivery through this implementation needs an owned, verified domain; a Gmail address cannot supply DNS ownership for `gmail.com`, and the Vercel project hostname does not provide email-domain control. No Gmail SMTP adapter has been selected or installed. [Resend test sender restrictions](https://resend.com/docs/knowledge-base/403-error-resend-dev-domain).
 
 ## Account and sender
 
@@ -31,7 +31,7 @@ Create a Resend webhook pointing to the stable environment origin plus `/api/v1/
 
 Keep `CRON_SECRET` set and verify the committed `/api/internal/worker` cron actually runs every minute. The worker sends approved database templates after booking submission; adding an API key alone does not approve template text or start scheduled jobs. See [Vercel setup](vercel-owner-setup.md) and [notification operations](notifications.md).
 
-Production requires approved Resend templates for request receipt/rejection, payment request/receipt, confirmation, booking changes/completion, pickup reminder, cancellation/refund update, private gallery, review invitation and guest-access recovery in all10 enabled guest languages. The staff contact alert requires the configured staff language and opens the authenticated request detail. Launch validation checks approved versions, supported variables, usable subject/body and an access link. Review invitations may retain a reviewed marketing classification; the dispatcher requires marketing consent. Other required operational templates are transactional. Put `{{access_url}}` on its own line to avoid adjoining punctuation in plain-text email clients. The English local-preview templates are drafts for review, not approved production content.
+Production requires approved Resend templates for request receipt/rejection, payment request/receipt, confirmation, booking changes/completion, pickup reminder, cancellation/refund update, private gallery, review invitation and guest-access recovery in all 10 enabled guest languages. The staff contact alert requires the configured staff language and opens the authenticated request detail. Launch validation checks approved versions, supported variables, usable subject/body and an access link. Review invitations may retain a reviewed marketing classification; the dispatcher requires marketing consent. Other required operational templates are transactional. Put `{{access_url}}` on its own line to avoid adjoining punctuation in plain-text email clients. The English local-preview templates are drafts for review, not approved production content.
 
 ## Optional Supabase Auth email transport
 
@@ -49,6 +49,8 @@ Supabase SMTP configuration handles Auth email, independently of the application
 Use the exact application URL/redirect allowlist for the target environment and keep public registration disabled. SMTP setup does not create the initial administrator; run the protected provisioning procedure in [staff access](staff.md), then complete MFA in `/admin`. This application's Staff screen returns a private invitation link for deliberate sharing; it does not automatically email that link merely because SMTP is configured. [Resend's Supabase SMTP guide](https://resend.com/docs/send-with-supabase-smtp).
 
 ## Controlled acceptance test
+
+The [English email draft pack](../launch/email-templates.en.draft.json) contains all 13 guest events and the staff contact alert, ready for content review. It is not imported or approved. Review the message classification, approve the English wording, and obtain native review of translations for all ten enabled guest languages before creating immutable production template versions.
 
 Use only a recipient explicitly designated by the owner for this test. Approve the corresponding event/channel/locale template before enabling the send. A proposed English `request_received` message for owner review is:
 
