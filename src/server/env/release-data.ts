@@ -1,4 +1,5 @@
 import {query} from "@/server/db";
+import {automatedEmailEnabled,websiteCheckoutEnabled} from "@/config/customer-service";
 import {requiredGuestEmailTemplates,renderTemplate} from "@/integrations/messaging/notifications";
 /** Read-only launch checks. Flags are not a substitute for persisted content approval. */
 export async function productionDataProblems(){
@@ -15,6 +16,8 @@ export async function productionDataProblems(){
   NOT EXISTS(SELECT 1 FROM app.payment_policies WHERE approved_at IS NOT NULL) AS payment_policy_missing,
   EXISTS(SELECT 1 FROM app.media_assets WHERE classification='public' AND (rights_evidence_ref IS NULL OR subjects_reviewed_at IS NULL)) AS media_approval_missing`);
  const checks=rows[0] as Record<string,unknown>;
+ if(!websiteCheckoutEnabled)delete checks.payment_policy_missing;
+ if(!automatedEmailEnabled)return Object.entries(checks).filter(([,value])=>!!value).map(([name])=>name);
  const templates=await query(`WITH required AS (
    SELECT event_type,l.code AS locale FROM unnest($1::text[]) event_type CROSS JOIN app.locales l WHERE l.enabled
    UNION SELECT 'contact_received',$2::text

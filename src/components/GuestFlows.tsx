@@ -11,20 +11,20 @@ import {api} from "./api";
 import {money,cairoDate} from "./format";
 import {OwnerGallery,TripVideo} from "./OwnerGallery";
 import {TeamWhatsAppLinks} from "./WhatsAppLinks";
+import {ContactChannels} from "./CustomerService";
 
 
 
-export function GuestAccess({locale,reference=""}:{locale:string;reference?:string}) {
+export function GuestAccess({locale}:{locale:string;reference?:string}) {
 
  const t=useTranslations();const [busy,setBusy]=useState(false);const [message,setMessage]=useState("");const [token,setToken]=useState("");
 
  useEffect(()=>{const url=new URL(window.location.href);const secret=url.searchParams.get("token")??new URLSearchParams(url.hash.slice(1)).get("token")??"";if(secret){setToken(secret);url.searchParams.delete("token");url.hash="";history.replaceState(null,"",url.pathname+url.search);}},[]);
 
- async function request(event:React.FormEvent<HTMLFormElement>) {event.preventDefault();setBusy(true);setMessage("");const form=new FormData(event.currentTarget);try{await api("/guest-access/request",{reference:form.get("reference"),contact:form.get("contact"),locale});setMessage(t("accessIntro"));}catch{setMessage(t("error"));}finally{setBusy(false);}}
 
  async function redeem(event:React.FormEvent<HTMLFormElement>) {event.preventDefault();setBusy(true);setMessage("");try{const result=await api<{reference?:string;redirectTo?:string;purpose?:string;galleryId?:string;invitationId?:string}>("/guest-access/redeem",{token});history.replaceState(null,"",`/${locale}/guest-access`);setToken("");window.location.assign(result.purpose==="gallery"&&result.galleryId?`/${locale}/my-gallery/${result.galleryId}`:result.purpose==="review"&&result.invitationId?`/${locale}/reviews?invitation=${result.invitationId}`:result.reference?`/${locale}/booking/${result.reference}`:`/${locale}/guest-access`);}catch{setMessage(t("error"));}finally{setBusy(false);}}
 
- return <div className="access-columns"><div><h2>{t("secureAccess")}</h2><p>{t("accessIntro")}</p><form className="form-stack" onSubmit={request}><label>{t("reference")}<input name="reference" defaultValue={reference} required dir="ltr" autoComplete="off"/></label><label>{t("email")} / {t("phone")}<input name="contact" required dir="ltr" autoComplete="email"/></label><button className="button" disabled={busy}>{busy?t("loading"):t("sendLink")}</button></form></div><div><h2>{t("redeem")}</h2><form className="form-stack" onSubmit={redeem}><label>{t("token")}<input name="token" type="password" value={token} onChange={event=>setToken(event.target.value)} required autoComplete="off" dir="ltr"/></label><button className="button button-secondary" disabled={busy}>{t("redeem")}</button></form></div>{message&&<p role="status" className="form-notice">{message}</p>}</div>;
+ return <div className="access-columns"><div><ContactChannels/></div><div><h2>{t("redeem")}</h2><form className="form-stack" onSubmit={redeem}><label>{t("token")}<input name="token" type="password" value={token} onChange={event=>setToken(event.target.value)} required autoComplete="off" dir="ltr"/></label><button className="button button-secondary" disabled={busy}>{t("redeem")}</button></form></div>{message&&<p role="status" className="form-notice">{message}</p>}</div>;
 
 }
 

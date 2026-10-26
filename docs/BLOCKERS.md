@@ -1,5 +1,13 @@
 # External launch dependencies
 
+## Owner scope update — 2026-10-26: WhatsApp completion
+
+The owner now requests customer-service completion on WhatsApp, visible bank transfer/InstaPay options, social/contact links and no automated email. This supersedes earlier online checkout, automatic email and booking-worker launch requirements. Public forms prepare editable WhatsApp drafts only; they do not create reservations or take payment. Customer service confirms availability, price and payment details. The two designated numbers and Gmail inbox are linked. Owner supplied InstaPay address abdohassan8123@instapay and its ipn.eg payment link; both are displayed. Owner supplied e-wallet number 01201338200, now displayed. Bank details and social page URLs remain pending; none are invented. Existing admin/catalog/media controls and historical records are retained.
+
+No automated test suites were run for this change, as requested. TypeScript compilation passed. The local transfer flow was manually exercised through draft review with InstaPay and the second team number; no message was sent. Private screenshot: .local/evidence/ui/whatsapp-booking/review.png. Historical CI results below do not verify this new flow. Preview: http://127.0.0.1:3003/en. No production deployment occurred.
+
+Next: add owner-supplied payment/social details, approve public business content/media, and resolve a commercially eligible host within the free-only budget. Paymob, Resend and booking-minute cron activation are not required for this flow. Operational private-media/retention dependencies remain separate.
+
 2026-10-26 update: completely free services are required. The owner designated `horizonsredsea@gmail.com` as the business inbox and asked to keep the worker compatible with Vercel. Native cron entries are removed; [Supabase external scheduling](runbooks/external-scheduler.md) is prepared but inactive. The prior failed Vercel attempts below are historical; the commercial-use restriction and other launch inputs remain. No hosting purchase, new email adapter, extension installation or schedule activation has occurred.
 
 E01 is resolved: the designated repository contains the source and its CI is passing. Remaining rows are `BLOCKED_EXTERNAL` until their evidence is supplied and verified; these do not block independent implementation.

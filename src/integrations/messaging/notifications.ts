@@ -1,4 +1,5 @@
 import {createHmac,timingSafeEqual} from "node:crypto";
+import {automatedEmailEnabled} from "@/config/customer-service";
 import {mkdir,writeFile} from "node:fs/promises";
 import {join} from "node:path";
 import {z} from "zod";
@@ -43,6 +44,7 @@ export function renderTemplate(template:string,values:Record<string,string>){
   return rendered;
 }
 export async function sendEmail(message:{to:string;subject:string;text:string;idempotencyKey:string;synthetic?:boolean}){
+  if(!automatedEmailEnabled)fail("AUTOMATED_EMAIL_DISABLED");
   emailSchema.parse(message.to);
   if(/[\r\n]/.test(message.subject)||message.subject.length>500||message.text.length>20000)fail("EMAIL_CONTENT_INVALID");
   const provider=configured("EMAIL_PROVIDER");
@@ -147,6 +149,7 @@ export async function deliverNotification(job:Job):Promise<unknown>{
         VALUES($1,'email',$2,'internal','suppressed',$3) ON CONFLICT DO NOTHING`,[job.id,Math.max(1,job.attempts),reason]);
       return {alreadyProcessed:true as const,suppressionReason:reason};
     }
+    if(!automatedEmailEnabled)return suppress("AUTOMATED_EMAIL_DISABLED");
     if(job.event.event_type==="refund_approved"){
       if(!(await tx.query("SELECT 1 FROM app.refund_requests WHERE id=$1 AND approved_at IS NOT NULL",[job.event.aggregate_id])).rowCount)fail("REFUND_NOTIFICATION_INELIGIBLE");
       return suppress("INTERNAL_APPROVAL_NO_CUSTOMER_SEND");

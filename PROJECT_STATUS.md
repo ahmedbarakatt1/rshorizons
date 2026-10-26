@@ -1,5 +1,13 @@
 # Red Sea Horizons — execution status
 
+## Owner scope update — 2026-10-26: WhatsApp completion
+
+The owner now requests customer-service completion on WhatsApp, visible bank transfer/InstaPay options, social/contact links and no automated email. This supersedes earlier online checkout, automatic email and booking-worker launch requirements. Public forms prepare editable WhatsApp drafts only; they do not create reservations or take payment. Customer service confirms availability, price and payment details. The two designated numbers and Gmail inbox are linked. Owner supplied InstaPay address abdohassan8123@instapay and its ipn.eg payment link; both are displayed. Owner supplied e-wallet number 01201338200, now displayed. Bank details and social page URLs remain pending; none are invented. Existing admin/catalog/media controls and historical records are retained.
+
+No automated test suites were run for this change, as requested. TypeScript compilation passed. The local transfer flow was manually exercised through draft review with InstaPay and the second team number; no message was sent. Private screenshot: .local/evidence/ui/whatsapp-booking/review.png. Historical CI results below do not verify this new flow. Preview: http://127.0.0.1:3003/en. No production deployment occurred.
+
+Next: add owner-supplied payment/social details, approve public business content/media, and resolve a commercially eligible host within the free-only budget. Paymob, Resend and booking-minute cron activation are not required for this flow. Operational private-media/retention dependencies remain separate.
+
 Updated 2026-10-26, Africa/Cairo. The complete 1,415-line production handoff and confirmed owner decisions remain authoritative. **Production is not live or approved for launch.** Independent application work is implemented and locally verified; outstanding external gates are in `docs/BLOCKERS.md`.
 
 Current change: owner requires completely free services and asked to adapt the worker for Vercel. Native Vercel cron registration is removed. `scripts/prepare-supabase-scheduler.ts` prepares paused Supabase schedules at the original frequencies; no hosted extension, secret or schedule is activated. Vercel Hobby's commercial-use restriction remains independent. Business inbox: `horizonsredsea@gmail.com`; no sender domain or Resend account is confirmed. See `docs/runbooks/external-scheduler.md`. Prior CI below applies to the previous application commit; new focused verification is recorded in the release report.
@@ -46,3 +54,6 @@ Current change: owner requires completely free services and asked to adapt the w
 Details and review rulings: `docs/PRODUCTION_READINESS_PASS.md`. Earlier counts/history remain in `docs/RELEASE_REPORT.md`; they do not override this current status. Do not recreate modules or resume OpenWA onboarding.
 
 Latest CI: https://github.com/ahmedbarakatt1/rshorizons/actions/runs/40223344217 — SUCCESS, 217 domain tests and 57 browser passes/24 documented skips. Final evidence: docs/evidence/production-readiness-2026-10-25.json.
+
+### Vercel reauthentication and production check — 2026-10-26
+Vercel CLI sign-in succeeded. Fresh team API response confirms the designated team remains on Hobby. Production environment downloaded only into ignored .local; Vercel withheld four sensitive values, so placeholder-related database/secret validation failures are not evidence that those hosted secrets are invalid. Actual missing release inputs include owner approval flags, private-video provider settings, monitoring destination, sensitive-data key reference and approved media retention days. No deployment, purchase, approval-flag override or secret publication occurred. The new WhatsApp flow does not require Resend or Paymob. Next action: resolve hosting eligibility within the owner's free-only requirement and the remaining production content/media configuration before deployment.

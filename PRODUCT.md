@@ -27,3 +27,6 @@ Production accounts, policies, merchant methods, official contacts, schedules, p
 
 ## Context provenance
 Captured from the complete approved production handoff and owner-confirmed brand. As the delegated UI implementer, I used the explicit brief in place of a repeated product interview; no new factual business claims were inferred.
+
+## Current booking experience (owner update 2026-10-26)
+Customers choose service/stay details, review an editable message and complete arrangements with customer service on WhatsApp. Display bank transfer and InstaPay options with owner-approved details; otherwise ask customer service. Provide direct phone, WhatsApp, email and verified social links. No automated email or website checkout.

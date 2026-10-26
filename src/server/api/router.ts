@@ -1,4 +1,5 @@
 import {publicRoute} from "./public";
+import {websiteCheckoutEnabled,automatedEmailEnabled} from "@/config/customer-service";
 import {adminReads} from "./admin-reads";
 import {adminWrites} from "./admin-writes";
 import {authRoute} from "./auth";
@@ -11,6 +12,11 @@ import {verifyMessagingWebhook,applyMessagingWebhook} from "@/integrations/messa
 import {muxWebhook} from "@/integrations/video";
 export async function route(request:Request,parts:string[]) {
   try {
+    if(request.method==="POST"&&!websiteCheckoutEnabled&&(
+      parts[0]==="quotes"||(parts[0]==="bookings"&&(parts.length===1||parts[2]==="payment-attempts"))||parts[0]==="contact"
+    ))throw new AppError("CONTACT_CUSTOMER_SERVICE",410,"Please complete your booking with customer service on WhatsApp.");
+    if(request.method==="POST"&&!automatedEmailEnabled&&parts[0]==="guest-access"&&parts[1]==="request")
+      throw new AppError("AUTOMATED_EMAIL_DISABLED",410,"Please contact customer service for assistance.");
     if(parts[0]==="webhooks"&&parts[1]==="paymob"&&request.method==="POST")
       return success(await paymobWebhook(await readJson(request,256*1024),new URL(request.url).searchParams.get("hmac")??""));
     if(parts[0]==="webhooks"&&parts.length===2) {

@@ -27,3 +27,6 @@ Visible 3px focus, skip link, semantic headings and native form controls. Logica
 
 ## Publication
 Local demonstration labels remain visible when synthetic inventory or unapproved images are used. Public production must receive approved imagery/content and pass the independent release gates. No fabricated reviews, credentials or equipment claims.
+
+## Current booking experience (owner update 2026-10-26)
+Customers choose service/stay details, review an editable message and complete arrangements with customer service on WhatsApp. Display bank transfer and InstaPay options with owner-approved details; otherwise ask customer service. Provide direct phone, WhatsApp, email and verified social links. No automated email or website checkout.

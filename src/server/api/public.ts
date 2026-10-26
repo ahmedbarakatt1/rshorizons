@@ -1,3 +1,4 @@
+import {websiteCheckoutEnabled} from "@/config/customer-service";
 import {serveOwnerMedia} from "@/integrations/storage/owner-media";
 import {z} from "zod";
 import {query} from "@/server/db";
@@ -24,7 +25,7 @@ export async function publicRoute(request:Request,parts:string[]):Promise<Respon
   if(request.method==="GET") {
     if(resource==="health") {
       if(id==="live")return success({status:"ok"});
-      if(id==="ready"){await query("SELECT 1");return success({status:"ok",environment:process.env.APP_ENV??"development",bookingIntake:process.env.BOOKING_ENABLED==="true"});}
+      if(id==="ready"){await query("SELECT 1");return success({status:"ok",environment:process.env.APP_ENV??"development",bookingIntake:websiteCheckoutEnabled&&process.env.BOOKING_ENABLED==="true",bookingChannel:"whatsapp"});}
     }
     if(resource==="catalog")return success(await getCatalog(locale));
     if(resource==="policies"&&id==="current"){
