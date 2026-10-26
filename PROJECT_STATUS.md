@@ -1,5 +1,7 @@
 # Red Sea Horizons — execution status
 
+2026-10-27 presentation update: removed the global demonstration banner at the owner's request while retaining WhatsApp-only completion and staff confirmation. Added Luxor to the production destination catalog in all ten locales. Replaced generated catalog artwork with optimized, locally hosted web photographs whose sources and licenses are recorded in `docs/design/web-media.md`; owner-supplied previous-trip media remains unchanged. Added accessible Instagram and TikTok icons. Local production build, desktop/mobile render checks, image decode checks and horizontal-overflow checks pass. Next: deploy this revision to Vercel and repeat the live checks.
+
 2026-10-26 publication update: owner approved the supplied media for publication and supplied Instagram `horizonsrs2026` and TikTok `@red.sea.horizons`; Red Sea Horizons remains the displayed operator name and no street address is requested. Public showcase media is being moved to the private Supabase bucket and served through the application. The current synthetic catalog and prices remain visibly labelled as a personal demonstration.
 
 ## Owner scope update — 2026-10-26: WhatsApp completion

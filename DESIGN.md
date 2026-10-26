@@ -26,7 +26,7 @@ The first question is “Which reservation needs a decision?” A 228px pale fra
 Visible 3px focus, skip link, semantic headings and native form controls. Logical inline/block spacing supports Arabic; amounts, phones, dates and references use bdi/dir=ltr. No information depends only on color. Reduced motion disables the one image entrance and transitions. The interface has real empty, loading, failed, disabled and saved states.
 
 ## Publication
-The owner approved the supplied trip, event and transport media for publication on 2026-10-26. Showcase inventory remains clearly labelled as demonstration content until the operator replaces it with final catalog copy. No fabricated reviews, credentials or equipment claims.
+The owner approved the supplied trip, event and transport media for publication on 2026-10-26. On 2026-10-27 the owner requested removal of the global demonstration banner and replacement of generated catalog art with licensed web photography. Source and license records live in `docs/design/web-media.md`. Catalog text continues to avoid fabricated reviews, credentials, equipment claims or guaranteed itinerary details.
 
 ## Current booking experience (owner update 2026-10-26)
 Customers choose service/stay details, review an editable message and complete arrangements with customer service on WhatsApp. Display bank transfer and InstaPay options with owner-approved details; otherwise ask customer service. Provide direct phone, WhatsApp, email and verified social links. No automated email or website checkout.

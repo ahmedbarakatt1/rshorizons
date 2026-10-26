@@ -6,6 +6,13 @@ import {teamWhatsAppNumbers} from "@/modules/content/whatsapp";
 import {TeamWhatsAppLinks} from "./WhatsAppLinks";
 import {api} from "./api";
 
+function SocialIcon({platform}:{platform:string}){
+ const common={width:20,height:20,viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:1.8,strokeLinecap:"round" as const,strokeLinejoin:"round" as const,"aria-hidden":true};
+ if(platform.toLowerCase()==="instagram")return <svg {...common}><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.4" cy="6.6" r=".8" fill="currentColor" stroke="none"/></svg>;
+ if(platform.toLowerCase()==="tiktok")return <svg {...common}><path d="M15 4v10.2a4.2 4.2 0 1 1-3-4V7h3c1.1 1.8 2.8 2.8 5 3v3c-2-.1-3.7-.8-5-2"/></svg>;
+ return <svg {...common}><circle cx="12" cy="12" r="9"/><path d="M8 12h8m-4-4v8"/></svg>;
+}
+
 export function PaymentMethods(){
  const t=useTranslations(),bank=paymentInstructions;
  return <section className="payment-methods" aria-labelledby="payment-methods-heading">
@@ -22,6 +29,6 @@ export function ContactChannels({compact=false}:{compact?:boolean}){
   {!compact&&<><h2>{t("customerService")}</h2><p>{t("contactDirect")}</p></>}
   <TeamWhatsAppLinks compact={compact}/>
   <div className="direct-contact-links"><a href={`mailto:${businessEmail}`}><span>{t("email")}</span><bdi>{businessEmail}</bdi></a>{teamWhatsAppNumbers.map(phone=><a href={`tel:${phone}`} key={phone}><span>{t("callUs")}</span><bdi>{phone}</bdi></a>)}</div>
-  {social.some(item=>item.url.startsWith("https://"))&&<nav className="social-links" aria-label={t("socialPages")}>{social.filter(item=>item.url.startsWith("https://")).map(item=><a key={item.platform} href={item.url} target="_blank" rel="noopener noreferrer" referrerPolicy="no-referrer">{item.platform}</a>)}</nav>}
+  {social.some(item=>item.url.startsWith("https://"))&&<nav className="social-links" aria-label={t("socialPages")}>{social.filter(item=>item.url.startsWith("https://")).map(item=><a key={item.platform} href={item.url} target="_blank" rel="noopener noreferrer" referrerPolicy="no-referrer" aria-label={item.platform}><SocialIcon platform={item.platform}/><span>{item.platform}</span></a>)}</nav>}
  </section>;
 }
