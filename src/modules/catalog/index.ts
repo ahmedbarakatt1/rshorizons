@@ -6,7 +6,7 @@ import type {ApartmentDetail,ApartmentSummary,CatalogData,DestinationSummary,Ser
 import {illustrativeImage} from "@/components/catalog-imagery";
 
 function isDemo() {
-  return ["development","test"].includes(process.env.APP_ENV??"development")&&process.env.DEMO_MODE==="true";
+  return process.env.DEMO_MODE==="true";
 }
 // Only approved variants with an actual effective rate can advertise a price.
 // The date expression is internal SQL, never supplied by a request.

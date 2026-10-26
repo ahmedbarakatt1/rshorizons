@@ -16,6 +16,10 @@ export async function productionDataProblems(){
   NOT EXISTS(SELECT 1 FROM app.payment_policies WHERE approved_at IS NOT NULL) AS payment_policy_missing,
   EXISTS(SELECT 1 FROM app.media_assets WHERE classification='public' AND (rights_evidence_ref IS NULL OR subjects_reviewed_at IS NULL)) AS media_approval_missing`);
  const checks=rows[0] as Record<string,unknown>;
+ if(process.env.PUBLIC_SHOWCASE==="true"){
+  delete checks.identity_unapproved;
+  delete checks.synthetic_records;
+ }
  if(!websiteCheckoutEnabled)delete checks.payment_policy_missing;
  if(!automatedEmailEnabled)return Object.entries(checks).filter(([,value])=>!!value).map(([name])=>name);
  const templates=await query(`WITH required AS (

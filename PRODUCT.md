@@ -23,7 +23,7 @@ All ten approved locales: en, de, pl, fr, ru, uk, es, ar, it, nl. Arabic is RTL;
 The owner confirmed Red Sea Horizons and supplied a navy/turquoise/sand brand board. Supplied underwater photographs are local reference material; their publication requires consent evidence. Apartment imagery is explicitly illustrative until real unit images are approved.
 
 ## Decisions still open
-Production accounts, policies, merchant methods, official contacts, schedules, prices, translations and media publication rights need the approvals recorded in docs/BLOCKERS.md.
+The owner approved the supplied media for publication and approved the current showcase prices and manual payment details. Production legal identity, policies, schedules and native translation review remain open as recorded in docs/BLOCKERS.md.
 
 ## Context provenance
 Captured from the complete approved production handoff and owner-confirmed brand. As the delegated UI implementer, I used the explicit brief in place of a repeated product interview; no new factual business claims were inferred.
