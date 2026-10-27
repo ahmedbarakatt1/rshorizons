@@ -54,12 +54,21 @@ test("invited reviewer chooses an accessible rating and public display name and 
  await expect(page.getByText("Your review will appear after moderation.")).toBeVisible();
 });
 
-test("a visitor can enter a secure review code directly on the reviews page",async({page})=>{
- await page.route("**/api/v1/reviews?**",route=>route.fulfill({json:{data:{items:[],summary:{total:0,average:null,ratings:{1:0,2:0,3:0,4:0,5:0}},filteredTotal:0,nextCursor:null}}}));
+test("every visitor can submit a review for moderation without a booking code",async({page})=>{
+ await page.route("**/api/v1/reviews**",async route=>{
+  if(route.request().method()==="POST"){
+   expect(route.request().postDataJSON()).toMatchObject({source:"public",name:"Open Reviewer",rating:5,text:"A public review awaiting moderation.",locale:"en",displayName:"first_name",consent:true});
+   await route.fulfill({status:201,json:{data:{id:review.id,state:"pending"}}});
+  }else await route.fulfill({json:{data:{items:[],summary:{total:0,average:null,ratings:{1:0,2:0,3:0,4:0,5:0}},filteredTotal:0,nextCursor:null}}});
+ });
  await page.goto("/en/reviews");
  await page.getByRole("link",{name:"Share your experience"}).click();
- await expect(page.getByLabel("Access token")).toBeVisible();
- await expect(page.getByRole("button",{name:"Open secure access"})).toBeVisible();
+ await page.getByLabel("Full name").fill("Open Reviewer");
+ await page.getByRole("radio",{name:"5 out of 5 stars",exact:true}).check();
+ await page.getByLabel("Your review",{exact:true}).fill("A public review awaiting moderation.");
+ await page.getByLabel("I have read the privacy notice").check();
+ await page.getByRole("button",{name:"Submit review"}).click();
+ await expect(page.getByRole("status").filter({hasText:"Thank you"})).toBeVisible();
 });
 
 test("@a11y reviews remain readable and accessible on mobile and Arabic RTL",async({page},info)=>{

@@ -4,8 +4,12 @@ import {staffPermission} from "@/modules/photography/access";
 import {MediaError} from "@/modules/photography/validation";
 import type {PublishedReview,ReviewPage} from "./types";
 const locale=z.enum(["en","de","pl","fr","ru","uk","es","ar","it","nl"]);
-export const reviewInputSchema=z.object({invitationId:z.uuid(),rating:z.number().int().min(1).max(5),text:z.string().trim().min(1).max(10000),locale,
-  displayName:z.enum(["first_name","initials","anonymous"]).default("initials")}).strict();
+const reviewFields={rating:z.number().int().min(1).max(5),text:z.string().trim().min(10).max(4000),locale,
+  displayName:z.enum(["first_name","initials","anonymous"]).default("initials")};
+export const reviewInputSchema=z.union([
+  z.object({source:z.literal("verified").default("verified"),invitationId:z.uuid(),...reviewFields}).strict(),
+  z.object({source:z.literal("public"),name:z.string().trim().min(2).max(150),consent:z.literal(true),website:z.string().max(200).optional(),...reviewFields}).strict()
+]);
 export function safeDisplayName(fullName:string,preference:"first_name"|"initials"|"anonymous"){
   if(preference==="anonymous")return "Guest";
   const parts=fullName.replace(/[<>]/g,"").trim().split(/\s+/).filter(Boolean);
@@ -13,6 +17,14 @@ export function safeDisplayName(fullName:string,preference:"first_name"|"initial
 }
 export async function submitReview(actor:ActorContext,input:unknown){
   const data=reviewInputSchema.parse(input);
+  if(data.source==="public"){
+    if(data.website)return {id:"accepted",state:"pending"};
+    return withTransaction({type:"system"},async tx=>{
+      const review=await tx.query(`INSERT INTO app.reviews(source,rating,original_text,original_locale,display_name_preference,public_display_name)
+        VALUES('public',$1,$2,$3,$4,$5) RETURNING id,moderation_state`,[data.rating,data.text,data.locale,data.displayName,safeDisplayName(data.name,data.displayName)]);
+      return {id:review.rows[0].id,state:review.rows[0].moderation_state};
+    });
+  }
   if(actor.type!=="guest"||!actor.sessionHash)throw new MediaError("NOT_FOUND",404);
   return withTransaction(actor,async tx=>{
     const result=await tx.query(`SELECT i.id,i.booking_item_id,b.primary_guest_id,g.full_name FROM app.review_invitations i
@@ -55,8 +67,8 @@ export async function replyToReview(actor:ActorContext,input:{reviewId:string;bo
 export async function listPublishedReviews(input:{serviceId?:string;cursor?:string}={}){
   if(input.serviceId)z.uuid().parse(input.serviceId);if(input.cursor)z.iso.datetime({offset:true}).parse(input.cursor);
   const result=await query(`SELECT r.id,r.rating,r.original_text text,r.original_locale locale,r.public_display_name display_name,r.submitted_at,
-    COALESCE((SELECT jsonb_agg(jsonb_build_object('body',reply.body,'publishedAt',reply.published_at)) FROM app.review_replies reply WHERE reply.review_id=r.id AND reply.published_at IS NOT NULL AND reply.withdrawn_at IS NULL),'[]'::jsonb) replies
-    FROM app.reviews r JOIN app.booking_items bi ON bi.id=r.booking_item_id JOIN app.quote_items qi ON qi.id=bi.quote_item_id LEFT JOIN app.service_variants v ON v.id=qi.variant_id
+    r.source='verified' verified,COALESCE((SELECT jsonb_agg(jsonb_build_object('body',reply.body,'publishedAt',reply.published_at)) FROM app.review_replies reply WHERE reply.review_id=r.id AND reply.published_at IS NOT NULL AND reply.withdrawn_at IS NULL),'[]'::jsonb) replies
+    FROM app.reviews r LEFT JOIN app.booking_items bi ON bi.id=r.booking_item_id LEFT JOIN app.quote_items qi ON qi.id=bi.quote_item_id LEFT JOIN app.service_variants v ON v.id=qi.variant_id
     WHERE r.moderation_state='published' AND ($1::uuid IS NULL OR v.service_id=$1) AND ($2::timestamptz IS NULL OR r.submitted_at<$2)
     ORDER BY r.submitted_at DESC LIMIT 50`,[input.serviceId??null,input.cursor??null]);
   return result.rows;
@@ -73,8 +85,8 @@ export async function listReviewPage(input:z.input<typeof reviewPageInputSchema>
  const result=await query<{items:PublishedReview[];total:number;average:number|null;ratings:Record<string,number>;filtered_total:number}>(`
   WITH published AS (
    SELECT r.* FROM app.reviews r
-   JOIN app.booking_items bi ON bi.id=r.booking_item_id
-   JOIN app.quote_items qi ON qi.id=bi.quote_item_id
+   LEFT JOIN app.booking_items bi ON bi.id=r.booking_item_id
+   LEFT JOIN app.quote_items qi ON qi.id=bi.quote_item_id
    LEFT JOIN app.service_variants v ON v.id=qi.variant_id
    WHERE r.moderation_state='published' AND ($1::uuid IS NULL OR v.service_id=$1)
   ), filtered AS (SELECT * FROM published WHERE $2::integer IS NULL OR rating=$2),
@@ -86,7 +98,7 @@ export async function listReviewPage(input:z.input<typeof reviewPageInputSchema>
    (SELECT jsonb_object_agg(star,(SELECT count(*)::integer FROM published WHERE rating=star)) FROM generate_series(1,5) star) ratings,
    (SELECT count(*)::integer FROM filtered) filtered_total,
    COALESCE((SELECT jsonb_agg(jsonb_build_object('id',r.id,'rating',r.rating,'text',r.original_text,'locale',r.original_locale,
-    'display_name',r.public_display_name,'submitted_at',r.submitted_at,'replies',
+    'display_name',r.public_display_name,'submitted_at',r.submitted_at,'verified',r.source='verified','replies',
     COALESCE((SELECT jsonb_agg(jsonb_build_object('body',reply.body,'publishedAt',reply.published_at) ORDER BY reply.published_at,reply.id)
      FROM app.review_replies reply WHERE reply.review_id=r.id AND reply.published_at IS NOT NULL AND reply.withdrawn_at IS NULL),'[]'::jsonb))
     ORDER BY r.submitted_at DESC,r.id DESC) FROM page r),'[]'::jsonb) items`,

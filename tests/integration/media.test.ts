@@ -103,3 +103,11 @@ it("review_completed_item_only",async()=>{
   expect(result.rating).toBe(1);
   expect((await db.query(`SELECT count(*)::int n FROM app.review_moderation_events WHERE review_id=$1`,[review.id])).rows[0].n).toBe(1);
 });
+it("public_review_is_pending_until_staff_moderation",async()=>{
+  const f=await fixture();
+  const review=await submitReview({type:"system"},{source:"public",name:"Open Reviewer",rating:4,text:"Public feedback awaiting staff review",locale:"en",displayName:"first_name",consent:true,website:""});
+  expect(review.state).toBe("pending");
+  expect((await db.query("SELECT source,moderation_state FROM app.reviews WHERE id=$1",[review.id])).rows[0]).toEqual({source:"public",moderation_state:"pending"});
+  await moderateReview(f.owner,{reviewId:review.id,expectedVersion:1,action:"publish",reason:"Relevant public feedback"});
+  expect((await db.query("SELECT moderation_state FROM app.reviews WHERE id=$1",[review.id])).rows[0].moderation_state).toBe("published");
+});

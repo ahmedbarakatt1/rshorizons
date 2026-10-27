@@ -11,7 +11,7 @@ import {catalogFiltersSchema} from "@/modules/catalog/contracts";
 import {bookingInputSchema,dateSchema,localeSchema,quoteInputSchema,uuidSchema} from "@/modules/bookings/contracts";
 import {bookingDetails,createBookingRequest,createQuote,submitBooking} from "@/modules/bookings/service";
 import {getGalleryManifest,issueDownloadGrant,servePrivateAsset,listPublicGalleries,servePublicDerivative} from "@/modules/photography/service";
-import {submitReview,listReviewPage,reviewPageInputSchema} from "@/modules/reviews/service";
+import {submitReview,listReviewPage,reviewPageInputSchema,reviewInputSchema} from "@/modules/reviews/service";
 import {submitContact,getSocialLinks} from "@/modules/content/contact";
 
 const dateRangeSchema=z.object({from:dateSchema,to:dateSchema}).refine(v=>v.to>=v.from);
@@ -146,7 +146,14 @@ export async function publicRoute(request:Request,parts:string[]):Promise<Respon
       const body=z.object({assetIds:z.array(uuidSchema).min(1).max(100),derivative:z.enum(["preview","web","video","original"])}).strict().parse(await readJson(request));
       return success(await issueDownloadGrant(actor,{...body,galleryId:id}));
     }
-    if(resource==="reviews")return success(await submitReview(await getGuest(request),await readJson(request)),201);
+    if(resource==="reviews"){
+      const input=reviewInputSchema.parse(await readJson(request));
+      if(input.source==="public"){
+        await rateLimit(request,"public-review",5);
+        return success(await submitReview({type:"system"},input),201);
+      }
+      return success(await submitReview(await getGuest(request),input),201);
+    }
     if(resource==="contact"){
       const input=await readJson(request);
       return success(await submitContact(input,{rateLimitKeyDigest:digestSecret(`contact:${process.env.VERCEL==="1"?request.headers.get("x-vercel-forwarded-for")??"unknown":"local"}`)}),202);
