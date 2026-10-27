@@ -45,7 +45,7 @@ export function WhatsAppBookingForm({locale,service,apartment}:{locale:string;se
    {!!service?.addons.length&&<fieldset><legend>{t("optionalExtras")}</legend>{service.addons.map(addon=><label key={addon.variantId} className="check-label"><input type="checkbox" name={`addon-${addon.variantId}`}/><span>{addon.title}</span></label>)}</fieldset>}
    <label>{t("paymentPreference")}<select name="payment"><option value="discuss">{t("discussWithTeam")}</option><option value="bank">{t("bankTransfer")}</option><option value="instapay">InstaPay</option><option value="wallet">{t("eWallet")}</option></select></label>
    <label>{t("bookingNotes")}<textarea name="notes" rows={3} maxLength={800}/></label>
-   <label>{t("customerService")}<select value={phone} onChange={event=>setPhone(event.target.value)} dir="ltr">{teamWhatsAppNumbers.map(number=><option key={number} value={number}>WhatsApp {number}</option>)}</select></label>
+   <label>{t("customerService")}<select value={phone} onChange={event=>setPhone(event.target.value)} dir="ltr">{teamWhatsAppNumbers.map(number=><option key={number} value={number}>{locale==="ar"?"واتساب":"WhatsApp"} {number}</option>)}</select></label>
    <p className="small">{t("whatsappShareNotice")} <Link href={`/${locale}/privacy`}>{t("privacy")}</Link></p>
    {error&&<p role="alert" className="form-error">{error}</p>}
    <button className="button" type="submit">{t("prepareBookingMessage")}</button>

@@ -1,15 +1,15 @@
 "use client";
 import {useState} from "react";
-import {useTranslations} from "next-intl";
+import {useLocale,useTranslations} from "next-intl";
 import {teamWhatsAppNumbers,whatsappLink} from "@/modules/content/whatsapp";
 import {api} from "./api";
 
 export function TeamWhatsAppLinks({reference,compact=false}:{reference?:string;compact?:boolean}){
-  const t=useTranslations();
+  const t=useTranslations(),locale=useLocale(),whatsappName=locale==="ar"?"واتساب":"WhatsApp";
   const draft=reference?t("whatsappBookingDraft",{reference}):t("whatsappDraft");
   return <section className={compact?"whatsapp-contacts compact":"whatsapp-contacts"} aria-label={t("whatsappTitle")}>
     {!compact&&<><h2>{t("whatsappTitle")}</h2><p className="small">{t("whatsappManual")}</p></>}
-    <div className="whatsapp-contact-links">{teamWhatsAppNumbers.map(phone=><a key={phone} href={whatsappLink(phone,draft)!} className={compact?"text-link":"button button-secondary"} target="_blank" rel="noopener noreferrer" referrerPolicy="no-referrer">WhatsApp <bdi>{phone}</bdi></a>)}</div>
+    <div className="whatsapp-contact-links">{teamWhatsAppNumbers.map(phone=><a key={phone} href={whatsappLink(phone,draft)!} className={compact?"text-link":"button button-secondary"} target="_blank" rel="noopener noreferrer" referrerPolicy="no-referrer">{whatsappName} <bdi>{phone}</bdi></a>)}</div>
   </section>;
 }
 

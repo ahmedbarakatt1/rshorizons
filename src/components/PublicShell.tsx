@@ -11,11 +11,13 @@ export function Mark() {return <svg viewBox="0 0 48 48" className="brand-mark" a
 export function Arrow() {return <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg>;}
 export function PublicShell({children,locale}:{children:React.ReactNode;locale:Locale}) {
  const t=useTranslations(); const pathname=usePathname();
+ const brandName=locale==="ar"?"ريد سي هورايزنز":"Red Sea Horizons";
+ const regionName=locale==="ar"?"مصر · البحر الأحمر":"Egypt · Red Sea";
  const links=[["experiences","experiences"],["destinations","destinations"],["apartments","apartments"],["photography","photography"],["reviews","reviews"]] as const;
  return <>
   <a tabIndex={0} className="skip-link" href="#main">{t("skipContent")}</a>
   <header className="site-header">
-   <Link href={`/${locale}`} className="wordmark" aria-label="Red Sea Horizons"><Mark/><span>RED SEA<br/><strong>HORIZONS</strong></span></Link>
+   <Link href={`/${locale}`} className="wordmark" aria-label={brandName}><Mark/><span>RED SEA<br/><strong>HORIZONS</strong></span></Link>
    <nav className="desktop-nav" aria-label={t("menu")}>{links.map(([path,label])=><Link key={path} href={`/${locale}/${path}`} aria-current={pathname.startsWith(`/${locale}/${path}`)?"page":undefined}>{t(label)}</Link>)}</nav>
    <div className="header-tools"><label className="locale-control"><span className="sr-only">{t("language")}</span><select aria-label={t("language")} value={locale} onChange={event=>{
     const target=event.target.value; document.cookie=`NEXT_LOCALE=${target}; path=/; max-age=31536000; SameSite=Lax`;window.location.assign(pathname.replace(/^\/[^/]+/,`/${target}`)+window.location.search);
@@ -26,7 +28,7 @@ export function PublicShell({children,locale}:{children:React.ReactNode;locale:L
   <footer className="site-footer">
    <ContactChannels compact/>
    <div className="footer-top"><div><Mark/><p>{t("manualTitle")}</p><Link href={`/${locale}/contact`} className="text-link">{t("contact")} <Arrow/></Link></div><nav>{["experiences","destinations","apartments","gallery","reviews","about"].map(path=><Link key={path} href={`/${locale}/${path}`}>{t(path)}</Link>)}</nav><nav>{["privacy","terms","cancellation-policy","payment-options"].map((path,i)=><Link key={path} href={`/${locale}/${path}`}>{t(["privacy","terms","cancellation","paymentMethodsTitle"][i])}</Link>)}</nav></div>
-   <p className="footer-name">Red Sea Horizons</p><div className="footer-bottom"><span>© {new Date().getFullYear()} Red Sea Horizons</span><span>Egypt · Red Sea</span><Link href="/admin">{t("staff")}</Link></div>
+   <p className="footer-name">{brandName}</p><div className="footer-bottom"><span>© {new Date().getFullYear()} {brandName}</span><span>{regionName}</span><Link href="/admin">{t("staff")}</Link></div>
   </footer>
  </>;
 }
