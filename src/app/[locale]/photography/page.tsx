@@ -8,7 +8,7 @@ import {locales} from "@/i18n/locales";
 import type {Metadata} from "next";
 export async function generateMetadata({params}:{params:Promise<{locale:string}>}):Promise<Metadata>{
  const {locale}=await params;const t=await getTranslations({locale});const base=process.env.APP_BASE_URL;
- return {title:`${t("photography")} · Red Sea Horizons`,description:t("photoIntro"),...(base?{alternates:{canonical:`${base}/${locale}/photography`,languages:Object.fromEntries(locales.map(code=>[code,`${base}/${code}/photography`]))}}:{})};
+ return {title:`${t("photography")} · ${locale==="ar"?"ريد سي هورايزنز":"Red Sea Horizons"}`,description:t("photoIntro"),...(base?{alternates:{canonical:`${base}/${locale}/photography`,languages:Object.fromEntries(locales.map(code=>[code,`${base}/${code}/photography`]))}}:{})};
 }
 export default async function PhotographyPage({params}:{params:Promise<{locale:string}>}) {
  const {locale}=await params;setRequestLocale(locale);const t=await getTranslations();const data=await getCatalog(locale);

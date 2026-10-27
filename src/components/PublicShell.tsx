@@ -17,7 +17,7 @@ export function PublicShell({children,locale}:{children:React.ReactNode;locale:L
  return <>
   <a tabIndex={0} className="skip-link" href="#main">{t("skipContent")}</a>
   <header className="site-header">
-   <Link href={`/${locale}`} className="wordmark" aria-label={brandName}><Mark/><span>RED SEA<br/><strong>HORIZONS</strong></span></Link>
+   <Link href={`/${locale}`} className="wordmark" aria-label={brandName}><Mark/>{locale==="ar"?<span><strong>ريد سي</strong><br/>هورايزنز</span>:<span>RED SEA<br/><strong>HORIZONS</strong></span>}</Link>
    <nav className="desktop-nav" aria-label={t("menu")}>{links.map(([path,label])=><Link key={path} href={`/${locale}/${path}`} aria-current={pathname.startsWith(`/${locale}/${path}`)?"page":undefined}>{t(label)}</Link>)}</nav>
    <div className="header-tools"><label className="locale-control"><span className="sr-only">{t("language")}</span><select aria-label={t("language")} value={locale} onChange={event=>{
     const target=event.target.value; document.cookie=`NEXT_LOCALE=${target}; path=/; max-age=31536000; SameSite=Lax`;window.location.assign(pathname.replace(/^\/[^/]+/,`/${target}`)+window.location.search);
