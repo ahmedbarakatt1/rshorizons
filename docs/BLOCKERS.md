@@ -29,7 +29,7 @@ Current service setup check (2026-10-25): official Supabase and Vercel CLI acces
 | E09 | Agency/legal owner | Approve legal identity, contact/social URLs, terms/privacy/cancellation/safety content | Agency settings and approved policy versions; brand name alone is not legal identity approval |
 | E10 | Content owner | Confirm media rights and subject/guardian publication consent | Explicit consent records and approved public derivatives; supplied originals are not automatically public |
 | E11 | Language reviewers | Approve all ten public/booking-critical translations | Translation approval records; local translation coverage is not human approval |
-| E12 | Agency owner | Enroll the administrator's authenticator on first hosted sign-in after deployment | Hosted identity/password verified, active all-scope owner and MFA requirement persisted. Verification session signed out. MFA enrollment and hosted dashboard browser verification remain outstanding; other staff addresses/scopes still need designation |
+| E12 | Agency owner | Designate any additional staff addresses and least-privilege scopes | Initial hosted owner identity/password and active all-scope authority are configured. The owner removed the separate authenticator-code requirement on 2026-10-27. Additional staff accounts remain owner-designated. |
 | E13 | Operations owner | Designate the Mux account/environment and monitoring destination | Implemented signed private Mux playback/retention; actual account/billing approval, processing verification, alerts and cron ownership remain required |
 | E14 | Agency owner | Approve UAT, recovery/retention objectives and designated live-test transaction amount/contacts | M6 release gate and M7 authorized production journey |
 

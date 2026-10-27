@@ -1,5 +1,9 @@
 # Implementation decisions
 
+## Password-only staff sign-in — 2026-10-27
+
+The owner explicitly removed the separate staff authenticator-code step. Hosted administrators sign in with their private Supabase email and password; the application continues to enforce active account status, current roles and scopes, session expiry, secure cookies, revocation and rate limits. Existing and future staff profiles no longer require MFA. Optional Supabase MFA endpoints remain available but are not part of the login flow.
+
 ## Public catalog presentation — 2026-10-27
 
 At the owner's request, the public `Local demonstration · Sample inventory and prices · Not available for sale` banner is removed. This presentation change does not enable online booking, automated messaging or payment capture: requests still end in an editable WhatsApp draft and require customer-service confirmation. Luxor is added as a destination in all supported locales without inventing a priced Luxor service. Generated catalog artwork is replaced by locally hosted, optimized derivatives of licensed web photographs; attribution and license records are in `docs/design/web-media.md`. Instagram and TikTok links now include accessible vector icons and visible text labels.

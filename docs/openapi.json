@@ -22153,7 +22153,7 @@
     "/api/v1/admin/auth/invite-accept": {
       "post": {
         "operationId": "post__admin_auth_invite_accept",
-        "summary": "Accept one-use provider invitation and set a strong password before MFA",
+        "summary": "Accept one-use provider invitation and set a strong password",
         "description": "Validated server operation. All money, inventory, approval and authorization rules are enforced against the current database state.",
         "tags": [
           "admin"
@@ -24334,56 +24334,132 @@
       },
       "ReviewInput": {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "type": "object",
-        "properties": {
-          "invitationId": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+        "anyOf": [
+          {
+            "type": "object",
+            "properties": {
+              "source": {
+                "default": "verified",
+                "type": "string",
+                "const": "verified"
+              },
+              "invitationId": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "rating": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 5
+              },
+              "text": {
+                "type": "string",
+                "minLength": 10,
+                "maxLength": 4000
+              },
+              "locale": {
+                "type": "string",
+                "enum": [
+                  "en",
+                  "de",
+                  "pl",
+                  "fr",
+                  "ru",
+                  "uk",
+                  "es",
+                  "ar",
+                  "it",
+                  "nl"
+                ]
+              },
+              "displayName": {
+                "default": "initials",
+                "type": "string",
+                "enum": [
+                  "first_name",
+                  "initials",
+                  "anonymous"
+                ]
+              }
+            },
+            "required": [
+              "source",
+              "invitationId",
+              "rating",
+              "text",
+              "locale",
+              "displayName"
+            ],
+            "additionalProperties": false
           },
-          "rating": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 5
-          },
-          "text": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 10000
-          },
-          "locale": {
-            "type": "string",
-            "enum": [
-              "en",
-              "de",
-              "pl",
-              "fr",
-              "ru",
-              "uk",
-              "es",
-              "ar",
-              "it",
-              "nl"
-            ]
-          },
-          "displayName": {
-            "default": "initials",
-            "type": "string",
-            "enum": [
-              "first_name",
-              "initials",
-              "anonymous"
-            ]
+          {
+            "type": "object",
+            "properties": {
+              "source": {
+                "type": "string",
+                "const": "public"
+              },
+              "name": {
+                "type": "string",
+                "minLength": 2,
+                "maxLength": 150
+              },
+              "consent": {
+                "type": "boolean",
+                "const": true
+              },
+              "website": {
+                "type": "string",
+                "maxLength": 200
+              },
+              "rating": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 5
+              },
+              "text": {
+                "type": "string",
+                "minLength": 10,
+                "maxLength": 4000
+              },
+              "locale": {
+                "type": "string",
+                "enum": [
+                  "en",
+                  "de",
+                  "pl",
+                  "fr",
+                  "ru",
+                  "uk",
+                  "es",
+                  "ar",
+                  "it",
+                  "nl"
+                ]
+              },
+              "displayName": {
+                "default": "initials",
+                "type": "string",
+                "enum": [
+                  "first_name",
+                  "initials",
+                  "anonymous"
+                ]
+              }
+            },
+            "required": [
+              "source",
+              "name",
+              "consent",
+              "rating",
+              "text",
+              "locale",
+              "displayName"
+            ],
+            "additionalProperties": false
           }
-        },
-        "required": [
-          "invitationId",
-          "rating",
-          "text",
-          "locale",
-          "displayName"
-        ],
-        "additionalProperties": false
+        ]
       },
       "ReviewModeration": {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -26316,7 +26392,7 @@
         "type": "apiKey",
         "in": "cookie",
         "name": "rsh_staff_access",
-        "description": "MFA aal2 required for operations; MFA enrollment routes use an active pre-MFA staff session. Local test token is a separate development-only cookie."
+        "description": "Password-authenticated staff session with current active-account, role and scope checks. Optional Supabase MFA routes remain available but are not required for login."
       },
       "cronAuth": {
         "type": "http",

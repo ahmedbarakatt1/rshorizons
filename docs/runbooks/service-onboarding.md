@@ -8,7 +8,7 @@ This is the working sequence for the owner's Vercel deployment. Use the verified
 
 | Service | Actual result | Next owner input |
 |---|---|---|
-| Supabase | Official CLI authenticated; owner designated production. 25 migrations/118 tables, required reference data, restricted login, verified TLS, invite-only Auth and administrator password are verified | Separate staging, authenticator enrollment,64 MiB storage capacity and hosted recovery |
+| Supabase | Official CLI authenticated; owner designated production. Migrations, required reference data, restricted login, verified TLS, invite-only Auth and administrator password are verified | Separate staging, 64 MiB storage capacity and hosted recovery |
 | Vercel | Official CLI authenticated to `ahmedbarakatt1s-projects/rshorizons`; correct GitHub repository and `rshorizons.vercel.app` verified; Node 22/build gate/core runtime variables configured | Hobby plan cannot satisfy commercial minute-cron deployment; remaining provider inputs and approvals still required |
 | WhatsApp | Owner replaced OpenWA with manual links to two designated numbers and scoped staff-to-guest drafts; Vercel selects links | Hosted UAT verifies destinations; no host, QR, tunnel or gateway credential needed |
 | Resend | Application adapter prepared; no account/sender/key/callback configured | Designated account and owner-controlled sending domain |
@@ -19,7 +19,7 @@ Vercel's automatic preview and production attempts both ended in ERROR: Hobby pe
 
 Hosted boundary checks: verified CA/hostname connection as `tourism_app`; wrong CA and wrong hostname rejected; SSL enforcement enabled and `pg_stat_ssl` true. A temporary private storage probe uploaded/downloaded correctly, rejected anonymous/public reads and was removed. The latest security advisor reports one Auth warning: leaked-password protection is disabled. The earlier extension warning is resolved. The global64 MiB storage update failed with HTTP 402 and explicitly requires a paid plan; the private bucket uses the actual50 MiB ceiling until resolved.
 
-Administrator Auth creation used the server Admin API with protected stdin. Staff authority was installed transactionally through the designated project's official CLI query, with the same profile/owner/all-scope/audit checks as `scripts/provision-admin.ts`; no operator database password was exported. The real password sign-in returned `aal1`, and the verification session was signed out. MFA enrollment is still an owner action. Keep `[auth].enable_signup=false` while `[auth.email].enable_signup=true`: the latter maps to the email provider switch and disabling it also disables password sign-in.
+Administrator Auth creation used the server Admin API with protected stdin. Staff authority was installed transactionally through the designated project's official CLI query, with the same profile/owner/all-scope/audit checks as `scripts/provision-admin.ts`; no operator database password was exported. The real password sign-in returned `aal1`, and the verification session was signed out. Password-only access is the current owner-selected policy. Keep `[auth].enable_signup=false` while `[auth.email].enable_signup=true`: the latter maps to the email provider switch and disabling it also disables password sign-in.
 
 The owner may use Gmail to register for Resend and receive tests. Resend's default sender can send only to the account email; customer delivery requires an owned verified sender domain. No Gmail SMTP adapter or unapproved sender was substituted. [Resend testing restriction](https://resend.com/docs/knowledge-base/403-error-resend-dev-domain).
 
@@ -27,7 +27,7 @@ The owner may use Gmail to register for Resend and receive tests. Resend's defau
 
 The production Supabase project and Vercel team/project are already designated. Remaining non-secret inputs include the separate staging destination, eligible hosting plan, domain and Resend account choice. A stable designated Vercel staging hostname can be used before final DNS; email still requires a verified sending domain. Never infer domain ownership from the administrator email. OpenWA hosting is retired and must not be requested again.
 
-Use provider sign-in and secret settings for keys/passwords. Keep staging and production separate. Hosting purchases, paid plan upgrades, authenticator enrollment are owner steps; no purchase is authorized by this checklist.
+Use provider sign-in and secret settings for keys/passwords. Keep staging and production separate. Hosting purchases and paid plan upgrades are owner steps; no purchase is authorized by this checklist.
 
 ## 2. Supabase and administrator
 
@@ -38,7 +38,7 @@ After the project is designated and accessible:
 3. Obtain actual connection endpoints from **Connect** in that project. Use the transaction pooler for Vercel runtime and direct/session connection for migrations, with verified TLS. The pooled runtime username is the restricted role plus project reference, not the dashboard's default `postgres` username. Do not invent the pooler hostname. [Supabase connections](https://supabase.com/docs/guides/database/connecting-to-postgres).
 4. Put `DATABASE_URL`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` and `SUPABASE_SECRET_KEY` in the correct Vercel environment. Keep `MIGRATION_DATABASE_URL` and management tokens only in the operator secret store. Keep `app` outside exposed Data API schemas.
 5. Disable public sign-up/anonymous sign-in, set the exact Auth URL/redirect allowlist and enable TOTP MFA. Create the private `tourism-private` bucket as specified in [Vercel setup](vercel-owner-setup.md).
-6. Provision the designated administrator through [the protected stdin command](staff.md#provisioning-and-password-rotation), bound to the exact project reference. Sign in at `/admin` and complete authenticator enrollment. Verify price changes, media controls and sign-out against hosted data. The existing local account is not migrated automatically.
+6. Provision the designated administrator through [the protected stdin command](staff.md#provisioning-and-password-rotation), bound to the exact project reference. Sign in at `/admin` with email and password, then verify price changes, media controls and sign-out against hosted data. The existing local account is not migrated automatically.
 
 ## 3. Email and WhatsApp
 
