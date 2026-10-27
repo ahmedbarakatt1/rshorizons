@@ -41,7 +41,7 @@ test("invited reviewer chooses an accessible rating and public display name and 
  await page.route("**/api/v1/reviews**",async route=>{
   if(route.request().method()==="POST"){
    expect(route.request().postDataJSON()).toMatchObject({rating:2,displayName:"anonymous",text:"Synthetic invitation review for browser verification.",invitationId:review.id,locale:"en"});
-   await route.fulfill({status:201,json:{data:{id:review.id,state:"pending"}}});
+   await route.fulfill({status:201,json:{data:{id:review.id,state:"published"}}});
   }else await route.fulfill({json:{data:{items:[],summary:{total:0,average:null,ratings:{1:0,2:0,3:0,4:0,5:0}},filteredTotal:0,nextCursor:null}}});
  });
  await page.goto(`/en/reviews?invitation=${review.id}`);
@@ -51,21 +51,21 @@ test("invited reviewer chooses an accessible rating and public display name and 
  await page.getByRole("button",{name:"Submit review"}).click();
  await expect(page.getByRole("status").filter({hasText:"Thank you"})).toBeVisible();
  await expect(page.getByRole("button",{name:"Submit review"})).toHaveCount(0);
- await expect(page.getByText("Your review will appear after moderation.")).toBeVisible();
+ await expect(page.getByText("Your review is now published.")).toBeVisible();
 });
 
-test("every visitor can submit a review for moderation without a booking code",async({page})=>{
+test("every visitor can publish a review immediately without a booking code",async({page})=>{
  await page.route("**/api/v1/reviews**",async route=>{
   if(route.request().method()==="POST"){
-   expect(route.request().postDataJSON()).toMatchObject({source:"public",name:"Open Reviewer",rating:5,text:"A public review awaiting moderation.",locale:"en",displayName:"first_name",consent:true});
-   await route.fulfill({status:201,json:{data:{id:review.id,state:"pending"}}});
+   expect(route.request().postDataJSON()).toMatchObject({source:"public",name:"Open Reviewer",rating:5,text:"A public review visible immediately.",locale:"en",displayName:"first_name",consent:true});
+   await route.fulfill({status:201,json:{data:{id:review.id,state:"published"}}});
   }else await route.fulfill({json:{data:{items:[],summary:{total:0,average:null,ratings:{1:0,2:0,3:0,4:0,5:0}},filteredTotal:0,nextCursor:null}}});
  });
  await page.goto("/en/reviews");
  await page.getByRole("link",{name:"Share your experience"}).click();
  await page.getByLabel("Full name").fill("Open Reviewer");
  await page.getByRole("radio",{name:"5 out of 5 stars",exact:true}).check();
- await page.getByLabel("Your review",{exact:true}).fill("A public review awaiting moderation.");
+ await page.getByLabel("Your review",{exact:true}).fill("A public review visible immediately.");
  await page.getByLabel("I have read the privacy notice").check();
  await page.getByRole("button",{name:"Submit review"}).click();
  await expect(page.getByRole("status").filter({hasText:"Thank you"})).toBeVisible();

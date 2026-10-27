@@ -96,18 +96,19 @@ it("review_completed_item_only",async()=>{
   await expect(submitReview(guest,input)).rejects.toThrow("REVIEW_NOT_ELIGIBLE");
   await db.query(`UPDATE app.booking_items SET fulfilment_state='fulfilled' WHERE id=$1`,[item]);
   const review=await submitReview(guest,input);
-  expect(review.state).toBe("pending");
+  expect(review.state).toBe("published");
   await expect(submitReview(guest,input)).rejects.toThrow("REVIEW_NOT_ELIGIBLE");
-  await moderateReview(f.owner,{reviewId:review.id,expectedVersion:1,action:"publish",reason:"Relevant verified feedback"});
-  const result=(await db.query(`SELECT rating,original_text FROM app.reviews WHERE id=$1`,[review.id])).rows[0];
+  const result=(await db.query(`SELECT rating,original_text,published_at FROM app.reviews WHERE id=$1`,[review.id])).rows[0];
   expect(result.rating).toBe(1);
-  expect((await db.query(`SELECT count(*)::int n FROM app.review_moderation_events WHERE review_id=$1`,[review.id])).rows[0].n).toBe(1);
+  expect(result.published_at).toBeTruthy();
 });
-it("public_review_is_pending_until_staff_moderation",async()=>{
+it("public_review_publishes_immediately_and_staff_can_remove_or_restore_it",async()=>{
   const f=await fixture();
-  const review=await submitReview({type:"system"},{source:"public",name:"Open Reviewer",rating:4,text:"Public feedback awaiting staff review",locale:"en",displayName:"first_name",consent:true,website:""});
-  expect(review.state).toBe("pending");
-  expect((await db.query("SELECT source,moderation_state FROM app.reviews WHERE id=$1",[review.id])).rows[0]).toEqual({source:"public",moderation_state:"pending"});
-  await moderateReview(f.owner,{reviewId:review.id,expectedVersion:1,action:"publish",reason:"Relevant public feedback"});
+  const review=await submitReview({type:"system"},{source:"public",name:"Open Reviewer",rating:4,text:"Public feedback visible immediately",locale:"en",displayName:"first_name",consent:true,website:""});
+  expect(review.state).toBe("published");
+  expect((await db.query("SELECT source,moderation_state,published_at IS NOT NULL published FROM app.reviews WHERE id=$1",[review.id])).rows[0]).toEqual({source:"public",moderation_state:"published",published:true});
+  await moderateReview(f.owner,{reviewId:review.id,expectedVersion:1,action:"withdraw",reason:"Selected by administrator for removal"});
+  expect((await db.query("SELECT moderation_state FROM app.reviews WHERE id=$1",[review.id])).rows[0].moderation_state).toBe("withdrawn");
+  await moderateReview(f.owner,{reviewId:review.id,expectedVersion:2,action:"restore",reason:"Administrator restored the review"});
   expect((await db.query("SELECT moderation_state FROM app.reviews WHERE id=$1",[review.id])).rows[0].moderation_state).toBe("published");
 });

@@ -51,7 +51,7 @@ export function Reviews({locale}:{locale:string}){
   const data=new FormData(event.currentTarget);
   try{
    await api("/reviews",invitation?{source:"verified",invitationId:invitation,rating:chosenRating,text:data.get("text"),locale,displayName:data.get("displayName")}:{source:"public",name:data.get("name"),rating:chosenRating,text:data.get("text"),locale,displayName:data.get("displayName"),consent:data.get("consent")==="on",website:data.get("website")},undefined,crypto.randomUUID());
-   setSubmitted(true);
+   setSubmitted(true);setReload(value=>value+1);
   }catch(error){
    setFormError(error instanceof ApiError&&[401,403,404,409].includes(error.status)?"review_accessError":"review_submitError");
   }finally{setBusy(false);}

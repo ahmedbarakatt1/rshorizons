@@ -1,5 +1,9 @@
 # Implementation decisions
 
+## Immediate guest reviews with administrator removal — 2026-10-28
+
+The owner removed the review-approval queue. Both open public reviews and verified completed-booking reviews publish immediately after a valid submission. Administrators retain a reversible Withdraw/Restore control for selected reviews; original rating and text remain immutable, and withdrawn reviews disappear from public listings without deleting the audit record. Existing pending reviews are published by migration `20261028013000_immediate_review_publication.sql`.
+
 ## Password-only staff sign-in — 2026-10-27
 
 The owner explicitly removed the separate staff authenticator-code step. Hosted administrators sign in with their private Supabase email and password; the application continues to enforce active account status, current roles and scopes, session expiry, secure cookies, revocation and rate limits. Existing and future staff profiles no longer require MFA. Optional Supabase MFA endpoints remain available but are not part of the login flow.

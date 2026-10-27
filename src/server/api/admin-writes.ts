@@ -165,7 +165,7 @@ export async function adminWrites(request:Request,parts:string[]) {
     return success(await publishGallery(actor,{galleryId:uuidSchema.parse(id),...body}));
   }
   if(resource==="reviews"&&id) {
-    const actor=await getStaff(request,"reviews.moderate"),body=z.object({expectedVersion:version,action:z.enum(["publish","reject","withdraw","restore"]),reason:text}).strict();
+    const actor=await getStaff(request,"reviews.moderate"),body=z.object({expectedVersion:version,action:z.enum(["withdraw","restore"]),reason:text}).strict();
     if(action==="moderate")return success(await moderateReview(actor,{...body.parse(await readJson(request)),reviewId:uuidSchema.parse(id)}));
     if(action==="replies"){const input=z.object({body:text}).strict().parse(await readJson(request));return success(await replyToReview(actor,{reviewId:uuidSchema.parse(id),body:input.body}),201);}
   }

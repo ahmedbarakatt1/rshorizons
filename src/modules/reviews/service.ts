@@ -18,7 +18,7 @@ export function safeDisplayName(fullName:string,preference:"first_name"|"initial
 export async function submitReview(actor:ActorContext,input:unknown){
   const data=reviewInputSchema.parse(input);
   if(data.source==="public"){
-    if(data.website)return {id:"accepted",state:"pending"};
+    if(data.website)return {id:"accepted",state:"published"};
     return withTransaction({type:"system"},async tx=>{
       const review=await tx.query(`INSERT INTO app.reviews(source,rating,original_text,original_locale,display_name_preference,public_display_name)
         VALUES('public',$1,$2,$3,$4,$5) RETURNING id,moderation_state`,[data.rating,data.text,data.locale,data.displayName,safeDisplayName(data.name,data.displayName)]);
@@ -40,14 +40,14 @@ export async function submitReview(actor:ActorContext,input:unknown){
     return {id:review.rows[0].id,state:review.rows[0].moderation_state};
   });
 }
-export const moderationInputSchema=z.object({reviewId:z.uuid(),expectedVersion:z.number().int().positive(),action:z.enum(["publish","reject","withdraw","restore"]),reason:z.string().trim().min(1).max(2000)}).strict();
+export const moderationInputSchema=z.object({reviewId:z.uuid(),expectedVersion:z.number().int().positive(),action:z.enum(["withdraw","restore"]),reason:z.string().trim().min(1).max(2000)}).strict();
 export async function moderateReview(actor:ActorContext,input:unknown){
   const data=moderationInputSchema.parse(input);
   return withTransaction(actor,async tx=>{
     const staff=await staffPermission(tx,actor,"reviews.moderate");
     // V1 moderation is agency-wide, so require all-scope instead of silently widening a destination grant.
     if(!staff.owner){const scope=await tx.query(`SELECT 1 FROM app.staff_scopes WHERE staff_id=$1 AND scope_type='all'`,[actor.id]);if(!scope.rowCount)throw new MediaError("NOT_FOUND",404);}
-    const state={publish:"published",reject:"rejected",withdraw:"withdrawn",restore:"published"}[data.action];
+    const state=data.action==="restore"?"published":"withdrawn";
     const result=await tx.query(`UPDATE app.reviews SET moderation_state=$3,published_at=CASE WHEN $3='published' THEN now() ELSE published_at END,version=version+1,updated_at=now() WHERE id=$1 AND version=$2 RETURNING id,version,moderation_state`,[data.reviewId,data.expectedVersion,state]);
     if(!result.rowCount)throw new MediaError("VERSION_CONFLICT",409);
     await tx.query(`INSERT INTO app.review_moderation_events(review_id,actor_id,action,reason) VALUES($1,$2,$3,$4)`,[data.reviewId,actor.id,data.action,data.reason]);
