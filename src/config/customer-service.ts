@@ -7,6 +7,7 @@ export const paymentInstructions: {bankName:string;accountName:string;accountNum
   bankName:"",accountName:"",accountNumber:"",iban:"",instapay:"abdohassan8123@instapay",instapayUrl:"https://ipn.eg/S/abdohassan8123/instapay/8Yhxaj",walletNumber:"01201338200"
 };
 export const socialPages: {platform:string;url:string}[] = [
+  {platform:"Facebook",url:"https://www.facebook.com/share/1CFka6exsG/"},
   {platform:"Instagram",url:"https://www.instagram.com/horizonsrs2026/"},
   {platform:"TikTok",url:"https://www.tiktok.com/@red.sea.horizons"}
 ];

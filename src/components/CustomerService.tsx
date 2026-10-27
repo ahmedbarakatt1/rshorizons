@@ -8,6 +8,7 @@ import {api} from "./api";
 
 function SocialIcon({platform}:{platform:string}){
  const common={width:20,height:20,viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:1.8,strokeLinecap:"round" as const,strokeLinejoin:"round" as const,"aria-hidden":true};
+ if(platform.toLowerCase()==="facebook")return <svg {...common}><path d="M14 21v-8h3l.5-3H14V8.2c0-.9.4-1.7 1.8-1.7H18V3.8c-.7-.1-1.7-.3-2.9-.3-2.8 0-4.6 1.7-4.6 4.8V10H8v3h2.5v8"/></svg>;
  if(platform.toLowerCase()==="instagram")return <svg {...common}><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.4" cy="6.6" r=".8" fill="currentColor" stroke="none"/></svg>;
  if(platform.toLowerCase()==="tiktok")return <svg {...common}><path d="M15 4v10.2a4.2 4.2 0 1 1-3-4V7h3c1.1 1.8 2.8 2.8 5 3v3c-2-.1-3.7-.8-5-2"/></svg>;
  return <svg {...common}><circle cx="12" cy="12" r="9"/><path d="M8 12h8m-4-4v8"/></svg>;
@@ -24,7 +25,7 @@ export function PaymentMethods(){
 }
 export function ContactChannels({compact=false}:{compact?:boolean}){
  const t=useTranslations();const [social,setSocial]=useState(socialPages);
- useEffect(()=>{let active=true;api<{items:{platform:string;url:string}[]}>("/social-links").then(result=>{if(active)setSocial([...socialPages,...result.items.filter(item=>!socialPages.some(link=>link.platform===item.platform))]);}).catch(()=>{});return()=>{active=false;};},[]);
+ useEffect(()=>{let active=true;api<{items:{platform:string;url:string}[]}>("/social-links").then(result=>{if(active)setSocial([...socialPages,...result.items.filter(item=>!socialPages.some(link=>link.platform.toLowerCase()===item.platform.toLowerCase()))]);}).catch(()=>{});return()=>{active=false;};},[]);
  return <section className={compact?"contact-channels compact":"contact-channels"} aria-label={t("contact")}>
   {!compact&&<><h2>{t("customerService")}</h2><p>{t("contactDirect")}</p></>}
   <TeamWhatsAppLinks compact={compact}/>

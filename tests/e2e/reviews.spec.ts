@@ -54,6 +54,14 @@ test("invited reviewer chooses an accessible rating and public display name and 
  await expect(page.getByText("Your review will appear after moderation.")).toBeVisible();
 });
 
+test("a visitor can enter a secure review code directly on the reviews page",async({page})=>{
+ await page.route("**/api/v1/reviews?**",route=>route.fulfill({json:{data:{items:[],summary:{total:0,average:null,ratings:{1:0,2:0,3:0,4:0,5:0}},filteredTotal:0,nextCursor:null}}}));
+ await page.goto("/en/reviews");
+ await page.getByRole("link",{name:"Share your experience"}).click();
+ await expect(page.getByLabel("Access token")).toBeVisible();
+ await expect(page.getByRole("button",{name:"Open secure access"})).toBeVisible();
+});
+
 test("@a11y reviews remain readable and accessible on mobile and Arabic RTL",async({page},info)=>{
  await page.route("**/api/v1/reviews?**",route=>route.fulfill({json:{data:{items:[review],summary:{total:1,average:2,ratings:{1:0,2:1,3:0,4:0,5:0}},filteredTotal:1,nextCursor:null}}}));
  await page.setViewportSize({width:390,height:844});

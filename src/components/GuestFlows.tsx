@@ -15,7 +15,7 @@ import {ContactChannels} from "./CustomerService";
 
 
 
-export function GuestAccess({locale}:{locale:string;reference?:string}) {
+export function GuestAccess({locale,inline=false}:{locale:string;reference?:string;inline?:boolean}) {
 
  const t=useTranslations();const [busy,setBusy]=useState(false);const [message,setMessage]=useState("");const [token,setToken]=useState("");
 
@@ -24,7 +24,9 @@ export function GuestAccess({locale}:{locale:string;reference?:string}) {
 
  async function redeem(event:React.FormEvent<HTMLFormElement>) {event.preventDefault();setBusy(true);setMessage("");try{const result=await api<{reference?:string;redirectTo?:string;purpose?:string;galleryId?:string;invitationId?:string}>("/guest-access/redeem",{token});history.replaceState(null,"",`/${locale}/guest-access`);setToken("");window.location.assign(result.purpose==="gallery"&&result.galleryId?`/${locale}/my-gallery/${result.galleryId}`:result.purpose==="review"&&result.invitationId?`/${locale}/reviews?invitation=${result.invitationId}`:result.reference?`/${locale}/booking/${result.reference}`:`/${locale}/guest-access`);}catch{setMessage(t("error"));}finally{setBusy(false);}}
 
- return <div className="access-columns"><div><ContactChannels/></div><div><h2>{t("redeem")}</h2><form className="form-stack" onSubmit={redeem}><label>{t("token")}<input name="token" type="password" value={token} onChange={event=>setToken(event.target.value)} required autoComplete="off" dir="ltr"/></label><button className="button button-secondary" disabled={busy}>{t("redeem")}</button></form></div>{message&&<p role="status" className="form-notice">{message}</p>}</div>;
+ const form=<form className="form-stack review-access-form" onSubmit={redeem}><label>{t("token")}<input name="token" type="password" value={token} onChange={event=>setToken(event.target.value)} required autoComplete="off" dir="ltr"/></label><button className="button button-secondary" disabled={busy}>{busy?t("loading"):t("redeem")}</button>{message&&<p role="alert" className="form-error">{message}</p>}</form>;
+ if(inline)return form;
+ return <div className="access-columns"><div><ContactChannels/></div><div><h2>{t("redeem")}</h2>{form}</div></div>;
 
 }
 

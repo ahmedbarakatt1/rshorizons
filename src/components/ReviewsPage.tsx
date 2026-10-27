@@ -78,14 +78,14 @@ export function Reviews({locale}:{locale:string}){
    </section>
   </div>
   <section className="review-share" id="share-review" aria-labelledby="review-share-title"><div><h2 id="review-share-title">{t("review_write")}</h2><p>{t("review_invitationIntro")}</p><p className="review-privacy">{t("review_privacy")}</p><Link className="text-link" href={`/${locale}/contact`}>{t("review_contact")}</Link></div><div>
-   {accessNeeded?<GuestAccess locale={locale}/>:submitted?<div className="review-success" role="status"><h3>{t("review_thanks")}</h3><p>{t("review_submitted")}</p></div>:invitation?<form className="form-stack review-submit" onSubmit={submit}>
+   {accessNeeded?<GuestAccess locale={locale} inline/>:submitted?<div className="review-success" role="status"><h3>{t("review_thanks")}</h3><p>{t("review_submitted")}</p></div>:invitation?<form className="form-stack review-submit" onSubmit={submit}>
     <fieldset className="review-rating"><legend>{t("review_yourRating")}</legend><div>{[1,2,3,4,5].map(value=><label key={value} className={value<=chosenRating?"is-selected":""}><input type="radio" name="rating" value={value} checked={chosenRating===value} onChange={()=>setChosenRating(value)} required aria-label={t("review_stars",{count:value})}/><Star filled={value<=chosenRating}/><span aria-hidden="true">{number(value)}</span></label>)}</div></fieldset>
     <label htmlFor="review-body">{t("review_yourReview")}<textarea id="review-body" name="text" minLength={10} maxLength={4000} required rows={6} aria-describedby="review-immutable"/></label>
     <label htmlFor="review-display-name">{t("review_displayName")}<select id="review-display-name" name="displayName" defaultValue="initials"><option value="initials">{t("review_initials")}</option><option value="first_name">{t("review_firstName")}</option><option value="anonymous">{t("review_anonymous")}</option></select></label>
     <p id="review-immutable" className="review-form-help">{t("review_immutable")}</p>
     {formError&&<p role="alert" className="form-error">{t(formError)}</p>}
     <button className="button" disabled={busy}>{busy?t("loading"):t("review_submit")}</button>
-   </form>:<div className="review-invitation-note"><h3>{t("review_invitationTitle")}</h3><p>{t("review_invitationHelp")}</p><Link className="button button-secondary" href={`/${locale}/guest-access`}>{t("secureAccess")}</Link></div>}
+   </form>:<div className="review-invitation-note"><h3>{t("review_invitationTitle")}</h3><p>{t("review_invitationHelp")}</p><GuestAccess locale={locale} inline/></div>}
   </div></section>
  </>;
 }
