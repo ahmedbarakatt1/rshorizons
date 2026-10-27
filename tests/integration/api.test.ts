@@ -18,6 +18,12 @@ afterAll(()=>db.end());
 test("public_catalog_and_policy_contract_use_database",async()=>{
   const catalog=await call("catalog?locale=ar"),policies=await call("policies/current?locale=ar");
   expect(catalog.response.status).toBe(200);expect(catalog.json.data.services.length).toBeGreaterThan(0);
+  const arabic=/[\u0600-\u06ff]/;
+  for(const item of [...catalog.json.data.services,...catalog.json.data.apartments,...catalog.json.data.destinations]){
+    expect(item.title).toMatch(arabic);
+    expect(item.summary).toMatch(arabic);
+  }
+  for(const apartment of catalog.json.data.apartments)for(const amenity of apartment.amenities)expect(amenity).toMatch(arabic);
   expect(policies.json.data.terms).toBe("demo-v1");expect(policies.json.data.privacy).toBe("demo-v1");
 });
 test("guest_request_staff_approval_real_runtime_boundary",async()=>{
