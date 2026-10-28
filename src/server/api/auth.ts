@@ -45,7 +45,7 @@ export async function authRoute(request:Request,parts:string[]){
     const active=await query("SELECT id FROM app.staff_profiles WHERE id=$1 AND active AND revoked_at IS NULL",[result.data.user.id]);
     if(!active.rows.length)throw new AppError("STAFF_DISABLED",403);
     const updated=await auth.auth.updateUser({password:input.password});if(updated.error)throw new AppError("PASSWORD_REJECTED",422);
-    return success({requiresMfa:true},200,[sessionCookie("rsh_staff_access",result.data.session.access_token,3600),sessionCookie("rsh_staff_refresh",result.data.session.refresh_token,86400)]);
+    return success({requiresMfa:false},200,[sessionCookie("rsh_staff_access",result.data.session.access_token,3600),sessionCookie("rsh_staff_refresh",result.data.session.refresh_token,86400)]);
   }
   const access=cookieValue(request,"rsh_staff_access"),refresh=cookieValue(request,"rsh_staff_refresh");
   if(!access||!refresh)throw new AppError("UNAUTHENTICATED",401);

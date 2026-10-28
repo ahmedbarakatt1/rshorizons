@@ -1,3 +1,4 @@
+import {websiteCheckoutEnabled} from "@/config/customer-service";
 import {serveOwnerMedia} from "@/integrations/storage/owner-media";
 import {z} from "zod";
 import {query} from "@/server/db";
@@ -10,7 +11,7 @@ import {catalogFiltersSchema} from "@/modules/catalog/contracts";
 import {bookingInputSchema,dateSchema,localeSchema,quoteInputSchema,uuidSchema} from "@/modules/bookings/contracts";
 import {bookingDetails,createBookingRequest,createQuote,submitBooking} from "@/modules/bookings/service";
 import {getGalleryManifest,issueDownloadGrant,servePrivateAsset,listPublicGalleries,servePublicDerivative} from "@/modules/photography/service";
-import {submitReview,listReviewPage,reviewPageInputSchema} from "@/modules/reviews/service";
+import {submitReview,listReviewPage,reviewPageInputSchema,reviewInputSchema} from "@/modules/reviews/service";
 import {submitContact,getSocialLinks} from "@/modules/content/contact";
 
 const dateRangeSchema=z.object({from:dateSchema,to:dateSchema}).refine(v=>v.to>=v.from);
@@ -24,7 +25,7 @@ export async function publicRoute(request:Request,parts:string[]):Promise<Respon
   if(request.method==="GET") {
     if(resource==="health") {
       if(id==="live")return success({status:"ok"});
-      if(id==="ready"){await query("SELECT 1");return success({status:"ok",environment:process.env.APP_ENV??"development",bookingIntake:process.env.BOOKING_ENABLED==="true"});}
+      if(id==="ready"){await query("SELECT 1");return success({status:"ok",environment:process.env.APP_ENV??"development",bookingIntake:websiteCheckoutEnabled&&process.env.BOOKING_ENABLED==="true",bookingChannel:"whatsapp"});}
     }
     if(resource==="catalog")return success(await getCatalog(locale));
     if(resource==="policies"&&id==="current"){
@@ -122,7 +123,7 @@ export async function publicRoute(request:Request,parts:string[]):Promise<Respon
         const result=await query(`SELECT b.id,b.version FROM app.bookings b JOIN app.guests g ON g.id=b.primary_guest_id WHERE b.reference=$1 AND (lower(g.email)=lower($2) OR g.phone_e164=$2)`,[body.reference,body.contact]);
         if(result.rows[0]){
           const b=result.rows[0],key=`access:${b.id}:${Math.floor(Date.now()/300000)}`;
-          await query(`WITH event AS (INSERT INTO app.outbox_events(aggregate_type,aggregate_id,aggregate_version,event_type,event_key,payload) VALUES('booking',$1,$2,'guest_access_requested',$3,jsonb_build_object('bookingId',$1::text)) ON CONFLICT DO NOTHING RETURNING id) INSERT INTO app.jobs(event_id,kind,job_key) SELECT id,'notification',id||':notification' FROM event`,[b.id,b.version,key]);
+          await query(`WITH event AS (INSERT INTO app.outbox_events(aggregate_type,aggregate_id,aggregate_version,event_type,event_key,payload) VALUES('booking',$1,$2,'guest_access_requested',$3,jsonb_build_object('bookingId',$1::uuid)) ON CONFLICT DO NOTHING RETURNING id) INSERT INTO app.jobs(event_id,kind,job_key) SELECT id,'notification',id||':notification' FROM event`,[b.id,b.version,key]);
         }
         return success({message:"If the details match, a secure access link will be sent."},202);
       }
@@ -145,7 +146,14 @@ export async function publicRoute(request:Request,parts:string[]):Promise<Respon
       const body=z.object({assetIds:z.array(uuidSchema).min(1).max(100),derivative:z.enum(["preview","web","video","original"])}).strict().parse(await readJson(request));
       return success(await issueDownloadGrant(actor,{...body,galleryId:id}));
     }
-    if(resource==="reviews")return success(await submitReview(await getGuest(request),await readJson(request)),201);
+    if(resource==="reviews"){
+      const input=reviewInputSchema.parse(await readJson(request));
+      if(input.source==="public"){
+        await rateLimit(request,"public-review",5);
+        return success(await submitReview({type:"system"},input),201);
+      }
+      return success(await submitReview(await getGuest(request),input),201);
+    }
     if(resource==="contact"){
       const input=await readJson(request);
       return success(await submitContact(input,{rateLimitKeyDigest:digestSecret(`contact:${process.env.VERCEL==="1"?request.headers.get("x-vercel-forwarded-for")??"unknown":"local"}`)}),202);

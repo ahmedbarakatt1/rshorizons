@@ -1,4 +1,8 @@
 import {defineConfig,devices} from "@playwright/test";
+import {config} from "dotenv";
+// Match the application and Vitest fixtures without replacing CI's isolated
+// browser database URLs or explicitly supplied test settings.
+config({path:".env.local",quiet:true});
 export default defineConfig({
  testDir:"./tests/e2e",fullyParallel:false,workers:1,timeout:60000,expect:{timeout:15000},retries:process.env.CI?1:0,
  reporter:[["list"],["html",{open:"never"}]],

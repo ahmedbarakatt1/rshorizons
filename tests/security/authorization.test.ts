@@ -21,6 +21,11 @@ test("disabled_staff_stale_session_is_denied_on_every_action",async()=>{
   expect((await request("admin/session",actor.cookie)).status).toBe(403);
   expect((await request("admin/resources",actor.cookie,{code:`x-${randomUUID()}`,kind:"guide",name:"Forbidden",mode:"exclusive",capacity:1})).status).toBe(403);
 });
+test("staff_accounts_use_password_only_without_an_authenticator_requirement",async()=>{
+  const id=await makeActor(db,"owner");
+  const profile=await db.query("SELECT mfa_required FROM app.staff_profiles WHERE id=$1",[id]);
+  expect(profile.rows[0].mfa_required).toBe(false);
+});
 test("operations_cannot_approve_or_read_finance",async()=>{
   const actor=await staff("operations"),departure=await makeDeparture(db),{booking}=await makeBooking(db,[await tourItem(db,departure.id)]);
   expect((await request(`admin/bookings/${booking.id}/approve`,actor.cookie,{expectedVersion:1})).status).toBe(403);

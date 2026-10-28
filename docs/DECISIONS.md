@@ -1,6 +1,50 @@
 # Implementation decisions
 
+## Immediate guest reviews with administrator removal — 2026-10-28
+
+The owner removed the review-approval queue. Both open public reviews and verified completed-booking reviews publish immediately after a valid submission. Administrators retain a reversible Withdraw/Restore control for selected reviews; original rating and text remain immutable, and withdrawn reviews disappear from public listings without deleting the audit record. Existing pending reviews are published by migration `20261028013000_immediate_review_publication.sql`.
+
+## Password-only staff sign-in — 2026-10-27
+
+The owner explicitly removed the separate staff authenticator-code step. Hosted administrators sign in with their private Supabase email and password; the application continues to enforce active account status, current roles and scopes, session expiry, secure cookies, revocation and rate limits. Existing and future staff profiles no longer require MFA. Optional Supabase MFA endpoints remain available but are not part of the login flow.
+
+## Public catalog presentation — 2026-10-27
+
+At the owner's request, the public `Local demonstration · Sample inventory and prices · Not available for sale` banner is removed. This presentation change does not enable online booking, automated messaging or payment capture: requests still end in an editable WhatsApp draft and require customer-service confirmation. Luxor is added as a destination in all supported locales without inventing a priced Luxor service. Generated catalog artwork is replaced by locally hosted, optimized derivatives of licensed web photographs; attribution and license records are in `docs/design/web-media.md`. Instagram and TikTok links now include accessible vector icons and visible text labels.
+
+## Owner publication and contact approval — 2026-10-26
+
+The owner explicitly confirmed publication of the supplied trip, event and transport media. The public social destinations are Instagram `https://www.instagram.com/horizonsrs2026/` and TikTok `https://www.tiktok.com/@red.sea.horizons`. The working operator name remains Red Sea Horizons; no street address is required or published. This approval permits the prepared, metadata-stripped derivatives to be hosted for the public showcase. It does not approve unidentified third-party media, fabricated claims or guest-private gallery content.
+
+## Owner scope update — 2026-10-26: WhatsApp completion
+
+The owner now requests customer-service completion on WhatsApp, visible bank transfer/InstaPay options, social/contact links and no automated email. This supersedes earlier online checkout, automatic email and booking-worker launch requirements. Public forms prepare editable WhatsApp drafts only; they do not create reservations or take payment. Customer service confirms availability, price and payment details. The two designated numbers, Gmail inbox, Instagram and TikTok are linked. Owner supplied InstaPay address abdohassan8123@instapay and its ipn.eg payment link; both are displayed. Owner supplied e-wallet number 01201338200, now displayed. Bank details remain intentionally customer-service supplied. Existing admin/catalog/media controls and historical records are retained.
+
+No automated test suites were run for this change, as requested. TypeScript compilation passed. The local transfer flow was manually exercised through draft review with InstaPay and the second team number; no message was sent. Private screenshot: .local/evidence/ui/whatsapp-booking/review.png. Historical CI results below do not verify this new flow. Preview: http://127.0.0.1:3003/en. No production deployment occurred.
+
+Next: add owner-supplied payment/social details, approve public business content/media, and resolve a commercially eligible host within the free-only budget. Paymob, Resend and booking-minute cron activation are not required for this flow. Operational private-media/retention dependencies remain separate.
+
 The handoff is the approved specification and milestone execution plan. The user expressly requested implementation without another approval/planning stop.
+
+## Free-only budget and external scheduling — 2026-10-26
+
+The owner requires completely free services and designated `horizonsredsea@gmail.com` as the business inbox. This does not verify a Resend sending domain or authorize a new email adapter. After requesting free-host research, the owner specifically asked to modify the worker for Vercel. Native Vercel Cron registration is removed; Supabase Cron/pg_net can invoke the existing bearer-protected endpoints at the same cadence. An operator-script generator prepares three paused jobs with a Vault reference and checks for unsafe secret-table read privileges. No hosted schedule, extension or secret was installed or activated. Existing releases, provider approvals and job semantics remain unchanged. Hobby's independent noncommercial-use restriction still prevents treating this as an approved commercial deployment; no paid upgrade is authorized. See `runbooks/external-scheduler.md`.
+
+## WhatsApp links replace OpenWA — 2026-10-25
+
+The owner explicitly requested removal of OpenWA and manual links for both directions. Confirmed team numbers are +201099267451 (normalized from Egyptian local01099267451) and +201220907478. Public pages open editable drafts to these contacts; authorized staff prepare drafts to the saved booking guest number, subject to current booking scope and WhatsApp consent. The person presses Send. No gateway, automatic WhatsApp send, delivery claim, QR or tunnel is required. Automated email remains a separate requirement. Historical SQL migrations and receipt/consent records are preserved; no schema migration is needed for this UI/dispatch change. This decision supersedes previous Meta/OpenWA and automatic WhatsApp requirements, including the earlier local-host choice. See `docs/runbooks/whatsapp-links.md`.
+
+## Hosted configuration — 2026-10-25 (earlier setup history)
+
+The owner designated `ahmedbarakatt1s-projects/rshorizons` on Vercel and classified the supplied Supabase project as production. Official CLIs are authenticated; plugin reauthentication is no longer a setup blocker. Configure only these projects. Separate staging remains required. No paid upgrade, server purchase, DNS change or real guest-message test is authorized yet.
+
+Fresh Supabase initialization exposed two release defects: the local harness attempted CREATE against managed Auth, and required reference data existed only in the synthetic seed. The baseline Auth guard was corrected before its first hosted application. Only two known loopback databases had their exact old baseline checksum reconciled to the guard-only checksum; generic drift validation is unchanged. A forward migration now installs reference data without any staff identity, inventory, price, policy approval or message template. Another forward migration relocates btree_gist into extensions without dropping constraints/data.
+
+Hosted PostgreSQL connections now verify the provider CA and hostname. The application accepts the provider certificate through server-only `DATABASE_SSL_CA` and rejects conflicting URL TLS options. The actual restricted Supavisor connection, invalid CA/hostname rejection, SSL enforcement and backend TLS were tested. Existing local loopback tests remain supported.
+
+The administrator was created through Supabase Admin Auth using protected stdin, then granted the same active owner/all-scope/MFA-required authority as the provisioning script through transactional operator SQL. Its password sign-in passed; owner TOTP enrollment remains outstanding. No local credential hash was copied and no default password was committed.
+
+Gmail may be used for account registration/test receipt. It does not replace the existing Resend verified-domain requirement. Oracle signup was blocked by card verification; the subsequent no-card free-cloud search did not find a verified compatible host. The owner's latest instruction, **host locally**, supersedes the cloud-only restriction and designates this Windows computer for OpenWA. Vercel and production Supabase remain the website/database destinations. The dedicated local gateway uses loopback2786, its own volume and session-scoped credentials; another project's existing gateway on2785 is not reused. See `docs/runbooks/local-openwa.md`. Keep production booking/publication gates closed pending owner pairing, secure HTTPS, actual delivery, and the other account, plan, content and UAT dependencies. No hosting purchase is authorized.
 
 | ID | Decision | Reason / consequence |
 |---|---|---|
@@ -56,3 +100,6 @@ On 2026-10-20 the owner requested generated or web images for parts without phot
 ## Owner media and repository — 2026-10-24
 
 The owner designated `https://github.com/ahmedbarakatt1/rshorizons` and supplied WhatsApp event/transfer-car photos, expressly requesting use of the original videos. This resolves repository selection and authorizes local asset preparation/use. All 30 videos are included on demand; source footage, private inspection evidence and metadata-stripped local derivatives remain outside Git/deployment. Eight selected WhatsApp photographs add actual boats, evening outings and transportation. No vehicle capacity or event details are inferred from photographs. Production subject/guardian consent remains E10. See `docs/design/owner-media.md`.
+
+## Owner approval of current prices and payment details — 2026-10-26
+Owner explicitly requested: "deploy the prices and the payment as it is for now". Current displayed prices and bank-transfer-by-customer-service, InstaPay abdohassan8123@instapay (owner-supplied ipn.eg link), and e-wallet 01201338200 are approved as the initial pricing/payment presentation. This does not invent legal identity, media rights, or policy approval. A fresh read-only production query found 0 published nonsynthetic services, 0 price rules, 0 active nonsynthetic apartments, 0 approved agency settings and 0 approved policy versions. The local showcase catalog has not been promoted into production. Next implementation: prepare and transfer only the approved catalog/prices (exclude synthetic guests/bookings/admin sessions), make public media available on hosted storage, and complete or explicitly scope out remaining release dependencies. Code deployment alone would produce an empty catalog. No deployment occurred in this step.

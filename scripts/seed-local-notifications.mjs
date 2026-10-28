@@ -11,6 +11,7 @@ if(process.argv.includes("--showcase")){
   url.pathname=`/${database}`;
 }
 const templates={
+  guest_access_requested:["Your booking access — {{reference}}","Use this private link to view reservation {{reference}} and its current status. If you did not request it, you can ignore this message.\n\n{{access_url}}"],
   request_received:["Request received — {{reference}}","We received your reservation request {{reference}}. It is awaiting staff review; your booking is not yet confirmed and no payment is requested. Follow your request: {{access_url}}"],
   approved_payment_required:["Payment requested — {{reference}}","Staff approved request {{reference}}. View the approved amount and payment deadline using your private booking link: {{access_url}}"],
   booking_confirmed:["Booking confirmed — {{reference}}","Your booking {{reference}} is confirmed. View your itinerary and any remaining balance: {{access_url}}"],
@@ -28,7 +29,7 @@ const db=new pg.Client({connectionString:url.toString()});await db.connect();
 try{
   await db.query("BEGIN");
   for(const [event,[subject,body]] of Object.entries(templates))await db.query(`INSERT INTO app.notification_templates(event_type,channel,locale,template_version,provider,approval_status,category,subject_template,body_template)
-    VALUES($1,'email','en',1,'local','approved','transactional',$2,$3) ON CONFLICT DO NOTHING`,[event,subject,body]);
+    VALUES($1,'email','en',$4,'local','approved','transactional',$2,$3) ON CONFLICT DO NOTHING`,[event,subject,body,event==="guest_access_requested"?2:1]);
   await db.query("COMMIT");
   console.log("English local-only message previews prepared. No real email/WhatsApp template was approved or sent.");
 }catch(error){await db.query("ROLLBACK");throw error;}finally{await db.end();}

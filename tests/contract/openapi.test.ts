@@ -10,7 +10,7 @@ describe("published API contracts",()=>{
    ["/api/v1/admin/staff/invitations","post"],["/api/v1/admin/auth/invite-accept","post"],
    ["/api/v1/admin/bookings/{id}/manifest","get"],["/api/v1/admin/pickup-locations","get"],
    ["/api/v1/admin/stays","get"],["/api/v1/photo-packages","get"],
-   ["/api/v1/webhooks/mux","post"],["/api/v1/webhooks/resend","post"],["/api/v1/webhooks/whatsapp","post"],
+   ["/api/v1/webhooks/mux","post"],["/api/v1/webhooks/resend","post"],["/api/v1/admin/bookings/{id}/whatsapp-link","get"],
    ["/api/internal/worker","get"],["/api/internal/retention","get"],["/api/internal/monitor","get"],
   ])expect(spec.paths[path]?.[method],`${method} ${path}`).toBeDefined();
  });

@@ -1,0 +1,91 @@
+{
+  "at": "2026-10-25T16:51:10.535Z",
+  "ownerDecision": "Host OpenWA locally on this Windows computer; supersedes earlier cloud-only preference",
+  "websiteDestination": "Vercel",
+  "databaseDestination": "Owner-designated production Supabase",
+  "upstreamVersion": "0.25.0",
+  "upstreamCommit": "173916c83b41e622f849ecd380bf36486dfd8cdf",
+  "platform": "linux/amd64",
+  "composeSha256": "b82ec6a344fe51b1ad856dad2ec3cca6dc8e5c488ee164f4c33d0f6b87e5520c",
+  "imageId": "sha256:b032ebba767d4798b848b9e470b6c05170d7d93e844e1c698225cbf681329f9f",
+  "localOrigin": "http://127.0.0.1:2786",
+  "composeProject": "rsh-whatsapp",
+  "volume": "rsh-whatsapp_gateway-data",
+  "build": "passed",
+  "health": {
+    "status": "healthy",
+    "mainDatabase": "up",
+    "dataDatabase": "up"
+  },
+  "configuration": {
+    "validation": "passed",
+    "loopbackOnly": true,
+    "readonlyRoot": true,
+    "dockerDaemonMounted": false,
+    "restartPolicy": "unless-stopped",
+    "memoryLimitBytes": 2147483648
+  },
+  "authorization": {
+    "at": "2026-10-25T16:50:16.142Z",
+    "administratorValidated": true,
+    "sessionScopedOperatorValidated": true,
+    "anonymousSessionsDenied": true,
+    "keyAdministrationDenied": true,
+    "otherSessionsDenied": true,
+    "sessionPersisted": true,
+    "status": "qr_ready",
+    "engineLoaded": true,
+    "paired": false
+  },
+  "restart": {
+    "at": "2026-10-25T16:44:27.162Z",
+    "administratorValidated": true,
+    "sessionScopedOperatorValidated": true,
+    "anonymousSessionsDenied": true,
+    "keyAdministrationDenied": true,
+    "otherSessionsDenied": true,
+    "sessionPersisted": true,
+    "status": "created",
+    "engineLoaded": false,
+    "paired": false,
+    "pairedRecoveryVerified": false,
+    "scope": "Unpaired session identity and scoped operator key only"
+  },
+  "browser": {
+    "engine": "Edge",
+    "realFormLogin": "passed",
+    "qrRendered": true,
+    "imageComplete": true,
+    "qrDimensions": [
+      276,
+      276
+    ],
+    "privatePrePairingScreenshot": ".local/openwa/dashboard-before-pairing.png",
+    "qrScreenshotRecorded": false
+  },
+  "credentialStorage": {
+    "randomMasterKey": true,
+    "sessionScopedOperatorKey": true,
+    "separateWebhookSecret": true,
+    "windowsDirectoryAclRestricted": true,
+    "excludedFromGitAndDeployment": true,
+    "vercelInstallation": false
+  },
+  "ownerPairing": "pending",
+  "publicHttps": "not configured",
+  "pairedRestore": "not verified",
+  "realMessageSent": false,
+  "callbackDeliveryVerified": false,
+  "productionMessagingVerified": false,
+  "purchases": false,
+  "remaining": [
+    "Owner scans intended WhatsApp number",
+    "Paired restart and consistent backup/restore",
+    "Stable authenticated HTTPS route for Vercel",
+    "Approved message text and authorized test recipient",
+    "Actual send and signed callback verification",
+    "Existing independent application release gates"
+  ],
+  "supersededAt": "2026-10-25T17:33:38.274Z",
+  "supersededBy": "Owner replaced OpenWA with manual WhatsApp links; historical setup evidence only"
+}

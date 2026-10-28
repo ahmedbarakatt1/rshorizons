@@ -1,5 +1,5 @@
 export type PublishedReview={
- id:string;rating:number;text:string;locale:string;display_name:string;submitted_at:string;
+ id:string;rating:number;text:string;locale:string;display_name:string;submitted_at:string;verified:boolean;
  replies:{body:string;publishedAt:string}[];
 };
 export type ReviewPage={

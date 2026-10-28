@@ -5,6 +5,9 @@ import {AppError} from "@/server/http/errors";
 import {bookingDetails} from "@/modules/bookings/service";
 import {uuidSchema} from "@/modules/bookings/contracts";
 import {readReport} from "@/modules/reports/service";
+import {whatsappLink} from "@/modules/content/whatsapp";
+import {isLocale} from "@/i18n/locales";
+import {z} from "zod";
 
 const scopedBooking=`NOT EXISTS(SELECT 1 FROM app.booking_items bi JOIN app.quote_items qi ON qi.id=bi.quote_item_id LEFT JOIN app.service_variants v ON v.id=qi.variant_id LEFT JOIN app.services sv ON sv.id=v.service_id LEFT JOIN app.apartments ap ON ap.id=qi.apartment_id LEFT JOIN app.properties pr ON pr.id=ap.property_id WHERE bi.booking_id=b.id AND NOT app.scope_allows($1,coalesce(sv.destination_id,pr.destination_id),pr.id))`;
 async function operationalOnly(actor:StaffActor) {
@@ -14,6 +17,25 @@ async function operationalOnly(actor:StaffActor) {
 export async function adminReads(request:Request,parts:string[]) {
   if(request.method!=="GET")return undefined;
   const [,resource,id]=parts;
+  if(resource==="contact") {
+    const actor=await getStaff(request,"contacts.read");
+    const scope=await query("SELECT app.scope_allows($1,NULL,NULL) AS allowed",[actor.id]);
+    if(!scope.rows[0].allowed)throw new AppError("FORBIDDEN",403);
+    if(id) {
+      const {rows}=await query("SELECT id,sender_name,email,phone_e164,locale,message,state,version,created_at FROM app.contact_requests WHERE id=$1 AND retention_deadline>now()",[uuidSchema.parse(id)]);
+      if(!rows[0])throw new AppError("NOT_FOUND",404);
+      return success(rows[0]);
+    }
+    const params=new URL(request.url).searchParams;
+    const state=z.enum(["new","assigned","replied","closed","spam"]).nullable().parse(params.get("state"));
+    const after=params.get("after")?uuidSchema.parse(params.get("after")):null;
+    if(after&&!(await query("SELECT 1 FROM app.contact_requests WHERE id=$1",[after])).rowCount)throw new AppError("INVALID_CURSOR",400,"Refresh the inbox to continue.");
+    const {rows}=await query(`SELECT id,sender_name,locale,state,created_at FROM app.contact_requests
+      WHERE retention_deadline>now() AND ($1::text IS NULL OR state=$1)
+      AND ($2::uuid IS NULL OR (created_at,id)<(SELECT created_at,id FROM app.contact_requests WHERE id=$2))
+      ORDER BY created_at DESC,id DESC LIMIT 51`,[state,after]);
+    return success({items:rows.slice(0,50),nextCursor:rows.length>50?rows[49].id:null});
+  }
   if(resource==="session") {
     const actor=await getStaff(request);
     const {rows}=await query(`SELECT p.code FROM app.permissions p WHERE app.has_permission($1,p.code)`,[actor.id]);
@@ -30,7 +52,7 @@ export async function adminReads(request:Request,parts:string[]) {
     await getStaff(request);
     const [destinations,categories,variants,properties,roles,policies,amenities,cancellationPolicies,pickupLocations]=await Promise.all([
       query("SELECT id,canonical_slug AS title FROM app.destinations ORDER BY canonical_slug"),
-      query("SELECT id,code AS title FROM app.categories ORDER BY sort_order"),
+      query("SELECT id,code AS title FROM app.categories WHERE active ORDER BY sort_order"),
       query("SELECT v.id,t.title FROM app.service_variants v JOIN app.variant_translations t ON t.variant_id=v.id AND t.locale='en' WHERE v.active"),
       query("SELECT id,name AS title FROM app.properties WHERE active"),
       query("SELECT id,code AS title FROM app.roles"),
@@ -45,6 +67,19 @@ export async function adminReads(request:Request,parts:string[]) {
     const actor=await getStaff(request,"bookings.read",id?uuidSchema.parse(id):undefined);
     const operation=await operationalOnly(actor);
     if(id){
+      if(parts[3]==="whatsapp-link"){
+        const {rows}=await query(`SELECT b.reference,g.phone_e164,g.locale,
+          coalesce((SELECT granted AND withdrawn_at IS NULL FROM app.guest_consents c WHERE c.guest_id=g.id AND c.type='whatsapp_booking' ORDER BY captured_at DESC,id DESC LIMIT 1),false) AS consent
+          FROM app.bookings b JOIN app.guests g ON g.id=b.primary_guest_id WHERE b.id=$1`,[id]);
+        const guest=rows[0];
+        if(!guest)throw new AppError("NOT_FOUND",404);
+        if(!guest.consent)throw new AppError("WHATSAPP_CONSENT_REQUIRED",409);
+        const locale=isLocale(guest.locale)?guest.locale:"en";
+        const messages=(await import(`../../../messages/${locale}.json`)).default;
+        const url=whatsappLink(guest.phone_e164,messages.whatsappStaffDraft.replace("{reference}",guest.reference));
+        if(!url)throw new AppError("WHATSAPP_PHONE_REQUIRED",409);
+        return success({url});
+      }
       const details=await bookingDetails(id,true);
       if(parts[3]==="manifest"){
         const participants=await query(`SELECT p.id,p.display_name AS full_name,p.age_category,ip.booking_item_id,d.certification,d.equipment_sizes,d.clearance_status FROM app.booking_participants p LEFT JOIN app.item_participants ip ON ip.participant_id=p.id LEFT JOIN app.dive_requirements d ON d.participant_id=p.id WHERE p.booking_id=$1 ORDER BY p.display_name`,[id]);
@@ -82,8 +117,16 @@ export async function adminReads(request:Request,parts:string[]) {
     galleries:{permission:"galleries.manage",sql:"SELECT g.id,g.title,g.kind,g.booking_id,g.visibility_state,g.expires_at,g.version FROM app.galleries g WHERE EXISTS(SELECT 1 FROM app.staff_roles sr JOIN app.roles r ON r.id=sr.role_id WHERE sr.staff_id=$1 AND r.code='owner') OR EXISTS(SELECT 1 FROM app.photographer_assignments pa WHERE pa.staff_id=$1 AND pa.booking_id=g.booking_id AND pa.revoked_at IS NULL AND pa.access_starts_at<=now() AND pa.access_ends_at>now()) OR (g.kind='public' AND app.scope_allows($1,g.destination_id,NULL)) ORDER BY g.created_at DESC",scoped:true},
     pages:{permission:"content.write",sql:"SELECT p.id,p.page_key,p.status,p.version,t.locale,t.title,t.slug,t.structured_body FROM app.cms_pages p LEFT JOIN app.cms_translations t ON t.page_id=p.id ORDER BY p.page_key,t.locale"},
     media:{permission:"media.upload",sql:"SELECT a.id,a.mime_type,a.state,a.size_bytes,a.created_at,a.version FROM app.media_assets a WHERE EXISTS(SELECT 1 FROM app.staff_roles sr JOIN app.roles r ON r.id=sr.role_id WHERE sr.staff_id=$1 AND r.code='owner') OR EXISTS(SELECT 1 FROM app.gallery_assets ga JOIN app.galleries g ON g.id=ga.gallery_id JOIN app.photographer_assignments pa ON pa.booking_id=g.booking_id WHERE ga.asset_id=a.id AND pa.staff_id=$1 AND pa.revoked_at IS NULL AND pa.access_starts_at<=now() AND pa.access_ends_at>now()) ORDER BY a.created_at DESC LIMIT 200",scoped:true},
-    reviews:{permission:"reviews.moderate",sql:"SELECT id,rating,original_text,moderation_state,public_display_name,version FROM app.reviews ORDER BY submitted_at DESC LIMIT 200"},
-    "notification-deliveries":{permission:"notifications.read",sql:"SELECT id,channel,provider,status,error_class,attempt,created_at FROM app.notification_deliveries ORDER BY created_at DESC LIMIT 200"},
+    reviews:{permission:"reviews.moderate",sql:"SELECT id,source,rating,original_text,moderation_state,public_display_name,version FROM app.reviews ORDER BY submitted_at DESC LIMIT 200"},
+    "notification-deliveries":{permission:"notifications.read",sql:`SELECT d.id,d.channel,d.provider,d.status,d.error_class,d.attempt,d.created_at,e.event_type,b.id AS booking_id,b.reference
+      FROM app.notification_deliveries d JOIN app.jobs j ON j.id=d.job_id JOIN app.outbox_events e ON e.id=j.event_id
+      LEFT JOIN app.bookings b ON b.id=CASE
+        WHEN e.event_type='payment_received' THEN (SELECT booking_id FROM app.cash_ledger WHERE id=e.aggregate_id)
+        WHEN e.event_type IN('refund_completed','refund_update','refund_approved') THEN (SELECT booking_id FROM app.refund_requests WHERE id=e.aggregate_id)
+        WHEN e.event_type='gallery_ready' THEN (SELECT booking_id FROM app.galleries WHERE id=e.aggregate_id)
+        WHEN e.event_type='review_invitation' THEN (SELECT bi.booking_id FROM app.review_invitations ri JOIN app.booking_items bi ON bi.id=ri.booking_item_id WHERE ri.id=e.aggregate_id)
+        ELSE e.aggregate_id END AND app.has_permission($1,'bookings.read') AND ${scopedBooking}
+      ORDER BY d.created_at DESC LIMIT 200`,scoped:true},
     jobs:{permission:"notifications.read",sql:"SELECT id,kind,status,attempts,run_after,lease_until,failure_class FROM app.jobs ORDER BY created_at DESC LIMIT 200"},
     staff:{permission:"staff.manage",sql:"SELECT id,name,active,revoked_at,mfa_required,version FROM app.staff_profiles ORDER BY name"},
     "audit-events":{permission:"audit.read",sql:"SELECT id,actor_type,action,target_type,target_id,summary,created_at FROM app.audit_events ORDER BY created_at DESC LIMIT 200"},

@@ -6,11 +6,10 @@ import type {ApartmentSummary,DestinationSummary,ServiceSummary} from "@/types/c
 import {Arrow} from "./PublicShell";
 import {api} from "./api";
 import {money} from "./format";
-import {resolveIllustrativeImage} from "./catalog-imagery";
+import {resolveWebPhoto} from "./catalog-imagery";
 export function Photo({image,alt,priority=false,className="",sizes="(max-width:767px) 50vw, (max-width:1100px) 55vw, 40vw"}:{image:string;alt:string;priority?:boolean;className?:string;sizes?:string}) {
- const t=useTranslations();
- const illustration=resolveIllustrativeImage(image);
- if(illustration)return <span className={`photo illustrative-photo ${className}`}><picture><source type="image/avif" srcSet={illustration.avifSrcSet} sizes={sizes}/><img className="illustrative-photo-image" src={illustration.src} srcSet={illustration.srcSet} sizes={sizes} alt={`${t("illustrativeImage")} — ${alt}`} width="1536" height="1024" loading={priority?"eager":"lazy"} fetchPriority={priority?"high":"auto"}/></picture><span className="illustrative-photo-caption">{t("illustrativeImage")}</span></span>;
+ const webPhoto=resolveWebPhoto(image);
+ if(webPhoto)return <img className={`photo ${className}`} src={webPhoto.src} srcSet={webPhoto.srcSet} sizes={sizes} alt={alt} width="1280" height="853" loading={priority?"eager":"lazy"} fetchPriority={priority?"high":"auto"}/>;
  if(!image || image==="apartment") return <div className={`photo unavailable-photo ${className}`} role="img" aria-label={alt}><span>Port Ghalib<br/><small>Unit photography awaiting approval</small></span></div>;
  const src=image.startsWith("/")?image:`/api/v1/demo-media/${image}`;
  const responsive=src.startsWith("/api/v1/demo-media/");
@@ -24,7 +23,7 @@ export function ApartmentCard({item,locale}:{item:ApartmentSummary;locale:string
  const t=useTranslations();
  return <article className="catalog-card"><Link href={`/${locale}/apartments/${item.slug}`}><Photo image={item.image} alt={item.title}/><div className="card-meta"><span>Port Ghalib</span><span>{t("guestCount",{count:item.maxGuests})}</span></div><h3>{item.title}</h3><p>{item.summary}</p><div className="card-bottom"><span><bdi className="money">{money(item.nightlyAmountMinor,item.currency,locale)}</bdi> / {t("night")}</span><Arrow/></div></Link></article>;
 }
-const categoryKeys:Record<string,string>={boat_tours:"catBoat",scuba_diving:"catDive",shore_dives:"catShore",desert_safari:"catSafari",beach_buggy:"catBuggy",tours:"catTours","boat-tours":"catBoat","scuba-diving":"catDive","shore-dives":"catShore",snorkeling:"catSnorkel","desert-safari":"catSafari","beach-buggy":"catBuggy",transportation:"catTransfer",photography:"catPhoto"};
+const categoryKeys:Record<string,string>={boat_tours:"catBoat",scuba_diving:"catDive",desert_safari:"catSafari",beach_buggy:"catBuggy",tours:"catTours","boat-tours":"catBoat","scuba-diving":"catDive",snorkeling:"catSnorkel","desert-safari":"catSafari","beach-buggy":"catBuggy",transportation:"catTransfer",photography:"catPhoto"};
 export function Search({locale,destinations}:{locale:string;destinations:DestinationSummary[]}) {
  const t=useTranslations();
  return <form className="discovery-search" action={`/${locale}/experiences`}><label>{t("where")}<select name="destination"><option value="">{t("anyDestination")}</option>{destinations.map(item=><option value={item.slug} key={item.id}>{item.title}</option>)}</select></label><label>{t("activity")}<select name="category"><option value="">{t("allActivities")}</option>{Object.keys(categoryKeys).map(category=><option value={category} key={category}>{t(categoryKeys[category])}</option>)}</select></label><label>{t("guests")}<input name="guests" type="number" min="1" max="30" defaultValue="1"/></label><button className="button" type="submit">{t("search")}<Arrow/></button></form>;

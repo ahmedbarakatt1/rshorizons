@@ -10136,6 +10136,432 @@
         }
       }
     },
+    "/api/v1/admin/contact": {
+      "get": {
+        "operationId": "get__admin_contact",
+        "summary": "List retained contact requests",
+        "description": "Requires contacts.read and current global staff scope. Default grant: owner only. Excludes expired records; optional state filter and UUID after cursor page 50 records at a time, returning data.nextCursor.",
+        "tags": [
+          "admin"
+        ],
+        "parameters": [
+          {
+            "name": "state",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "after",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "staffAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation; private endpoints are no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Success"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing/invalid session or signature",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, scope or origin rejected",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Unavailable or unauthorized object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Version, inventory, idempotency or state conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "Expired quote or consumed/expired grant",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Business rule rejected",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Dependency/configuration unavailable; no simulated external success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/contact/{id}": {
+      "get": {
+        "operationId": "get__admin_contact__id_",
+        "summary": "Read a retained guest enquiry",
+        "description": "Requires contacts.read and current global scope. Expired or missing requests return 404; all responses are private and no-store.",
+        "tags": [
+          "admin"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "security": [
+          {
+            "staffAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation; private endpoints are no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Success"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing/invalid session or signature",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, scope or origin rejected",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Unavailable or unauthorized object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Version, inventory, idempotency or state conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "Expired quote or consumed/expired grant",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Business rule rejected",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Dependency/configuration unavailable; no simulated external success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "patch__admin_contact__id_",
+        "summary": "Record contact resolution without sending a message",
+        "description": "Requires contacts.manage and global scope; locks the retained row and rejects stale expectedVersion with 409. Preserves the original message and appends a redacted audit event.",
+        "tags": [
+          "admin"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Origin",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uri"
+            },
+            "description": "Exact configured application origin; cookie mutations reject missing/foreign origins."
+          }
+        ],
+        "security": [
+          {
+            "staffAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation; private endpoints are no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Success"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing/invalid session or signature",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission, scope or origin rejected",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Unavailable or unauthorized object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Version, inventory, idempotency or state conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "Expired quote or consumed/expired grant",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Business rule rejected",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Dependency/configuration unavailable; no simulated external success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "state",
+                  "expectedVersion"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "state": {
+                    "enum": [
+                      "new",
+                      "replied",
+                      "closed",
+                      "spam"
+                    ]
+                  },
+                  "expectedVersion": {
+                    "type": "integer",
+                    "minimum": 1
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/admin/pickup-locations": {
       "post": {
         "operationId": "post__admin_pickup_locations",
@@ -21727,7 +22153,7 @@
     "/api/v1/admin/auth/invite-accept": {
       "post": {
         "operationId": "post__admin_auth_invite_accept",
-        "summary": "Accept one-use provider invitation and set a strong password before MFA",
+        "summary": "Accept one-use provider invitation and set a strong password",
         "description": "Validated server operation. All money, inventory, approval and authorization rules are enforced against the current database state.",
         "tags": [
           "admin"
@@ -22754,298 +23180,6 @@
         }
       }
     },
-    "/api/v1/webhooks/whatsapp": {
-      "post": {
-        "operationId": "post__webhooks_whatsapp",
-        "summary": "Authenticate raw whatsapp callback and deduplicate effects",
-        "description": "Signature verified against the exact raw body before parsing. Timestamp/replay limits apply where supported. No unsigned client redirect can confirm delivery or payment.",
-        "tags": [
-          "webhooks"
-        ],
-        "parameters": [
-          {
-            "name": "x-hub-signature-256",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "security": [
-          {
-            "whatsappSignature": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful operation; private endpoints are no-store.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Success"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid input",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Missing/invalid session or signature",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Permission, scope or origin rejected",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Unavailable or unauthorized object",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Version, inventory, idempotency or state conflict",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "410": {
-            "description": "Expired quote or consumed/expired grant",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Business rule rejected",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Rate limited",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "Dependency/configuration unavailable; no simulated external success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        },
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "additionalProperties": false,
-                "required": [
-                  "object",
-                  "entry"
-                ],
-                "properties": {
-                  "object": {
-                    "const": "whatsapp_business_account"
-                  },
-                  "entry": {
-                    "type": "array",
-                    "items": {
-                      "type": "object"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "get": {
-        "operationId": "get__webhooks_whatsapp",
-        "summary": "Validate provider subscription challenge",
-        "description": "Validated server operation. All money, inventory, approval and authorization rules are enforced against the current database state.",
-        "tags": [
-          "webhooks"
-        ],
-        "parameters": [
-          {
-            "name": "hub.mode",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "hub.verify_token",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "hub.challenge",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "security": [
-          {
-            "whatsappVerify": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Validated numeric challenge",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "string",
-                  "pattern": "^[0-9]{1,100}$"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid input",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Missing/invalid session or signature",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Permission, scope or origin rejected",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Unavailable or unauthorized object",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Version, inventory, idempotency or state conflict",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "410": {
-            "description": "Expired quote or consumed/expired grant",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Business rule rejected",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Rate limited",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "Dependency/configuration unavailable; no simulated external success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/v1/webhooks/mux": {
       "post": {
         "operationId": "post__webhooks_mux",
@@ -23201,28 +23335,28 @@
         }
       }
     },
-    "/api/v1/webhooks/openwa": {
-      "post": {
-        "operationId": "post__webhooks_openwa",
-        "summary": "Verify signed OpenWA delivery acknowledgements",
-        "description": "Raw HMAC-SHA256 signature, exact configured session and signed idempotency key required. Delayed durable retries are allowed; future timestamps rejected. Statuses do not regress. No incoming chat processing.",
+    "/api/v1/admin/bookings/{id}/whatsapp-link": {
+      "get": {
+        "operationId": "get__admin_bookings__id__whatsapp_link",
+        "summary": "Prepare a manual WhatsApp draft for the saved guest number",
+        "description": "Current booking scope and WhatsApp consent are required. Returns a wa.me URL containing only a booking-reference draft; no send, token or delivery receipt is created.",
         "tags": [
-          "webhooks"
+          "admin"
         ],
         "parameters": [
           {
-            "name": "x-openwa-signature",
-            "in": "header",
+            "name": "id",
+            "in": "path",
             "required": true,
             "schema": {
               "type": "string",
-              "pattern": "^sha256=[0-9a-f]{64}$"
+              "format": "uuid"
             }
           }
         ],
         "security": [
           {
-            "openwaSignature": []
+            "staffAuth": []
           }
         ],
         "responses": {
@@ -23322,64 +23456,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        },
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "additionalProperties": false,
-                "required": [
-                  "event",
-                  "sessionId",
-                  "timestamp",
-                  "idempotencyKey",
-                  "data"
-                ],
-                "properties": {
-                  "event": {
-                    "enum": [
-                      "message.ack",
-                      "message.failed"
-                    ]
-                  },
-                  "sessionId": {
-                    "type": "string"
-                  },
-                  "timestamp": {
-                    "type": "string",
-                    "format": "date-time"
-                  },
-                  "idempotencyKey": {
-                    "type": "string"
-                  },
-                  "data": {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "required": [
-                      "messageId",
-                      "status"
-                    ],
-                    "properties": {
-                      "messageId": {
-                        "type": "string"
-                      },
-                      "status": {
-                        "enum": [
-                          "pending",
-                          "sent",
-                          "delivered",
-                          "read",
-                          "failed"
-                        ]
-                      }
-                    }
-                  }
                 }
               }
             }
@@ -24258,56 +24334,132 @@
       },
       "ReviewInput": {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "type": "object",
-        "properties": {
-          "invitationId": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+        "anyOf": [
+          {
+            "type": "object",
+            "properties": {
+              "source": {
+                "default": "verified",
+                "type": "string",
+                "const": "verified"
+              },
+              "invitationId": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "rating": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 5
+              },
+              "text": {
+                "type": "string",
+                "minLength": 10,
+                "maxLength": 4000
+              },
+              "locale": {
+                "type": "string",
+                "enum": [
+                  "en",
+                  "de",
+                  "pl",
+                  "fr",
+                  "ru",
+                  "uk",
+                  "es",
+                  "ar",
+                  "it",
+                  "nl"
+                ]
+              },
+              "displayName": {
+                "default": "initials",
+                "type": "string",
+                "enum": [
+                  "first_name",
+                  "initials",
+                  "anonymous"
+                ]
+              }
+            },
+            "required": [
+              "source",
+              "invitationId",
+              "rating",
+              "text",
+              "locale",
+              "displayName"
+            ],
+            "additionalProperties": false
           },
-          "rating": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 5
-          },
-          "text": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 10000
-          },
-          "locale": {
-            "type": "string",
-            "enum": [
-              "en",
-              "de",
-              "pl",
-              "fr",
-              "ru",
-              "uk",
-              "es",
-              "ar",
-              "it",
-              "nl"
-            ]
-          },
-          "displayName": {
-            "default": "initials",
-            "type": "string",
-            "enum": [
-              "first_name",
-              "initials",
-              "anonymous"
-            ]
+          {
+            "type": "object",
+            "properties": {
+              "source": {
+                "type": "string",
+                "const": "public"
+              },
+              "name": {
+                "type": "string",
+                "minLength": 2,
+                "maxLength": 150
+              },
+              "consent": {
+                "type": "boolean",
+                "const": true
+              },
+              "website": {
+                "type": "string",
+                "maxLength": 200
+              },
+              "rating": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 5
+              },
+              "text": {
+                "type": "string",
+                "minLength": 10,
+                "maxLength": 4000
+              },
+              "locale": {
+                "type": "string",
+                "enum": [
+                  "en",
+                  "de",
+                  "pl",
+                  "fr",
+                  "ru",
+                  "uk",
+                  "es",
+                  "ar",
+                  "it",
+                  "nl"
+                ]
+              },
+              "displayName": {
+                "default": "initials",
+                "type": "string",
+                "enum": [
+                  "first_name",
+                  "initials",
+                  "anonymous"
+                ]
+              }
+            },
+            "required": [
+              "source",
+              "name",
+              "consent",
+              "rating",
+              "text",
+              "locale",
+              "displayName"
+            ],
+            "additionalProperties": false
           }
-        },
-        "required": [
-          "invitationId",
-          "rating",
-          "text",
-          "locale",
-          "displayName"
-        ],
-        "additionalProperties": false
+        ]
       },
       "ReviewModeration": {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -26240,7 +26392,7 @@
         "type": "apiKey",
         "in": "cookie",
         "name": "rsh_staff_access",
-        "description": "MFA aal2 required for operations; MFA enrollment routes use an active pre-MFA staff session. Local test token is a separate development-only cookie."
+        "description": "Password-authenticated staff session with current active-account, role and scope checks. Optional Supabase MFA routes remain available but are not required for login."
       },
       "cronAuth": {
         "type": "http",
@@ -26252,30 +26404,15 @@
         "name": "hmac",
         "description": "Paymob HMAC-SHA512 exact canonical transaction fields."
       },
-      "openwaSignature": {
-        "type": "apiKey",
-        "in": "header",
-        "name": "x-openwa-signature"
-      },
       "resendSignature": {
         "type": "apiKey",
         "in": "header",
         "name": "svix-signature"
       },
-      "whatsappSignature": {
-        "type": "apiKey",
-        "in": "header",
-        "name": "x-hub-signature-256"
-      },
       "muxSignature": {
         "type": "apiKey",
         "in": "header",
         "name": "mux-signature"
-      },
-      "whatsappVerify": {
-        "type": "apiKey",
-        "in": "query",
-        "name": "hub.verify_token"
       }
     }
   }

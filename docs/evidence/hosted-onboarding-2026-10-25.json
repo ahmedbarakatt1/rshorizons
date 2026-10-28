@@ -1,0 +1,250 @@
+{
+  "at": "2026-10-25T15:57:25.819Z",
+  "scope": "Owner-designated production Supabase and Vercel; no successful/live deployment",
+  "supabase": {
+    "migrations": 23,
+    "tables": 118,
+    "runtime": {
+      "current_user": "tourism_app",
+      "tls": true,
+      "currencies": 3,
+      "can_create_auth": false
+    },
+    "boundaryChecks": {
+      "untrustedCA": "SELF_SIGNED_CERT_IN_CHAIN",
+      "wrongHostname": "ERR_TLS_CERT_ALTNAME_INVALID",
+      "storage": {
+        "serverUploadDownloadVerified": true,
+        "anonymousDownloadDenied": true,
+        "publicDownloadDenied": true
+      },
+      "verificationObjectRemoved": true
+    },
+    "administrator": {
+      "active": true,
+      "mfa_required": true,
+      "role": "owner",
+      "scope_type": "all",
+      "passwordVerified": true,
+      "assurance": "aal1",
+      "mfaEnrollmentRequired": true,
+      "publicSignupsDisabled": true,
+      "emailSignInEnabled": true,
+      "verificationSessionSignedOut": true
+    },
+    "storage": {
+      "id": "tourism-private",
+      "public": false,
+      "fileSizeLimit": 52428800,
+      "requiredReleaseLimit": 67108864,
+      "releaseSizeRequirementMet": false,
+      "allowedMimeTypes": [
+        "image/jpeg",
+        "image/png",
+        "image/webp",
+        "video/mp4"
+      ]
+    },
+    "securityWarnings": [
+      {
+        "name": "auth_leaked_password_protection",
+        "level": "WARN"
+      }
+    ],
+    "baselineAuthGuard": {
+      "version": "20261020155436_tourism_core.sql",
+      "previousChecksum": "c89b1b66a191892f448d964e61f1416229c1ddff996a3ec1c50d686b13a18661",
+      "currentChecksum": "73cf89e7393c05e64f33e1777aaf69809078757e066ec6ecb69a341bf6e9f2c7",
+      "reason": "Before first hosted application: guard existing managed auth.users without CREATE privileges; existing schemas/data unchanged."
+    },
+    "lineEndingChecksumReconciliation": [
+      {
+        "version": "20261020164600_item_kind_inventory_guards.sql",
+        "oldChecksum": "99b60532e0808e240e7383546aad217208e741c9b9e1e2edaa1752b2544d2051",
+        "canonicalChecksum": "405c1f0cbee25e2e3383af4d05557c047f95b254806cf8765bf79f2a76a6a15e"
+      },
+      {
+        "version": "20261020165200_service_time_resource_guards.sql",
+        "oldChecksum": "e19ce1ca1868ec6265f27205307fd9806a3fde4483194bee95f17f531da06a6c",
+        "canonicalChecksum": "eba6db7695f0ce38d245d26914ffbbd50604943b0bd7121246539997e344b03a"
+      },
+      {
+        "version": "20261020165700_shared_transfer_inventory.sql",
+        "oldChecksum": "81c2ab698b18a9d810b629bf66a769789cb98a034f460dc7bdd53564e739b4f8",
+        "canonicalChecksum": "7eb171600cff0e9098970b1c62032c5d6a0eadc68df18bec82f3c3ad3901b7fc"
+      },
+      {
+        "version": "20261020170500_quote_fees_cancellation.sql",
+        "oldChecksum": "501f31f805fa31102b0e50e2f5197868aa7605682297ba1bc479ec8599aefb47",
+        "canonicalChecksum": "b53b758fccc8841bb49e09cdd8c24b72a172919d7ac5d55f485b278893cd0a90"
+      },
+      {
+        "version": "20261020171000_pickup_and_refund_policy_binding.sql",
+        "oldChecksum": "4b77751ae9c56a6ca10e6dc4b3481c43e5e9eb6139b80191fe4121bb935fa1d5",
+        "canonicalChecksum": "1349c419f30e94495255bcffa3b93079e588e40f063649e4a9929e91e8ddc833"
+      },
+      {
+        "version": "20261020174000_expired_auth_and_offline_events.sql",
+        "oldChecksum": "4decf8e3927f471e4d23693b6c0b8b3258243520dae74e5553b90445099fdab1",
+        "canonicalChecksum": "b5a958f5cacbbd8cd54654f611f514218b310311203b93b68569dcf644f275f7"
+      }
+    ]
+  },
+  "vercel": {
+    "project": "ahmedbarakatt1s-projects/rshorizons",
+    "hostname": "rshorizons.vercel.app",
+    "plan": "hobby",
+    "nodeVersion": "22.x",
+    "buildCommand": "npm run verify:release && npm run build",
+    "configuredVariableNames": [
+      "DATABASE_URL",
+      "DATABASE_SSL_CA",
+      "APP_ENV",
+      "APP_BASE_URL",
+      "DEMO_MODE",
+      "BOOKING_ENABLED",
+      "STORAGE_PROVIDER",
+      "CRON_SECRET",
+      "TOKEN_HASH_PEPPER",
+      "WHATSAPP_PROVIDER",
+      "EMAIL_PROVIDER",
+      "VIDEO_PROVIDER"
+    ],
+    "secretTypes": [
+      {
+        "key": "TOKEN_HASH_PEPPER",
+        "type": "sensitive",
+        "target": [
+          "production"
+        ]
+      },
+      {
+        "key": "CRON_SECRET",
+        "type": "sensitive",
+        "target": [
+          "production"
+        ]
+      },
+      {
+        "key": "DATABASE_URL",
+        "type": "sensitive",
+        "target": [
+          "production"
+        ]
+      },
+      {
+        "key": "SUPABASE_SECRET_KEY",
+        "type": "sensitive",
+        "target": [
+          "production"
+        ]
+      }
+    ],
+    "deployed": false,
+    "removedUnusedPrivilegedVariableNames": [
+      "POSTGRES_PASSWORD",
+      "POSTGRES_URL",
+      "POSTGRES_PRISMA_URL",
+      "POSTGRES_URL_NON_POOLING",
+      "SUPABASE_JWT_SECRET",
+      "SUPABASE_SERVICE_ROLE_KEY"
+    ],
+    "requiredSensitiveCredentialsRetained": true,
+    "automaticDeploymentAttempts": [
+      {
+        "id": "dpl_6jrZurHc24w7LP6dct76oCXqDAb9",
+        "target": "preview",
+        "state": "ERROR",
+        "error": "Hobby accounts are limited to daily cron jobs. This cron expression (* * * * *) would run more than once per day. Upgrade to the Pro plan to unlock all Cron Jobs features on Vercel."
+      },
+      {
+        "id": "dpl_DgHQKmbUTp3D4smHX1xMuaJBujb2",
+        "target": "production",
+        "state": "ERROR",
+        "error": "Hobby accounts are limited to daily cron jobs. This cron expression (* * * * *) would run more than once per day. Upgrade to the Pro plan to unlock all Cron Jobs features on Vercel."
+      }
+    ]
+  },
+  "localVerification": {
+    "domainTests": 209,
+    "files": 46,
+    "lint": "passed",
+    "types": "passed",
+    "build": "passed",
+    "browserTests": 3,
+    "browserScope": "Chromium local administrator price/photo flow, required WhatsApp phone, automated accessibility/cache boundary",
+    "review": "Approved, no scoped defects"
+  },
+  "remaining": [
+    "Owner MFA enrollment and hosted dashboard verification",
+    "Separate isolated staging",
+    "Vercel compatible commercial/cron plan",
+    "Supabase 64MiB upload capacity; paid-plan error402 verified",
+    "Auth leaked-password protection",
+    "Resend account/owned sender domain and actual delivery callbacks",
+    "Remaining Paymob/Mux/content/consent/translation/recovery/UAT gates"
+  ],
+  "noRealGuestMessages": true,
+  "noPurchases": true,
+  "ci": {
+    "source": "ab0f80bc54ba25b06ec7d454566a0660d3f1c532",
+    "url": "https://github.com/ahmedbarakatt1/rshorizons/actions/runs/40208411106",
+    "status": "success",
+    "domainTests": {
+      "unit": 41,
+      "database": 62,
+      "concurrency": 7,
+      "integration": 55,
+      "contract": 7,
+      "security": 37,
+      "total": 209
+    },
+    "browserTests": {
+      "passed": 51,
+      "intentionalSkips": 18
+    },
+    "cleanMigrations": "passed",
+    "lint": "passed",
+    "types": "passed",
+    "build": "passed",
+    "recovery": "passed",
+    "sourceArtifactScan": "passed"
+  },
+  "openwa": {
+    "selectedHost": "Owner Windows computer",
+    "previouslySelectedHost": "Oracle Always Free; signup blocked by accepted-card requirement",
+    "decision": "Owner instructed host locally, superseding cloud-only restriction",
+    "ownerHostingConstraints": {
+      "cloudOnly": false,
+      "hostingPurchaseAuthorized": false,
+      "paymentCardAvailable": false,
+      "localHostNowDesignated": true
+    },
+    "cloudResourceCreated": false,
+    "localContainerCreated": true,
+    "composeValidation": "passed",
+    "composeSha256": "b82ec6a344fe51b1ad856dad2ec3cca6dc8e5c488ee164f4c33d0f6b87e5520c",
+    "nativeX64Build": "passed",
+    "nativeArmBuild": "not required for designated x86_64 host; not run",
+    "runtimeHealth": "passed",
+    "authenticationAndScope": "passed",
+    "unpairedRestartPersistence": "passed",
+    "qrDisplay": "verified in headed Edge browser",
+    "pairingAndDelivery": "pending owner QR scan, paired recovery, HTTPS and approved recipient/template",
+    "evidence": "docs/evidence/local-openwa-2026-10-25.json"
+  },
+  "noSuccessfulProductionDeployment": true,
+  "updatedAt": "2026-10-25T16:51:10.535Z",
+  "supersededAt": "2026-10-25T17:33:38.281Z",
+  "supersededBy": "Owner replaced OpenWA with manual WhatsApp links; historical setup evidence only",
+  "whatsappCurrent": {
+    "mode": "manual-links",
+    "numbers": [
+      "+201099267451",
+      "+201220907478"
+    ],
+    "vercelProductionValue": "links",
+    "gatewayRemoved": true,
+    "actualMessageSent": false
+  }
+}
