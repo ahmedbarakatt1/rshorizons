@@ -45,6 +45,7 @@ function localize(root:HTMLElement){
   });
   root.querySelectorAll<HTMLElement>(".admin-empty").forEach(element=>{if(/^No .+ match this view\.$/.test(element.textContent?.trim()??""))element.textContent="لا توجد نتائج مطابقة لهذا العرض.";});
   root.querySelectorAll<HTMLAnchorElement>('a[href^="/admin"]').forEach(link=>{
+    if(link.classList.contains("admin-language-switch"))return;
     const url=new URL(link.href,location.origin);url.searchParams.set("lang","ar");const next=`${url.pathname}${url.search}${url.hash}`;if(link.getAttribute("href")!==next)link.setAttribute("href",next);
   });
 }

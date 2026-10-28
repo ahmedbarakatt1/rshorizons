@@ -22,7 +22,7 @@ test("Arabic admin workspace keeps navigation and operational data functional",a
   await page.getByRole("link",{name:"الحجوزات",exact:true}).click();
   await expect(page).toHaveURL(/\/admin\/bookings\?lang=ar$/);
   await expect(page.getByRole("heading",{name:"الحجوزات",exact:true})).toBeVisible();
-  await expect(page.getByRole("link",{name:"English",exact:true})).toBeVisible();
+  await expect(page.getByRole("link",{name:"English",exact:true})).toHaveAttribute("href","/admin/bookings");
 
   await page.getByRole("link",{name:"الموارد والتكليفات",exact:true}).click();
   await page.getByRole("button",{name:"إنشاء مورد",exact:true}).click();
