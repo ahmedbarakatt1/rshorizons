@@ -52,7 +52,7 @@ export async function adminReads(request:Request,parts:string[]) {
     await getStaff(request);
     const [destinations,categories,variants,properties,roles,policies,amenities,cancellationPolicies,pickupLocations]=await Promise.all([
       query("SELECT id,canonical_slug AS title FROM app.destinations ORDER BY canonical_slug"),
-      query("SELECT id,code AS title FROM app.categories ORDER BY sort_order"),
+      query("SELECT id,code AS title FROM app.categories WHERE active ORDER BY sort_order"),
       query("SELECT v.id,t.title FROM app.service_variants v JOIN app.variant_translations t ON t.variant_id=v.id AND t.locale='en' WHERE v.active"),
       query("SELECT id,name AS title FROM app.properties WHERE active"),
       query("SELECT id,code AS title FROM app.roles"),

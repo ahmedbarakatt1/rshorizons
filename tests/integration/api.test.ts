@@ -18,6 +18,7 @@ afterAll(()=>db.end());
 test("public_catalog_and_policy_contract_use_database",async()=>{
   const catalog=await call("catalog?locale=ar"),policies=await call("policies/current?locale=ar");
   expect(catalog.response.status).toBe(200);expect(catalog.json.data.services.length).toBeGreaterThan(0);
+  expect(catalog.json.data.services.some((item:{category:string})=>item.category.replaceAll("_","-")==="shore-dives")).toBe(false);
   const arabic=/[\u0600-\u06ff]/;
   for(const item of [...catalog.json.data.services,...catalog.json.data.apartments,...catalog.json.data.destinations]){
     expect(item.title).toMatch(arabic);
