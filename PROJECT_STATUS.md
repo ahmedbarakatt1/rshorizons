@@ -1,5 +1,11 @@
 # Red Sea Horizons — execution status
 
+## November 26, 2026 — contact page and footer redesign
+
+Revision `686b7fa` is live as `dpl_C29rQ1BCr7BQ9rCgjKeohXRhPjMm`. The WhatsApp feature pairs the agency’s reef photograph with both team numbers. Direct calls and email are grouped beneath it, with separate social buttons and a coordinated payment panel. The footer uses the same contact hierarchy in a dark layout.
+
+Lint, the optimized build and 21 cross-browser contact, payment and booking checks passed. All ten languages fit a 320px viewport. Signed-out live checks verified the featured photograph, channel actions, accessible contrast and the Arabic mobile WhatsApp booking draft. Live desktop and mobile screenshots are in `.local/evidence/contact-modern-live`.
+
 ## November 26, 2026 — contact and payment buttons
 
 Revision `2e0158c` is live as `dpl_FFz2hFswzWKtRdZpT1WtV7YHo3FP`. WhatsApp, phone, email, social profiles and InstaPay use labeled, channel-colored buttons with native link destinations. The footer and booking handoff share the same controls.
