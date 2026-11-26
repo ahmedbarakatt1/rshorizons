@@ -26,9 +26,13 @@ for (const locale of ["en","ar"]) {
     await expect(methods).toContainText(copy.paymentConfirmFirst);
     await expect(methods.getByRole("link")).toHaveAttribute("href","https://ipn.eg/S/abdohassan8123/instapay/8Yhxaj");
     await page.goto(`/${locale}/contact`);
+    await expect(page.locator("header .locale-control svg[aria-hidden=true]")).toBeVisible();
     for (const href of ["mailto:horizonsredsea@gmail.com","tel:+201099267451","tel:+201220907478","https://www.facebook.com/share/1CFka6exsG/","https://www.instagram.com/horizonsrs2026/","https://www.tiktok.com/@red.sea.horizons"]) {
       await expect(main.locator(`a[href="${href}"]`)).toHaveAccessibleName(/\S/);
+      await expect(main.locator(`a[href="${href}"] svg[aria-hidden=true]`)).toBeVisible();
     }
+    for(const link of await main.locator('.whatsapp-contact-links a').all())
+      await expect(link.locator("svg[aria-hidden=true]")).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   });
 

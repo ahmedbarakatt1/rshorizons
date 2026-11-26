@@ -8,6 +8,7 @@ import {useEffect,useRef} from "react";
 import {usePathname} from "next/navigation";
 import {useTranslations} from "next-intl";
 import {localeNames,locales,type Locale} from "@/i18n/locales";
+import {ChannelIcon} from "./ChannelIcon";
 import {ContactChannels} from "./CustomerService";
 import {activitySections} from "@/config/activity-sections";
 
@@ -40,7 +41,7 @@ export function PublicShell({children,locale}:{children:React.ReactNode;locale:L
   <header className="site-header">
    <Link href={`/${locale}`} className="wordmark" aria-label={brandName}><Mark/>{locale==="ar"?<span><strong>ريد سي</strong><br/>هورايزنز</span>:<span>RED SEA<br/><strong>HORIZONS</strong></span>}</Link>
    <nav className="desktop-nav" aria-label={t("menu")}>{links.map(([path,label])=><Link key={path} href={`/${locale}/${path}`} aria-current={current(path)?"page":undefined}>{t(label)}</Link>)}</nav>
-   <div className="header-tools"><label className="locale-control"><span className="sr-only">{t("language")}</span><select disabled={!hydrated} aria-label={t("language")} value={locale} onChange={event=>{
+   <div className="header-tools"><label className="locale-control"><ChannelIcon name="globe"/><span className="sr-only">{t("language")}</span><select disabled={!hydrated} aria-label={t("language")} value={locale} onChange={event=>{
     const target=event.target.value; document.cookie=`NEXT_LOCALE=${target}; path=/; max-age=31536000; SameSite=Lax`;window.location.assign(pathname.replace(/^\/[^/]+/,`/${target}`)+window.location.search);
    }}>{locales.map(code=><option key={code} value={code}>{localeNames[code]}</option>)}</select></label><Link prefetch={false} href={`/${locale}/contact`} className="manage-link" aria-current={current("contact")?"page":undefined}>{t("contact")}</Link></div>
    <details className="mobile-menu" ref={menuRef}

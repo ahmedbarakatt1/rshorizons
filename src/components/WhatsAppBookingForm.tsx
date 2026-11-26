@@ -6,6 +6,7 @@ import Link from "next/link";
 import {useTranslations} from "next-intl";
 import type {ApartmentDetail,ServiceDetail} from "@/types/catalog";
 import {teamWhatsAppNumbers,whatsappLink} from "@/modules/content/whatsapp";
+import {ChannelIcon} from "./ChannelIcon";
 import {PaymentMethods} from "./CustomerService";
 import {money} from "./format";
 
@@ -58,7 +59,7 @@ export function WhatsAppBookingForm({locale,service,apartment}:{locale:string;se
   </form></div>
   {reviewing&&<div ref={reviewRef} tabIndex={-1} className="whatsapp-draft"><h2>{t("reviewBookingMessage")}</h2><p>{t("whatsappManual")}</p>
    <label>{t("message")}<textarea rows={12} value={draft} onChange={event=>setDraft(event.target.value)} maxLength={5000}/></label>
-   {draft.trim()&&<a className="button" href={whatsappLink(phone,draft)!} target="_blank" rel="noopener noreferrer" referrerPolicy="no-referrer">{t("continueWhatsApp")}</a>}
+   {draft.trim()&&<a className="button" href={whatsappLink(phone,draft)!} target="_blank" rel="noopener noreferrer" referrerPolicy="no-referrer"><ChannelIcon name="whatsapp"/>{t("continueWhatsApp")}</a>}
    <p className="small">{t("bookingNotConfirmed")}</p><button type="button" className="text-button" onClick={()=>{setReviewing(false);requestAnimationFrame(()=>formRef.current?.querySelector<HTMLInputElement>('input:not([type="hidden"])')?.focus());}}>{t("editBookingDetails")}</button>
   </div>}
  </div><aside className="booking-aside"><p>{t("from")} <bdi className="detail-price">{money(service?.fromAmountMinor??apartment?.nightlyAmountMinor??"0",service?.currency??apartment?.currency??"EGP",locale)}</bdi>{apartment?` / ${t("night")}`:""}</p><PaymentMethods/><Link className="text-link" href={`/${locale}/contact`}>{t("otherContactChannels")}</Link></aside></div>;

@@ -1,0 +1,26 @@
+.icon {
+  display: inline-block;
+  flex: none;
+  vertical-align: middle;
+}
+
+:global(.locale-control):has(> .icon) {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+:global(.locale-control) > .icon {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+
+:global(.direct-contact-links a > span):has(> .icon) {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+:global(.direct-contact-links a):has(.icon) {
+  align-items: flex-start;
+}

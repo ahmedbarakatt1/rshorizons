@@ -99,8 +99,7 @@ p { text-wrap: pretty; }
   position: relative;
   overflow: hidden;
 }
-/* These crops are anchored to the source pixels, including in RTL. The outline
-   leaves the diver's hands and the boat's bow outside their rectangular frames. */
+/* The boat crop stays anchored to the source pixels in both reading directions. */
 .trip-photo-cutout > img.photo {
   position: absolute;
   left: var(--crop-left);
@@ -109,32 +108,6 @@ p { text-wrap: pretty; }
   max-width: none;
   height: auto;
   aspect-ratio: var(--source-ratio);
-}
-.trip-photo-diver {
-  aspect-ratio: 7/8;
-  --source-ratio: 960/840;
-  --source-width: 210.989%;
-  --crop-left: -47.253%;
-  --crop-top: -57.692%;
-  clip-path: polygon(
-    0% 16.67%, 16.43% 16.67%, 15.48% 15.21%, 14.05% 13.54%, 11.43% 12.29%,
-    11.19% 11.88%, 11.67% 11.67%, 13.33% 12.5%, 15% 13.54%, 14.52% 12.71%,
-    11.9% 11.46%, 11.9% 11.04%, 12.62% 10.83%, 14.76% 11.46%, 15.95% 12.5%,
-    16.9% 13.54%, 16.43% 12.29%, 15.48% 11.25%, 15.71% 10.83%, 16.43% 11.04%,
-    18.1% 12.29%, 19.29% 13.96%, 20.24% 15.42%, 20.95% 16.25%, 21.67% 15.63%,
-    22.62% 15.42%, 23.1% 15.63%, 22.86% 16.04%, 21.9% 16.67%, 40.24% 16.67%,
-    40.71% 16.04%, 42.38% 15%, 43.57% 13.96%, 45.24% 13.54%, 47.14% 14.37%,
-    48.1% 13.75%, 49.52% 13.33%, 50.71% 13.75%, 51.9% 14.17%, 52.62% 15%,
-    53.81% 15.42%, 55% 16.67%, 72.86% 16.67%, 74.29% 12.5%, 74.76% 10.83%,
-    73.81% 8.96%, 72.62% 7.71%, 72.62% 7.08%, 73.1% 7.08%, 74.29% 7.5%,
-    75.48% 8.54%, 76.19% 7.5%, 76.67% 5.63%, 77.38% 4.38%, 78.57% 2.92%,
-    79.29% 2.5%, 79.52% 2.92%, 78.1% 4.79%, 77.62% 6.25%, 77.62% 6.88%,
-    78.33% 5.42%, 79.52% 4.17%, 81.43% 2.5%, 82.38% 2.29%, 82.62% 2.71%,
-    81.67% 3.75%, 80.24% 5.42%, 79.29% 6.67%, 79.52% 7.29%, 81.43% 6.25%,
-    83.33% 5%, 84.05% 5%, 83.57% 5.83%, 81.43% 8.13%, 80.24% 10%,
-    78.57% 12.29%, 77.86% 14.79%, 77.62% 16.67%, 100% 16.67%, 100% 100%,
-    0% 100%
-  );
 }
 .trip-photo-boat {
   aspect-ratio: 5/6;
@@ -152,6 +125,8 @@ p { text-wrap: pretty; }
   );
 }
 .hero-side { display: grid; gap: 24px; }
+.hero-side a { min-width: 0; }
+.hero-side a > span { overflow-wrap: anywhere; hyphens: auto; }
 .hero-side .photo { height: auto; aspect-ratio: 5/4; }
 .hero-photos figcaption a, .hero-side a>span {
   display: flex;

@@ -2,6 +2,7 @@
 import {useEffect,useState} from "react";
 import Link from "next/link";
 import {api,ApiError} from "./api";
+import {ChannelIcon} from "./ChannelIcon";
 import {Mark} from "./PublicShell";
 import {money,cairoDate} from "./format";
 import type {BookingDTO} from "./GuestFlows";
@@ -43,7 +44,7 @@ export function AdminApp({path,demo,locale}:{path:string[];demo:boolean;locale:"
  useEffect(()=>{api<{permissions:string[];owner:boolean}>("/admin/session").then(session=>{setPermissions(session.permissions);setOwner(session.owner);setAuthenticated(true);}).catch(cause=>{setAuthenticated(false);if(cause instanceof ApiError&&cause.status!==401&&cause.status!==403)setMessage(cause.message);});},[]);
  async function login(event:React.FormEvent<HTMLFormElement>,local=false) {event.preventDefault();setBusy(true);setMessage("");const form=new FormData(event.currentTarget);try{await api(local?"/admin/auth/local":"/admin/auth/login",local?{token:form.get("token")}:{email:form.get("email"),password:form.get("password")});await loadSession();}catch(cause){setMessage(cause instanceof Error?cause.message:"Sign-in failed. Please try again.");}finally{setBusy(false);}}
  const localized=(children:React.ReactNode)=><AdminArabic enabled={locale==="ar"}>{children}</AdminArabic>;
- const languageSwitch=<Link className="text-link admin-language-switch" href={`${section?`/admin/${path.join("/")}`:"/admin"}${locale==="ar"?"":"?lang=ar"}`}>{locale==="ar"?"English":"العربية"}</Link>;
+ const languageSwitch=<Link className="text-link admin-language-switch" href={`${section?`/admin/${path.join("/")}`:"/admin"}${locale==="ar"?"":"?lang=ar"}`}><ChannelIcon name="globe"/>{locale==="ar"?"English":"العربية"}</Link>;
  if(section==="invite")return localized(<StaffInvitation/>);
  if(authenticated===null)return localized(<main className="admin-login">{languageSwitch}<h1>Red Sea Horizons</h1><p role="status">Checking staff access…</p></main>);
  if(!authenticated)return localized(<main className="admin-login">{languageSwitch}<Link href="/en" className="wordmark"><Mark/><span>RED SEA<br/><strong>HORIZONS</strong></span></Link><h1>Staff sign in</h1><p>{demo?"Use your provisioned local account. Your current staff role controls access to prices, photos and reservations.":"Sign in with your staff email and password. Your current role and scope control access."}</p><form className="form-stack" onSubmit={event=>login(event)}><label>Email<input type="email" name="email" autoComplete="username" required/></label><label>Password<input type="password" name="password" autoComplete="current-password" required/></label><button className="button" disabled={busy}>{busy?"Signing in…":"Sign in"}</button></form>{demo&&<details><summary>Local operator access</summary><p className="small">Local verification only. Use the one-time token issued by the operator bootstrap command.</p><form className="form-stack" onSubmit={event=>login(event,true)}><label>Local operator token<input name="token" type="password" autoComplete="off" required/></label><button className="button button-secondary" disabled={busy}>Open local workspace</button></form></details>}{message&&<p role="alert" className="admin-error">{message}</p>}</main>);

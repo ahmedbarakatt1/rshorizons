@@ -3,6 +3,7 @@ import {getLocale} from "next-intl/server";
 import {connection} from "next/server";
 import {direction} from "@/i18n/locales";
 import "./globals.css";
+import "./arabic-typography.css";
 
 export const metadata: Metadata = {
   title: "Red Sea Horizons",

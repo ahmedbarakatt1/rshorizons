@@ -7,6 +7,7 @@ import {isLocale,locales} from "@/i18n/locales";
 import {Catalog,Photo,Search,ServiceCard} from "@/components/Catalog";
 import {Arrow} from "@/components/PublicShell";
 import {BookingStatement} from "@/components/BookingStatement";
+import {CompassActions} from "@/components/NauticalCompass";
 import {WhatsAppBookingForm as BookingForm} from "@/components/WhatsAppBookingForm";
 import {ContactChannels,PaymentMethods} from "@/components/CustomerService";
 import {GuestAccess,PolicyContent,PrivateGallery,PublicGallery} from "@/components/GuestFlows";
@@ -78,13 +79,11 @@ export default async function PublicPage({params,searchParams}:Props) {
    <div className="hero-note">
     <h1>{t("homeTitle")}</h1>
     <p>{t("homeIntro")}</p>
-    <Link href={`/${locale}/experiences`} className="button">{t("explore")}<Arrow/></Link>
+    <CompassActions><Link href={`/${locale}/experiences`} className="button">{t("explore")}<Arrow/></Link></CompassActions>
    </div>
    <div className="hero-photos">
     <figure className="hero-primary">
-     <div className="trip-photo-cutout trip-photo-diver">
-      <Photo image="hero" alt={t("media_diver")} sizes="(max-width:767px) calc(140vw - 67px), 72vw" priority/>
-     </div>
+     <Photo image="hero" alt={t("media_diver")} sizes="(max-width:767px) 60vw, 36vw" priority/>
      <figcaption><Link href={`/${locale}/gallery`}>{t("previousTrips")}<Arrow/></Link></figcaption>
     </figure>
     <div className="hero-side">

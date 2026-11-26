@@ -1,0 +1,132 @@
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  max-width: 25rem;
+}
+
+.scene {
+  width: clamp(5.5rem, 10vw, 8.5rem);
+  aspect-ratio: 1.18;
+  flex: none;
+  position: relative;
+  perspective: 520px;
+  pointer-events: none;
+}
+
+.scene::before {
+  content: "";
+  position: absolute;
+  inset: 62% 5% 0 10%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, #28241645, #3a3a2800 72%);
+  transform: rotate(-10deg);
+}
+
+.instrument {
+  --polished-brass: conic-gradient(from 22deg, #9e7644, #f1deaf 11%, #a38b5e 18%, #685837 31%, #c8a879 41%, #faebc4 48%, #9c8152 58%, #ab956d 68%, #ffefc7 80%, #ae8453 91%, #9e7644);
+  position: absolute;
+  width: 76%;
+  aspect-ratio: 1;
+  inset: 13% 12% auto;
+  transform-style: preserve-3d;
+  transform: rotateX(36deg) rotateY(-17deg) rotateZ(-24deg);
+}
+
+.instrument > div {
+  position: absolute;
+}
+
+.bow {
+  width: 30%;
+  height: 23%;
+  left: 35%;
+  bottom: 101%;
+  border: 3px solid #aa8958;
+  border-radius: 44% 44% 40% 40%;
+  box-shadow: inset 1px 1px 0 #fff0c5, 1px 2px 0 #5b4a2e;
+}
+
+.crown {
+  width: 15%;
+  height: 12%;
+  left: 42.5%;
+  bottom: 95%;
+  border-radius: 22%;
+  background: repeating-linear-gradient(90deg, #876939 0 1px, #ddc595 1px 3px);
+  box-shadow: 1px 2px 0 #564a34;
+}
+
+.case, .bezel, .dial {
+  border-radius: 50%;
+}
+
+.case {
+  inset: 0;
+  background: var(--polished-brass);
+  box-shadow: 0 1px #8e7650, 0 2px #b09b71, 0 3px #a08a63, 0 4px #8d7955, 0 5px #74603f, 0 6px #5f5138, 0 7px #554932, 0 8px 1px #3f392a;
+}
+
+.bezel {
+  inset: 3%;
+  background: var(--polished-brass);
+  border: 1px solid #f3e4c3;
+  box-shadow: inset 0 0 0 1px #755735;
+  transform: translateZ(1px);
+}
+
+.dial {
+  inset: 8%;
+  background: #143e48;
+  box-shadow: 0 0 0 1px #443e2c, inset 2px 2px 5px #061c22;
+  transform: translateZ(2px);
+  color: #f9ebc9;
+  font: bold clamp(7px, .75vw, 10px)/1 Georgia, serif;
+}
+
+.scale {
+  position: absolute;
+  inset: 5%;
+  border-radius: 50%;
+  border: 1px solid #c1b588;
+  background: repeating-conic-gradient(from -1deg, #ddcfa2 0 1.5deg, transparent 1.5deg 6deg);
+  mask-image: radial-gradient(circle closest-side, transparent 88%, black 90%);
+}
+
+.rose {
+  position: absolute;
+  inset: 24%;
+  background: #8a9f98;
+  clip-path: polygon(50% 0, 56% 35%, 83% 17%, 65% 44%, 100% 50%, 65% 56%, 83% 83%, 56% 65%, 50% 100%, 44% 65%, 17% 83%, 35% 56%, 0 50%, 35% 44%, 17% 17%, 44% 35%);
+}
+
+.dial span {
+  position: absolute;
+  transform: translate(-50%, -50%);
+}
+
+.north { left: 50%; top: 21%; }
+.east { left: 79%; top: 50%; }
+.south { left: 50%; top: 79%; }
+.west { left: 21%; top: 50%; }
+
+.needle {
+  inset: 18% 44%;
+  background: conic-gradient(from 0deg, #db6545 0 25%, #e6d6b7 25% 50%, #a7a598 50% 75%, #ff9871 75%);
+  clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+  transform: translateZ(5px) rotateZ(34deg);
+}
+
+.pivot {
+  inset: 46%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 26%, #fff3cc, #d7b77d 42%, #967641 76%);
+  box-shadow: .5px 1px 1px #2d2d21;
+  transform: translateZ(6px);
+}
+
+@media (max-width: 767px) {
+  .actions { max-width: 23rem; }
+  .scene { width: 5rem; }
+}
