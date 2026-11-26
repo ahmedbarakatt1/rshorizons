@@ -1,5 +1,11 @@
 # Red Sea Horizons — execution status
 
+## November 26, 2026 — Red Sea relief banner
+
+Application revision `d7c9eff` is live on [Red Sea Horizons](https://red-sea-horizons.vercel.app/ar) as deployment `dpl_GXZ34LTaFp5NSAQYsUmqaYpJ2htK`. The blue homepage banner uses the supplied brand mark, a prerendered relief of the Red Sea with Hurghada marked, and direct links from trip photographs to diving and boat trips. Static artwork keeps terrain rendering off the guest device.
+
+Lint, the optimized build, ten-language message parity and nine cross-browser layout and keyboard checks passed. All ten localized banners rendered at 375px. The Arabic and English banners passed targeted automated WCAG A/AA checks. Signed-out production checks decoded the images and verified banner width and links at five mobile, tablet and desktop sizes (320–1440px), including navigation to Arabic boat trips. Browser evidence is in `.local/evidence/atlas-live`. The previous compatible deployment is `dpl_49d5kcyAZmbp5V8ziv4EmbJu4Uee`.
+
 ## November 26, 2026 — restored diver photograph, Arabic type and contact icons
 
 Revision `765adaa` is live on [Red Sea Horizons](https://red-sea-horizons.vercel.app/ar) as deployment `dpl_49d5kcyAZmbp5V8ziv4EmbJu4Uee`. The homepage displays the original diver photograph with a separate CSS brass compass beside the Explore link. Arabic guest and staff pages use self-hosted Cairo. The language selectors and guest contact channels have labeled icons.
