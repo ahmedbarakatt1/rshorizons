@@ -3,6 +3,7 @@ node_modules/
 .next-release/
 out/
 .vercel/
+supabase/.temp/
 .local/
 .tooling/node_modules/
 .tooling/vendor/

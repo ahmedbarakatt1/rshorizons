@@ -64,10 +64,10 @@ try{
       await db.query("UPDATE app.local_staff_credentials SET password_salt=$2,password_hash=$3,updated_at=now() WHERE staff_id=$1",[staffId,salt,hash]);
       await db.query("UPDATE app.local_operator_sessions SET revoked_at=now() WHERE staff_id=$1 AND revoked_at IS NULL",[staffId]);
     }else{
-      await db.query("INSERT INTO app.staff_profiles(id,name,active,mfa_required) VALUES($1,$2,true,true)",[staffId,account.name]);
+      await db.query("INSERT INTO app.staff_profiles(id,name,active,mfa_required) VALUES($1,$2,true,false)",[staffId,account.name]);
       await db.query("INSERT INTO app.local_staff_credentials(staff_id,email,password_salt,password_hash) VALUES($1,$2,$3,$4)",[staffId,account.email,salt,hash]);
     }
-  }else await db.query("INSERT INTO app.staff_profiles(id,name,active,mfa_required) VALUES($1,$2,true,true)",[staffId,account.name]);
+  }else await db.query("INSERT INTO app.staff_profiles(id,name,active,mfa_required) VALUES($1,$2,true,false)",[staffId,account.name]);
   if(!rotate){
     const role=await db.query("INSERT INTO app.staff_roles(staff_id,role_id) SELECT $1,id FROM app.roles WHERE code='owner' RETURNING role_id",[staffId]);
     if(!role.rowCount)throw new Error("OWNER_ROLE_MISSING");

@@ -3,10 +3,10 @@ import {AppError} from "@/server/http/errors";
 import {localeSchema,uuidSchema} from "@/modules/bookings/contracts";
 import {catalogFiltersSchema} from "./contracts";
 import type {ApartmentDetail,ApartmentSummary,CatalogData,DestinationSummary,ServiceDetail,ServiceSummary} from "@/types/catalog";
-import {illustrativeImage} from "@/components/catalog-imagery";
+import {webPhoto} from "@/components/catalog-imagery";
 
 function isDemo() {
-  return ["development","test"].includes(process.env.APP_ENV??"development")&&process.env.DEMO_MODE==="true";
+  return process.env.DEMO_MODE==="true";
 }
 // Only approved variants with an actual effective rate can advertise a price.
 // The date expression is internal SQL, never supplied by a request.
@@ -26,19 +26,17 @@ JOIN LATERAL (
  WHERE v.service_id=s.id AND v.active
  ORDER BY rate.currency,rate.amount,v.id LIMIT 1
 ) priced ON true
-WHERE s.status='published' AND t.approved_at IS NOT NULL AND dt.approved_at IS NOT NULL AND d.active
+WHERE c.active AND c.code<>'photography' AND s.status='published' AND t.approved_at IS NOT NULL AND dt.approved_at IS NOT NULL AND d.active
 AND ($2::boolean OR NOT s.synthetic)`;
 function serviceImage(category:string) {
   category=category.replaceAll("_","-");
-  if(isDemo()&&category==="transportation")return "/api/v1/demo-media/transfer-car";
-  if(isDemo()&&category==="boat-tours")return "/api/v1/demo-media/boat-day";
-  if(isDemo()&&["scuba-diving","shore-dives","snorkeling","photography","tours"].includes(category))
+  if(category==="transportation")return "/api/v1/demo-media/transfer-car";
+  if(category==="boat-tours")return "/api/v1/demo-media/boat-day";
+  if(["scuba-diving","shore-dives","snorkeling","photography","tours"].includes(category))
     return `/api/v1/demo-media/${category==="photography"?"diving":"reef"}`;
-  if(category==="beach-buggy")return illustrativeImage("buggy");
-  if(category==="desert-safari")return illustrativeImage("desert");
-  if(category==="boat-tours")return illustrativeImage("boat");
-  if(category==="transportation")return illustrativeImage("transfer");
-  return illustrativeImage("coast");
+  if(category==="beach-buggy")return webPhoto("buggy");
+  if(category==="desert-safari")return webPhoto("desert");
+  return "/api/v1/demo-media/reef";
 }
 export async function searchServices(filters:unknown,locale="en") {
   const f=catalogFiltersSchema.parse({...filters as object,locale});
@@ -53,7 +51,8 @@ export async function searchServices(filters:unknown,locale="en") {
 export async function getDestinations(locale:string):Promise<DestinationSummary[]> {
   localeSchema.parse(locale);
   const {rows}=await query<DestinationSummary>(`SELECT d.id,d.canonical_slug AS slug,t.title,t.description AS summary FROM app.destinations d JOIN app.destination_translations t ON t.destination_id=d.id AND t.locale=$1 WHERE d.active AND t.approved_at IS NOT NULL ORDER BY d.canonical_slug`,[locale]);
-  return rows.map((row,index)=>({...row,image:isDemo()&&index<2?`/api/v1/demo-media/${index?"diving":"hero"}`:illustrativeImage("coast")}));
+  const images:Record<string,string>={"al-qusair":"/api/v1/demo-media/diving",hurghada:webPhoto("desert"),luxor:webPhoto("luxor"),"marsa-alam":"/api/v1/demo-media/hero","port-ghalib":"/api/v1/demo-media/boat-day"};
+  return rows.map(row=>({...row,image:images[row.slug]??"/api/v1/demo-media/reef"}));
 }
 export async function getService(idOrSlug:string,locale:string):Promise<ServiceDetail> {
   localeSchema.parse(locale);
@@ -64,30 +63,30 @@ export async function getService(idOrSlug:string,locale:string):Promise<ServiceD
     query<{id:string;title:string;priceAmountMinor:string;currency:string;pricingUnit:string;capacityModel:string}>(`SELECT v.id,vt.title,v.pricing_unit AS "pricingUnit",v.capacity_model AS "capacityModel",r.amount::text AS "priceAmountMinor",r.currency FROM app.service_variants v JOIN app.variant_translations vt ON vt.variant_id=v.id AND vt.locale=$2 JOIN LATERAL (SELECT amount,currency FROM app.price_rules pr WHERE pr.variant_id=v.id AND pr.effective_range @> (now() AT TIME ZONE 'Africa/Cairo')::date AND pr.guest_category IN('adult','all') ORDER BY pr.priority DESC,(pr.guest_category='adult') DESC LIMIT 1) r ON true WHERE v.service_id=$1 AND v.active AND vt.approved_at IS NOT NULL ORDER BY vt.title`,[row.id,locale]),
     getDepartures(row.id),
     query(`SELECT itinerary,inclusions,exclusions,restrictions,meeting_notes FROM app.service_translations WHERE service_id=$1 AND locale=$2`,[row.id,locale]),
-    query<{variantId:string;title:string;minQuantity:number;maxQuantity:number}>(`SELECT a.addon_variant_id AS "variantId",t.title,a.min_quantity AS "minQuantity",a.max_quantity AS "maxQuantity" FROM app.service_addons a JOIN app.variant_translations t ON t.variant_id=a.addon_variant_id AND t.locale=$2 WHERE a.parent_service_id=$1 AND a.active AND t.approved_at IS NOT NULL`,[row.id,locale]),
+    query<{variantId:string;title:string;minQuantity:number;maxQuantity:number}>(`SELECT a.addon_variant_id AS "variantId",t.title,a.min_quantity AS "minQuantity",a.max_quantity AS "maxQuantity" FROM app.service_addons a JOIN app.service_variants extra ON extra.id=a.addon_variant_id JOIN app.services parent ON parent.id=extra.service_id JOIN app.categories category ON category.id=parent.category_id AND category.active AND category.code<>'photography' JOIN app.variant_translations t ON t.variant_id=a.addon_variant_id AND t.locale=$2 WHERE a.parent_service_id=$1 AND a.active AND t.approved_at IS NOT NULL`,[row.id,locale]),
     query(`SELECT p.id,v.id AS "variantId",p.name AS title,p.address,vp.surcharge::text AS "surchargeAmountMinor",vp.currency FROM app.variant_pickups vp JOIN app.pickup_locations p ON p.id=vp.pickup_id JOIN app.service_variants v ON v.id=vp.variant_id WHERE v.service_id=$1 AND v.active AND p.active ORDER BY p.name`,[row.id])
   ]);
   return {...row,image:serviceImage(row.category),variants:variants.rows,departures,...content.rows[0],meetingNotes:content.rows[0]?.meeting_notes??"",addons:addons.rows,pickupOptions:pickups.rows} as ServiceDetail;
 }
 export async function getDepartures(serviceId:string,from?:string,to?:string,guests=1) {
   uuidSchema.parse(serviceId);
-  const {rows}=await query<{id:string;startsAt:string;endsAt:string;availableSeats:number;variantId:string}>(`SELECT d.id,d.variant_id AS "variantId",d.starts_at AS "startsAt",d.ends_at AS "endsAt",(d.seat_capacity-COALESCE(sum(a.seats) FILTER(WHERE a.state<>'released'),0))::integer AS "availableSeats" FROM app.departures d JOIN app.service_variants v ON v.id=d.variant_id LEFT JOIN app.capacity_allocations a ON a.departure_id=d.id WHERE v.service_id=$1 AND d.status='scheduled' AND d.cutoff_at>now() AND ($2::date IS NULL OR d.starts_at>=($2::date::timestamp AT TIME ZONE 'Africa/Cairo')) AND ($3::date IS NULL OR d.starts_at<(($3::date+1)::timestamp AT TIME ZONE 'Africa/Cairo')) GROUP BY d.id HAVING d.seat_capacity-COALESCE(sum(a.seats) FILTER(WHERE a.state<>'released'),0)>=$4 ORDER BY d.starts_at LIMIT 90`,[serviceId,from??null,to??null,guests]);
+  const {rows}=await query<{id:string;startsAt:string;endsAt:string;availableSeats:number;variantId:string}>(`SELECT d.id,d.variant_id AS "variantId",d.starts_at AS "startsAt",d.ends_at AS "endsAt",(d.seat_capacity-COALESCE(sum(a.seats) FILTER(WHERE a.state<>'released'),0))::integer AS "availableSeats" FROM app.departures d JOIN app.service_variants v ON v.id=d.variant_id LEFT JOIN app.capacity_allocations a ON a.departure_id=d.id WHERE v.service_id=$1 AND EXISTS (SELECT 1 FROM app.services s JOIN app.categories c ON c.id=s.category_id WHERE s.id=v.service_id AND s.status='published' AND c.active AND c.code<>'photography') AND d.status='scheduled' AND d.cutoff_at>now() AND ($2::date IS NULL OR d.starts_at>=($2::date::timestamp AT TIME ZONE 'Africa/Cairo')) AND ($3::date IS NULL OR d.starts_at<(($3::date+1)::timestamp AT TIME ZONE 'Africa/Cairo')) GROUP BY d.id HAVING d.seat_capacity-COALESCE(sum(a.seats) FILTER(WHERE a.state<>'released'),0)>=$4 ORDER BY d.starts_at LIMIT 90`,[serviceId,from??null,to??null,guests]);
   return rows;
 }
 const apartmentSelect=`SELECT a.id,t.slug,t.title,t.description AS summary,a.unit_code AS "unitCode",a.max_guests AS "maxGuests",a.bedrooms,a.beds,a.bathrooms::float8 AS bathrooms,a.default_rate::text AS "nightlyAmountMinor",a.currency,COALESCE((SELECT sum(amount)::text FROM app.apartment_fee_rules WHERE apartment_id=a.id AND kind='cleaning'),'0') AS "cleaningFeeMinor",COALESCE((SELECT array_agg(mt.label) FROM app.apartment_amenities am JOIN app.amenity_translations mt ON mt.amenity_id=am.amenity_id AND mt.locale=$1 WHERE am.apartment_id=a.id),'{}') AS amenities FROM app.apartments a JOIN app.apartment_translations t ON t.apartment_id=a.id AND t.locale=$1 JOIN app.properties p ON p.id=a.property_id WHERE a.status='active' AND p.active AND t.approved_at IS NOT NULL AND ($2::boolean OR NOT a.synthetic)`;
 export async function searchApartments(filters:{checkIn?:string;checkOut?:string;guests?:number}={},locale="en"):Promise<ApartmentSummary[]> {
   localeSchema.parse(locale);
   const {rows}=await query<ApartmentSummary>(`${apartmentSelect} AND a.max_guests>=COALESCE($3,1) AND ($4::date IS NULL OR $5::date IS NULL OR NOT EXISTS(SELECT 1 FROM app.apartment_inventory ai WHERE ai.apartment_id=a.id AND ai.released_at IS NULL AND ai.date_range && daterange($4::date,$5::date+a.cleaning_buffer_days,'[)'))) ORDER BY a.unit_code`,[locale,isDemo(),filters.guests??null,filters.checkIn??null,filters.checkOut??null]);
-  return rows.map(row=>({...row,image:illustrativeImage("apartment")}));
+  return rows.map(row=>({...row,image:webPhoto("apartment")}));
 }
 export async function getApartment(idOrSlug:string,locale:string):Promise<ApartmentDetail> {
   localeSchema.parse(locale);
   const {rows}=await query<ApartmentSummary>(`${apartmentSelect} AND (a.id::text=$3 OR t.slug=$3)`,[locale,isDemo(),idOrSlug]);
   if(!rows[0]) throw new AppError("NOT_FOUND",404);
   const {rows:details}=await query(`SELECT t.house_rules AS "houseRules",a.check_in_time AS "checkInTime",a.check_out_time AS "checkOutTime",a.min_nights AS "minNights",COALESCE((SELECT array_agg(p.type) FROM app.apartment_payment_policies ap JOIN app.payment_policies p ON p.id=ap.policy_id WHERE ap.apartment_id=a.id AND p.approved_at IS NOT NULL),'{}') AS "paymentPolicies" FROM app.apartments a JOIN app.apartment_translations t ON t.apartment_id=a.id AND t.locale=$2 WHERE a.id=$1`,[rows[0].id,locale]);
-  return {...rows[0],...details[0],image:illustrativeImage("apartment")} as ApartmentDetail;
+  return {...rows[0],...details[0],image:webPhoto("apartment")} as ApartmentDetail;
 }
 export async function getCatalog(locale:string):Promise<CatalogData> {
-  const [services,apartments,destinations]=await Promise.all([searchServices({},locale),searchApartments({},locale),getDestinations(locale)]);
-  return {services:services.items,apartments,destinations,demo:isDemo()};
+  const [services,destinations]=await Promise.all([searchServices({},locale),getDestinations(locale)]);
+  return {services:services.items,apartments:[],destinations,demo:isDemo()};
 }

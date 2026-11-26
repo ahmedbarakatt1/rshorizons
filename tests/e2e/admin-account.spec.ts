@@ -54,13 +54,19 @@ test("password administrator updates a real quote price and uploads a gallery ph
   }finally{await db.end();}
 });
 
-test("choosing WhatsApp makes the booking phone number required",async({page})=>{
-  await page.goto("/en/experiences/boat-tours");await page.getByRole("link",{name:"Request this experience",exact:true}).click();
-  await page.getByRole("button",{name:"Calculate my quote",exact:true}).click();
-  const phone=page.locator('input[name="phoneE164"]');await expect(phone).toBeVisible();
-  expect(await phone.evaluate((node:HTMLInputElement)=>node.required)).toBe(false);
-  await page.locator('input[name="whatsapp"]').check();
-  expect(await phone.evaluate((node:HTMLInputElement)=>node.required)).toBe(true);
-  expect(await phone.evaluate((node:HTMLInputElement)=>node.validity.valueMissing)).toBe(true);
-  await phone.fill("+201234567890");expect(await phone.evaluate((node:HTMLInputElement)=>node.checkValidity())).toBe(true);
+test("guests choose their customer service number and can edit their draft",async({page})=>{
+  await page.goto("/en/boat-trips");
+  await page.locator(".catalog-card a").first().click();
+  await page.locator('a[href*="/booking/request?service="]').click();
+  const form=page.locator(".whatsapp-booking form");
+  await form.locator('[name="name"]').fill("Local example");
+  await form.locator('[name="date"]').fill(new Date(Date.now()+14*86400000).toISOString().slice(0,10));
+  await form.getByRole("combobox",{name:"Customer service",exact:true}).selectOption("+201220907478");
+  await form.getByRole("button").click();
+  const draft=page.locator(".whatsapp-draft");
+  await draft.locator("textarea").fill("Edited enquiry");
+  const link=draft.locator('a[href^="https://wa.me/"]');
+  await expect(link).toHaveAttribute("href","https://wa.me/201220907478?text=Edited%20enquiry");
+  await draft.getByRole("button").click();
+  await expect(form.locator('[name="name"]')).toHaveValue("Local example");
 });

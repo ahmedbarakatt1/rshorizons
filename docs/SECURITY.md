@@ -6,7 +6,7 @@ This is an agency-operated application with public guest checkout, scoped privat
 
 `app` is a private PostgreSQL schema with RLS and no anonymous/authenticated Data API access. Runtime credentials are distinct from migration credentials and cannot bypass RLS or administer the server. Narrow `SECURITY DEFINER` routines perform inventory and financial mutations with a fixed search path. Server code validates current staff activity, permission and destination/property scope; role strings from browsers are never accepted.
 
-Staff use Supabase identity, an invited active profile and MFA assurance level2 for protected actions. The local one-use operator mechanism is unavailable outside development/test demo mode. Grant revocation is checked against current database state; logout clears cookies and revokes the provider session when configured.
+Staff use Supabase email/password identity and an invited active profile. The owner chose password-only administration on 2026-10-27, so an authenticator code is not required at login. Roles, scopes, active status and revocation are still checked against current database state on protected actions; login attempts are throttled, cookies are HttpOnly, and logout clears cookies and revokes the provider session when configured. The local one-use operator mechanism remains unavailable outside development/test demo mode.
 
 Customer secrets are cryptographically random and HMAC-hashed using a server pepper. POST redemption consumes the one-use grant; GET and link scanners do not. Sessions use the intersection of current grant/session scopes. Guessed booking references, gallery IDs, derivative IDs and object keys do not confer access.
 

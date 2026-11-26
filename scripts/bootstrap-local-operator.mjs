@@ -12,7 +12,7 @@ try {
     try {
       await client.query("BEGIN");
       await client.query("INSERT INTO auth.users(id,email) VALUES($1,'operator@local.invalid')",[staffId]);
-      await client.query("INSERT INTO app.staff_profiles(id,name,active,mfa_required) VALUES($1,'Local demonstration operator',true,true)",[staffId]);
+      await client.query("INSERT INTO app.staff_profiles(id,name,active,mfa_required) VALUES($1,'Local demonstration operator',true,false)",[staffId]);
       await client.query("INSERT INTO app.staff_roles(staff_id,role_id) SELECT $1,id FROM app.roles WHERE code='owner'",[staffId]);
       await client.query("INSERT INTO app.staff_scopes(staff_id,scope_type) VALUES($1,'all')",[staffId]);
       await client.query("COMMIT"); rows=[{id:staffId}];

@@ -2,11 +2,11 @@ import {test,expect} from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import {mkdirSync} from "node:fs";
 
-test("owner photos and videos load on demand, play and seek",async({page},info)=>{
+test("@public-release owner photos and videos load on demand, play and seek",async({page},info)=>{
  const videoRequests:string[]=[];page.on("request",request=>{if(request.url().endsWith(".mp4"))videoRequests.push(request.url());});
  await page.goto("/en/gallery");
  await expect(page.locator(".trip-video")).toHaveCount(6);
- await expect(page.locator(".owner-photo-gallery img")).toHaveCount(12);
+ await expect(page.locator(".owner-gallery .owner-photo-gallery img")).toHaveCount(12);
  const first=page.locator(".trip-video").first();
  await first.scrollIntoViewIfNeeded();
  expect(videoRequests).toEqual([]);

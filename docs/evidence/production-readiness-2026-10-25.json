@@ -1,0 +1,84 @@
+{
+  "at": "2026-10-25T18:58:15.622Z",
+  "sourceCommit": "9ef467d8e73c029bffb21249834fb5607cc84499",
+  "ci": {
+    "url": "https://github.com/ahmedbarakatt1/rshorizons/actions/runs/40223344217",
+    "conclusion": "success",
+    "domainTests": 217,
+    "browserPassed": 57,
+    "browserSkipped": 24
+  },
+  "local": {
+    "domainTests": 217,
+    "domainFiles": 51,
+    "browserPassed": 57,
+    "browserSkipped": 24,
+    "checks": [
+      "lint",
+      "typecheck",
+      "production build",
+      "25 clean migrations",
+      "118-table drift",
+      "10 locales x 218 keys",
+      "pg_dump/pg_restore with concurrency suite",
+      "storage SHA-256 restore",
+      "zero production npm audit vulnerabilities",
+      "configured-secret/private-path source and artifact scan"
+    ]
+  },
+  "browserScope": [
+    "all reservation kinds and staff approval",
+    "password administrator price change with authoritative quote and photo upload",
+    "deliberate booking-link recovery",
+    "contact submit/detail/resolution/state filter/pagination",
+    "reviews/invitations/rating filters",
+    "video playback/seek",
+    "manual WhatsApp destinations and staff consent",
+    "responsive/Arabic RTL/automated accessibility"
+  ],
+  "hosted": {
+    "migrations": 25,
+    "at": "2026-10-25T18:26:44.532Z",
+    "project": "asdlmlizktankblwqocp",
+    "runtime_role": "tourism_app",
+    "contacts": "0",
+    "bookings": "0",
+    "booking_enabled": false,
+    "contact_function_security_definer": false,
+    "runtime_contact_execute": true,
+    "anonymous_contact_read": false,
+    "contact_rls": true,
+    "delete_policy": "(retention_deadline <= now())",
+    "contact_roles": [
+      {
+        "role": "owner",
+        "permission": "contacts.read"
+      },
+      {
+        "role": "owner",
+        "permission": "contacts.manage"
+      }
+    ],
+    "advisorWarning": "auth_leaked_password_protection"
+  },
+  "launch": {
+    "live": false,
+    "healthUrl": "https://rshorizons.vercel.app/api/v1/health/live",
+    "healthStatus": 404,
+    "vercelPlan": "hobby",
+    "dataProblems": [
+      "identity_unapproved",
+      "critical_policies_missing",
+      "payment_policy_missing",
+      "notification_templates_missing"
+    ],
+    "external": "Eligible hosting/minute cron, separate staging,64MiB storage, sender domain/Resend, Paymob/Mux/monitoring and data-key reference, approved content/policies/translations/media rights/retention, MFA/recovery/UAT/live-test authorization"
+  },
+  "privateEvidence": [
+    ".local/evidence/ui/contact-inbox-desktop.png",
+    ".local/evidence/ui/contact-inbox-mobile.png",
+    ".local/evidence/ui/contact-inbox-pagination.png",
+    ".local/evidence/ui/recovered-booking.png"
+  ],
+  "limitations": "Local synthetic and CI journeys are not real provider delivery, a live payment or production UAT. Screenshots/traces/original media/credentials stay ignored. Contact access defaults to owner/global scope; explicit grants are needed to delegate. No real sends, charges, plan upgrades or main merge."
+}

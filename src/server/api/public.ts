@@ -1,3 +1,4 @@
+import {websiteCheckoutEnabled} from "@/config/customer-service";
 import {serveOwnerMedia} from "@/integrations/storage/owner-media";
 import {z} from "zod";
 import {query} from "@/server/db";
@@ -5,12 +6,12 @@ import {AppError} from "@/server/http/errors";
 import {readJson,success,rateLimit,idempotencyKey} from "@/server/http/request";
 import {cookieValue,getGuest,issueGuestSession,redeemGuestGrant,sessionCookie} from "@/server/auth";
 import {newSecret,digestSecret} from "@/server/security";
-import {getApartment,getCatalog,getDepartures,getDestinations,getService,searchApartments,searchServices} from "@/modules/catalog";
+import {getCatalog,getDepartures,getDestinations,getService,searchServices} from "@/modules/catalog";
 import {catalogFiltersSchema} from "@/modules/catalog/contracts";
 import {bookingInputSchema,dateSchema,localeSchema,quoteInputSchema,uuidSchema} from "@/modules/bookings/contracts";
 import {bookingDetails,createBookingRequest,createQuote,submitBooking} from "@/modules/bookings/service";
 import {getGalleryManifest,issueDownloadGrant,servePrivateAsset,listPublicGalleries,servePublicDerivative} from "@/modules/photography/service";
-import {submitReview,listReviewPage,reviewPageInputSchema} from "@/modules/reviews/service";
+import {submitReview,listReviewPage,reviewPageInputSchema,reviewInputSchema} from "@/modules/reviews/service";
 import {submitContact,getSocialLinks} from "@/modules/content/contact";
 
 const dateRangeSchema=z.object({from:dateSchema,to:dateSchema}).refine(v=>v.to>=v.from);
@@ -24,7 +25,7 @@ export async function publicRoute(request:Request,parts:string[]):Promise<Respon
   if(request.method==="GET") {
     if(resource==="health") {
       if(id==="live")return success({status:"ok"});
-      if(id==="ready"){await query("SELECT 1");return success({status:"ok",environment:process.env.APP_ENV??"development",bookingIntake:process.env.BOOKING_ENABLED==="true"});}
+      if(id==="ready"){await query("SELECT 1");return success({status:"ok",environment:process.env.APP_ENV??"development",bookingIntake:websiteCheckoutEnabled&&process.env.BOOKING_ENABLED==="true",bookingChannel:"whatsapp"});}
     }
     if(resource==="catalog")return success(await getCatalog(locale));
     if(resource==="policies"&&id==="current"){
@@ -33,10 +34,7 @@ export async function publicRoute(request:Request,parts:string[]):Promise<Respon
       return success(Object.fromEntries(rows.map(r=>[r.policy_type,r.version])));
     }
     if(resource==="destinations")return success({items:await getDestinations(locale)});
-    if(resource==="photo-packages"){
-      const result=await query(`SELECT p.id,p.code,t.title,t.description,p.price_amount::text AS "priceAmountMinor",p.currency,p.entitlement_rules AS "entitlementRules" FROM app.photo_packages p JOIN app.photo_package_translations t ON t.package_id=p.id AND t.locale=$1 WHERE p.active AND t.approved_at IS NOT NULL ORDER BY p.price_amount,p.code`,[locale]);
-      return success({items:result.rows});
-    }
+    if(resource==="photo-packages" || resource==="apartments")throw new AppError("NOT_FOUND",404);
     if(resource==="services") {
       if(id&&action==="departures") {
         const params=dateRangeSchema.parse({from:url.searchParams.get("from"),to:url.searchParams.get("to")});
@@ -47,18 +45,7 @@ export async function publicRoute(request:Request,parts:string[]):Promise<Respon
       const filters=catalogFiltersSchema.parse(Object.fromEntries(url.searchParams));
       return success(await searchServices(filters,locale));
     }
-    if(resource==="apartments") {
-      if(id&&action==="availability"){
-        const range=dateRangeSchema.parse({from:url.searchParams.get("from"),to:url.searchParams.get("to")});
-        await getApartment(id,locale);
-        const {rows}=await query(`SELECT lower(date_range) AS "from",upper(date_range) AS "to" FROM app.apartment_inventory WHERE apartment_id=$1 AND released_at IS NULL AND date_range && daterange($2,$3,'[)') ORDER BY lower(date_range)`,[uuidSchema.parse(id),range.from,range.to]);
-        return success({unavailable:rows,checkoutExclusive:true});
-      }
-      if(id)return success(await getApartment(id,locale));
-      const filter=z.object({locale:localeSchema.optional(),checkIn:dateSchema.optional(),checkOut:dateSchema.optional(),guests:z.coerce.number().int().min(1).max(30).optional()}).strict().parse(Object.fromEntries(url.searchParams));
-      if(!!filter.checkIn!==!!filter.checkOut || filter.checkIn&&filter.checkOut&&filter.checkOut<=filter.checkIn)throw new AppError("INVALID_STAY",422);
-      return success({items:await searchApartments(filter,locale)});
-    }
+
     if(resource==="bookings"&&id) {
       const guest=await getGuest(request,id);
       if(action==="payments"){const detail=await bookingDetails(guest.bookingId);return success({items:detail.payments});}
@@ -73,7 +60,9 @@ export async function publicRoute(request:Request,parts:string[]):Promise<Respon
     if(resource==="galleries") {
       if(id==="public"){
         if(action)throw new AppError("NOT_FOUND",404);
-        return success({items:await listPublicGalleries(locale)});
+        const cursor=uuidSchema.nullable().parse(url.searchParams.get("cursor"));
+        const rows=await listPublicGalleries(locale,cursor,51);
+        return success({items:rows.slice(0,50),nextCursor:rows.length>50?rows[49].id:null});
       }
       if(id) {
         const actor=await getGuest(request);
@@ -122,7 +111,7 @@ export async function publicRoute(request:Request,parts:string[]):Promise<Respon
         const result=await query(`SELECT b.id,b.version FROM app.bookings b JOIN app.guests g ON g.id=b.primary_guest_id WHERE b.reference=$1 AND (lower(g.email)=lower($2) OR g.phone_e164=$2)`,[body.reference,body.contact]);
         if(result.rows[0]){
           const b=result.rows[0],key=`access:${b.id}:${Math.floor(Date.now()/300000)}`;
-          await query(`WITH event AS (INSERT INTO app.outbox_events(aggregate_type,aggregate_id,aggregate_version,event_type,event_key,payload) VALUES('booking',$1,$2,'guest_access_requested',$3,jsonb_build_object('bookingId',$1::text)) ON CONFLICT DO NOTHING RETURNING id) INSERT INTO app.jobs(event_id,kind,job_key) SELECT id,'notification',id||':notification' FROM event`,[b.id,b.version,key]);
+          await query(`WITH event AS (INSERT INTO app.outbox_events(aggregate_type,aggregate_id,aggregate_version,event_type,event_key,payload) VALUES('booking',$1,$2,'guest_access_requested',$3,jsonb_build_object('bookingId',$1::uuid)) ON CONFLICT DO NOTHING RETURNING id) INSERT INTO app.jobs(event_id,kind,job_key) SELECT id,'notification',id||':notification' FROM event`,[b.id,b.version,key]);
         }
         return success({message:"If the details match, a secure access link will be sent."},202);
       }
@@ -145,7 +134,14 @@ export async function publicRoute(request:Request,parts:string[]):Promise<Respon
       const body=z.object({assetIds:z.array(uuidSchema).min(1).max(100),derivative:z.enum(["preview","web","video","original"])}).strict().parse(await readJson(request));
       return success(await issueDownloadGrant(actor,{...body,galleryId:id}));
     }
-    if(resource==="reviews")return success(await submitReview(await getGuest(request),await readJson(request)),201);
+    if(resource==="reviews"){
+      const input=reviewInputSchema.parse(await readJson(request));
+      if(input.source==="public"){
+        await rateLimit(request,"public-review",5);
+        return success(await submitReview({type:"system"},input),201);
+      }
+      return success(await submitReview(await getGuest(request),input),201);
+    }
     if(resource==="contact"){
       const input=await readJson(request);
       return success(await submitContact(input,{rateLimitKeyDigest:digestSecret(`contact:${process.env.VERCEL==="1"?request.headers.get("x-vercel-forwarded-for")??"unknown":"local"}`)}),202);

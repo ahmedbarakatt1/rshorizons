@@ -3,8 +3,14 @@ media/
 .tooling/
 .agents/
 .playwright-cli/
+.playwright/
+playwright-report/
+test-results/
+.next-release/
+.env*
 docs/
 tests/
 supabase/tests/
+supabase/.temp/
 Red Sea Horizons Brand Board.png
 CODEX_TOURISM_PRODUCTION_HANDOFF.md

@@ -4,7 +4,7 @@ import {AppError} from "@/server/http/errors";
 import {digestSecret,newSecret} from "@/server/security";
 import {localPasswordEnvironment} from "./local-password";
 
-export type StaffActor=ActorContext&{type:"staff";id:string;name:string;aal:"aal2"};
+export type StaffActor=ActorContext&{type:"staff";id:string;name:string;aal:"aal1"|"aal2"};
 export type GuestActor=ActorContext&{type:"guest";id:string;sessionHash:string;bookingId:string;scope:string[]};
 export function cookieValue(request:Request,name:string) {
   const found=request.headers.get("cookie")?.split(";").map(c=>c.trim()).find(c=>c.startsWith(`${name}=`));
@@ -40,12 +40,11 @@ export async function getStaff(request:Request,permission?:string,bookingId?:str
     staffId=data.user.id;aal=String(claims.data.claims.aal??"aal1");
   }
   if(!staffId)throw new AppError("UNAUTHENTICATED",401);
-  const {rows}=await query<{name:string;active:boolean;revoked_at:Date|null;mfa_required:boolean}>(`SELECT name,active,revoked_at,mfa_required FROM app.staff_profiles WHERE id=$1`,[staffId]);
+  const {rows}=await query<{name:string;active:boolean;revoked_at:Date|null}>(`SELECT name,active,revoked_at FROM app.staff_profiles WHERE id=$1`,[staffId]);
   const staff=rows[0];
   if(!staff?.active||staff.revoked_at)throw new AppError("STAFF_DISABLED",403);
-  if(staff.mfa_required&&aal!=="aal2")throw new AppError("MFA_REQUIRED",403,"Complete multi-factor authentication.");
   if(permission)await query("SELECT app.assert_staff($1,$2,$3)",[staffId,permission,bookingId??null]);
-  return {type:"staff",id:staffId,name:staff.name,aal:"aal2"};
+  return {type:"staff",id:staffId,name:staff.name,aal:aal==="aal2"?"aal2":"aal1"};
 }
 export async function loginStaff(email:string,password:string) {
   const auth=authClient();
@@ -53,8 +52,7 @@ export async function loginStaff(email:string,password:string) {
   if(error||!data.session)throw new AppError("INVALID_CREDENTIALS",401,"Sign-in failed.");
   const {rows}=await query("SELECT id FROM app.staff_profiles WHERE id=$1 AND active AND revoked_at IS NULL",[data.user.id]);
   if(!rows.length)throw new AppError("STAFF_DISABLED",403);
-  const {data:claims}=await auth.auth.getClaims(data.session.access_token);
-  return {accessToken:data.session.access_token,refreshToken:data.session.refresh_token,requiresMfa:claims?.claims.aal!=="aal2"};
+  return {accessToken:data.session.access_token,refreshToken:data.session.refresh_token,requiresMfa:false};
 }
 export async function localLogin(token:string,requestUrl:string) {
   if(!localEnvironment(requestUrl))throw new AppError("NOT_FOUND",404);

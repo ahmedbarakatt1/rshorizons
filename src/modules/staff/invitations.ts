@@ -18,5 +18,5 @@ export async function inviteStaff(actor:StaffActor,input:{email:string;name?:str
   const result=await withTransaction(actor,async tx=>(await tx.query("SELECT app.invite_staff($1,$2,$3,$4,$5,$6) AS result",[data.user.id,input.email,input.name??input.email,input.roles,JSON.stringify(scopes),actor.id])).rows[0].result);
   // Fragment delivery prevents logs and link-prefetch GET requests consuming the token.
   const invitationUrl=new URL("/admin/invite",base);invitationUrl.hash=new URLSearchParams({token:data.properties.hashed_token}).toString();
-  return {...result,invitationUrl:invitationUrl.href,requiresMfa:true,delivery:"owner_shares_link"};
+  return {...result,invitationUrl:invitationUrl.href,requiresMfa:false,delivery:"owner_shares_link"};
 }

@@ -1,0 +1,179 @@
+{
+  "status": "DRAFT — not imported or approved for production",
+  "brand": "Red Sea Horizons",
+  "requiredGuestLocales": [
+    "en",
+    "de",
+    "pl",
+    "fr",
+    "ru",
+    "uk",
+    "es",
+    "ar",
+    "it",
+    "nl"
+  ],
+  "notes": [
+    "Owner approval and native-language review are still required.",
+    "Review invitation is proposed as marketing; classification requires review and marketing delivery requires separate marketing consent.",
+    "Translate approved guest templates for all enabled locales; the contact alert uses the configured staff locale.",
+    "No prices, deposit deadlines, cancellation terms or regulatory claims are invented; recipients open their private current records.",
+    "Approval must create reviewed immutable versions through the controlled database procedure; this file does not set any production approval."
+  ],
+  "templates": [
+    {
+      "event": "guest_access_requested",
+      "locale": "en",
+      "channel": "email",
+      "provider": "resend",
+      "approvalStatus": "draft",
+      "category": "transactional",
+      "classificationNeedsReview": true,
+      "subject": "Your booking access — {{reference}}",
+      "body": "Use this private link to view reservation {{reference}} and its current status. If you did not request it, you can ignore this message.\n\n{{access_url}}"
+    },
+    {
+      "event": "request_received",
+      "locale": "en",
+      "channel": "email",
+      "provider": "resend",
+      "approvalStatus": "draft",
+      "category": "transactional",
+      "classificationNeedsReview": true,
+      "subject": "Request received — {{reference}}",
+      "body": "We received your reservation request {{reference}}. It is awaiting staff review; your booking is not yet confirmed and no payment is requested. Follow your request:\n\n{{access_url}}"
+    },
+    {
+      "event": "approved_payment_required",
+      "locale": "en",
+      "channel": "email",
+      "provider": "resend",
+      "approvalStatus": "draft",
+      "category": "transactional",
+      "classificationNeedsReview": true,
+      "subject": "Payment requested — {{reference}}",
+      "body": "Staff approved request {{reference}}. View the approved amount and payment deadline using your private booking link:\n\n{{access_url}}"
+    },
+    {
+      "event": "booking_confirmed",
+      "locale": "en",
+      "channel": "email",
+      "provider": "resend",
+      "approvalStatus": "draft",
+      "category": "transactional",
+      "classificationNeedsReview": true,
+      "subject": "Booking confirmed — {{reference}}",
+      "body": "Your booking {{reference}} is confirmed. View your itinerary and any remaining balance:\n\n{{access_url}}"
+    },
+    {
+      "event": "request_rejected",
+      "locale": "en",
+      "channel": "email",
+      "provider": "resend",
+      "approvalStatus": "draft",
+      "category": "transactional",
+      "classificationNeedsReview": true,
+      "subject": "Request update — {{reference}}",
+      "body": "Staff reviewed request {{reference}}. Open your private booking link for the decision:\n\n{{access_url}}"
+    },
+    {
+      "event": "payment_received",
+      "locale": "en",
+      "channel": "email",
+      "provider": "resend",
+      "approvalStatus": "draft",
+      "category": "transactional",
+      "classificationNeedsReview": true,
+      "subject": "Payment recorded — {{reference}}",
+      "body": "A payment was recorded for {{reference}}. Review the current booking status and balance:\n\n{{access_url}}"
+    },
+    {
+      "event": "booking_changed",
+      "locale": "en",
+      "channel": "email",
+      "provider": "resend",
+      "approvalStatus": "draft",
+      "category": "transactional",
+      "classificationNeedsReview": true,
+      "subject": "Booking update — {{reference}}",
+      "body": "Your booking details for {{reference}} have changed. Review the latest arrangements:\n\n{{access_url}}"
+    },
+    {
+      "event": "cancellation_update",
+      "locale": "en",
+      "channel": "email",
+      "provider": "resend",
+      "approvalStatus": "draft",
+      "category": "transactional",
+      "classificationNeedsReview": true,
+      "subject": "Reservation update — {{reference}}",
+      "body": "The status of reservation {{reference}} has changed. Review the current decision and any payment details:\n\n{{access_url}}"
+    },
+    {
+      "event": "booking_completed",
+      "locale": "en",
+      "channel": "email",
+      "provider": "resend",
+      "approvalStatus": "draft",
+      "category": "transactional",
+      "classificationNeedsReview": true,
+      "subject": "Thank you — {{reference}}",
+      "body": "Thank you for joining Red Sea Horizons. Your booking {{reference}} is complete. View its details:\n\n{{access_url}}"
+    },
+    {
+      "event": "refund_update",
+      "locale": "en",
+      "channel": "email",
+      "provider": "resend",
+      "approvalStatus": "draft",
+      "category": "transactional",
+      "classificationNeedsReview": true,
+      "subject": "Refund update — {{reference}}",
+      "body": "A refund update is available for {{reference}}. View the recorded amount and current status:\n\n{{access_url}}"
+    },
+    {
+      "event": "gallery_ready",
+      "locale": "en",
+      "channel": "email",
+      "provider": "resend",
+      "approvalStatus": "draft",
+      "category": "transactional",
+      "classificationNeedsReview": true,
+      "subject": "Your gallery is ready — {{reference}}",
+      "body": "Your private gallery for {{reference}} is ready. Open your personal gallery link:\n\n{{access_url}}"
+    },
+    {
+      "event": "review_invitation",
+      "locale": "en",
+      "channel": "email",
+      "provider": "resend",
+      "approvalStatus": "draft",
+      "category": "marketing",
+      "classificationNeedsReview": true,
+      "subject": "Share your experience — {{reference}}",
+      "body": "You can share a review of your completed experience {{reference}}:\n\n{{access_url}}"
+    },
+    {
+      "event": "pickup_reminder",
+      "locale": "en",
+      "channel": "email",
+      "provider": "resend",
+      "approvalStatus": "draft",
+      "category": "transactional",
+      "classificationNeedsReview": true,
+      "subject": "Pickup reminder — {{reference}}",
+      "body": "Your pickup for {{reference}} is approaching. Check the latest time and meeting instructions:\n\n{{access_url}}"
+    },
+    {
+      "event": "contact_received",
+      "locale": "en",
+      "channel": "email",
+      "provider": "resend",
+      "approvalStatus": "draft",
+      "category": "transactional",
+      "classificationNeedsReview": true,
+      "subject": "New guest enquiry — {{reference}}",
+      "body": "A guest enquiry is waiting for your team. Open the protected contact request to read it and record your response.\n\n{{access_url}}"
+    }
+  ]
+}

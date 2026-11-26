@@ -1,5 +1,7 @@
 "use client";
 
+import {useHydrated} from "./use-hydrated";
+
 import {useEffect,useState} from "react";
 
 import Link from "next/link";
@@ -10,20 +12,24 @@ import {api} from "./api";
 
 import {money,cairoDate} from "./format";
 import {OwnerGallery,TripVideo} from "./OwnerGallery";
+import {TeamWhatsAppLinks} from "./WhatsAppLinks";
+import {ContactChannels} from "./CustomerService";
 
 
 
-export function GuestAccess({locale,reference=""}:{locale:string;reference?:string}) {
+export function GuestAccess({locale,inline=false}:{locale:string;reference?:string;inline?:boolean}) {
 
+ const hydrated=useHydrated();
  const t=useTranslations();const [busy,setBusy]=useState(false);const [message,setMessage]=useState("");const [token,setToken]=useState("");
 
  useEffect(()=>{const url=new URL(window.location.href);const secret=url.searchParams.get("token")??new URLSearchParams(url.hash.slice(1)).get("token")??"";if(secret){setToken(secret);url.searchParams.delete("token");url.hash="";history.replaceState(null,"",url.pathname+url.search);}},[]);
 
- async function request(event:React.FormEvent<HTMLFormElement>) {event.preventDefault();setBusy(true);setMessage("");const form=new FormData(event.currentTarget);try{await api("/guest-access/request",{reference:form.get("reference"),contact:form.get("contact"),locale});setMessage(t("accessIntro"));}catch{setMessage(t("error"));}finally{setBusy(false);}}
 
  async function redeem(event:React.FormEvent<HTMLFormElement>) {event.preventDefault();setBusy(true);setMessage("");try{const result=await api<{reference?:string;redirectTo?:string;purpose?:string;galleryId?:string;invitationId?:string}>("/guest-access/redeem",{token});history.replaceState(null,"",`/${locale}/guest-access`);setToken("");window.location.assign(result.purpose==="gallery"&&result.galleryId?`/${locale}/my-gallery/${result.galleryId}`:result.purpose==="review"&&result.invitationId?`/${locale}/reviews?invitation=${result.invitationId}`:result.reference?`/${locale}/booking/${result.reference}`:`/${locale}/guest-access`);}catch{setMessage(t("error"));}finally{setBusy(false);}}
 
- return <div className="access-columns"><div><h2>{t("secureAccess")}</h2><p>{t("accessIntro")}</p><form className="form-stack" onSubmit={request}><label>{t("reference")}<input name="reference" defaultValue={reference} required dir="ltr" autoComplete="off"/></label><label>{t("email")} / {t("phone")}<input name="contact" required dir="ltr" autoComplete="email"/></label><button className="button" disabled={busy}>{busy?t("loading"):t("sendLink")}</button></form></div><div><h2>{t("redeem")}</h2><form className="form-stack" onSubmit={redeem}><label>{t("token")}<input name="token" type="password" value={token} onChange={event=>setToken(event.target.value)} required autoComplete="off" dir="ltr"/></label><button className="button button-secondary" disabled={busy}>{t("redeem")}</button></form></div>{message&&<p role="status" className="form-notice">{message}</p>}</div>;
+ const form=<form method="post" className="form-stack review-access-form" onSubmit={redeem}><label>{t("token")}<input name="token" type="password" value={token} onChange={event=>setToken(event.target.value)} required autoComplete="off" dir="ltr"/></label><button className="button button-secondary" disabled={!hydrated||busy}>{busy?t("loading"):t("redeem")}</button>{message&&<p role="alert" className="form-error">{message}</p>}</form>;
+ if(inline)return form;
+ return <div className="access-columns"><div><ContactChannels/></div><div><h2>{t("redeem")}</h2>{form}</div></div>;
 
 }
 
@@ -35,7 +41,7 @@ export function ContactForm({locale}:{locale:string}) {
 
  async function send(event:React.FormEvent<HTMLFormElement>) {event.preventDefault();setBusy(true);setState("");const form=event.currentTarget;const data=new FormData(form);try{await api("/contact",{name:data.get("name"),email:data.get("email"),locale,message:data.get("message"),consent:true,privacyVersion},undefined,crypto.randomUUID());setState("received");form.reset();}catch{setState("error");}finally{setBusy(false);}}
 
- return <form className="form-stack contact-form" onSubmit={send}><label>{t("fullName")}<input name="name" autoComplete="name" required minLength={2} maxLength={150}/></label><label>{t("email")}<input name="email" type="email" autoComplete="email" required dir="ltr"/></label><label>{t("message")}<textarea name="message" required minLength={10} maxLength={4000} rows={6}/></label><label className="check-label"><input type="checkbox" required/><span>{t("privacyConsent")} · <Link href={`/${locale}/privacy`}>{t("privacy")}</Link></span></label>{state&&<p role={state==="error"?"alert":"status"} className={state==="error"?"form-error":"form-notice"}>{t(state)}</p>}<button className="button" disabled={busy||!privacyVersion}>{busy?t("loading"):t("send")}</button></form>;
+ return <div><TeamWhatsAppLinks/><form className="form-stack contact-form" onSubmit={send}><label>{t("fullName")}<input name="name" autoComplete="name" required minLength={2} maxLength={150}/></label><label>{t("email")}<input name="email" type="email" autoComplete="email" required dir="ltr"/></label><label>{t("message")}<textarea name="message" required minLength={10} maxLength={4000} rows={6}/></label><label className="check-label"><input type="checkbox" required/><span>{t("privacyConsent")} · <Link href={`/${locale}/privacy`}>{t("privacy")}</Link></span></label>{state&&<p role={state==="error"?"alert":"status"} className={state==="error"?"form-error":"form-notice"}>{t(state)}</p>}<button className="button" disabled={busy||!privacyVersion}>{busy?t("loading"):t("send")}</button></form></div>;
 
 }
 
@@ -71,7 +77,7 @@ export function BookingStatus({locale,reference}:{locale:string;reference:string
 
  {booking.revisions?.filter(revision=>revision.status==="proposed").map(revision=><form className="form-stack revision-review" key={revision.id} onSubmit={async event=>{event.preventDefault();setBusy(true);try{await api(`/bookings/${reference}/revision-acceptance`,{revisionId:revision.id,policiesAccepted:true},undefined,crypto.randomUUID());setMessage(t("requestSent"));await load();}catch{setMessage(t("error"));}finally{setBusy(false);}}}><h2>{t("change")}</h2><div className="price-line"><span>{t("total")}</span><bdi>{money(revision.totalAmountMinor,revision.currency,locale)}</bdi></div><p>{t("deadline")}: {cairoDate(revision.validUntil,locale)}</p><details><summary>{t("paymentPolicy")}</summary><dl className="revision-policies">{Object.entries(revision.policies).map(([key,value])=><div key={key}><dt>{key.replaceAll("_"," ")}</dt><dd>{typeof value==="object"?JSON.stringify(value):String(value)}</dd></div>)}</dl></details><label className="check-label"><input type="checkbox" required/><span>{t("termsConsent")} · <Link href={`/${locale}/terms`}>{t("terms")}</Link> · <Link href={`/${locale}/cancellation-policy`}>{t("cancellation")}</Link></span></label><button className="button button-secondary" disabled={busy}>{t("acceptRevision")}</button></form>)}
 
- </div><aside className="booking-aside"><h2>{t("manage")}</h2>{!["cancelled","rejected","expired","completed"].includes(booking.status)&&<form onSubmit={request} className="form-stack"><label>{t("details")}<select value={requestType} onChange={event=>setRequestType(event.target.value)}><option value="change">{t("change")}</option><option value="cancel">{t("cancel")}</option></select></label><label>{t("reason")}<textarea name="reason" required minLength={10} rows={5} maxLength={2000}/></label><button className="button button-secondary" disabled={busy}>{busy?t("loading"):t(requestType==="change"?"change":"cancel")}</button></form>}{message&&<p role="status">{message}</p>}{booking.requests.map(request=><p key={request.id}>{request.type} · {request.status}</p>)}<Link href={`/${locale}/contact`}>{t("contact")}</Link></aside></div>;
+ </div><aside className="booking-aside"><TeamWhatsAppLinks reference={booking.reference}/><h2>{t("manage")}</h2>{!["cancelled","rejected","expired","completed"].includes(booking.status)&&<form onSubmit={request} className="form-stack"><label>{t("details")}<select value={requestType} onChange={event=>setRequestType(event.target.value)}><option value="change">{t("change")}</option><option value="cancel">{t("cancel")}</option></select></label><label>{t("reason")}<textarea name="reason" required minLength={10} rows={5} maxLength={2000}/></label><button className="button button-secondary" disabled={busy}>{busy?t("loading"):t(requestType==="change"?"change":"cancel")}</button></form>}{message&&<p role="status">{message}</p>}{booking.requests.map(request=><p key={request.id}>{request.type} · {request.status}</p>)}<Link href={`/${locale}/contact`}>{t("contact")}</Link></aside></div>;
 
 }
 
@@ -97,18 +103,41 @@ export function PolicyContent({slug,locale}:{slug:string;locale:string}) {
 
  useEffect(()=>{api<{body?:string|{type:string;text:string}[];content?:string}>(`/pages/${slug}?locale=${locale}`).then(result=>setBody(typeof result.body==="string"?result.body:Array.isArray(result.body)?result.body.map(block=>block.text).join("\n\n"):typeof result.content==="string"?result.content:null)).catch(()=>{}).finally(()=>setLoaded(true));},[slug,locale]);
 
- return <div className="prose">{!loaded?<p>{t("loading")}</p>:body?<div className="preserve-lines">{body}</div>:<><p className="approval-notice">{t("demo")}</p><p>{t("noPayment")}</p><p>{t("pendingNotice")}</p><Link href={`/${locale}/contact`}>{t("contact")}</Link></>}</div>;
+ return <div className="prose">{!loaded?<p>{t("loading")}</p>:body?<div className="preserve-lines">{body}</div>:<><p>{t("policyContact")}</p><Link href={`/${locale}/contact`}>{t("contact")}</Link></>}</div>;
 
 }
 
 
 
-export function PublicGallery({locale,demo}:{locale:string;demo:boolean}) {
+export function PublicGallery({locale,showOwnerCollection}:{locale:string;showOwnerCollection:boolean}) {
 
- const t=useTranslations();const [galleries,setGalleries]=useState<{id:string;title:string;description?:string;assets:{id:string;url:string;width?:number;height?:number;mimeType?:string}[]}[]>([]);const [loaded,setLoaded]=useState(false);
-
- useEffect(()=>{api<{items:typeof galleries}>(`/galleries/public?locale=${locale}`).then(result=>setGalleries(result.items)).catch(()=>{}).finally(()=>setLoaded(true));},[locale]);
-
- return <>{!loaded?<p role="status">{t("loading")}</p>:galleries.length?galleries.map(gallery=><section key={gallery.id}><h2>{gallery.title}</h2><p>{gallery.description}</p><div className="editorial-gallery">{gallery.assets?.map(asset=>asset.mimeType==="video/mp4"?<TripVideo key={asset.id} src={asset.url} title={gallery.title} width={asset.width} height={asset.height}/>:<figure key={asset.id}><img className="photo" src={asset.url} width={asset.width??1200} height={asset.height??900} alt={gallery.title} loading="lazy"/></figure>)}</div></section>):demo?<OwnerGallery/>:<p className="empty-state">{t("empty")}</p>}</>;
-
+ const t=useTranslations();
+ type Gallery={id:string;title:string;description?:string;trip_photo:boolean;caption_locale:string;assets:{id:string;url:string;width?:number;height?:number;mimeType?:string}[]};
+ type GalleryPage={items:Gallery[];nextCursor:string|null};
+ const [galleries,setGalleries]=useState<Gallery[]>([]),[loaded,setLoaded]=useState(false),[cursor,setCursor]=useState<string|null>(null);
+ const [loadingMore,setLoadingMore]=useState(false),[loadError,setLoadError]=useState(false);
+ useEffect(()=>{
+  let active=true;
+  api<GalleryPage>(`/galleries/public?locale=${locale}`).then(result=>{if(active){setGalleries(result.items);setCursor(result.nextCursor);}}).catch(()=>{if(active)setLoadError(true);}).finally(()=>{if(active)setLoaded(true);});
+  return ()=>{active=false;};
+ },[locale]);
+ async function loadMore(){
+  setLoadingMore(true);setLoadError(false);
+  try{
+   const result=await api<GalleryPage>(`/galleries/public?locale=${locale}${cursor?`&cursor=${cursor}`:""}`);
+   setGalleries(current=>cursor?[...current,...result.items]:result.items);setCursor(result.nextCursor);
+  }catch{setLoadError(true);}finally{setLoadingMore(false);}
+ }
+ const photos=galleries.filter(gallery=>gallery.trip_photo);
+ return <>
+  {photos.length>0&&<section className="owner-photo-section"><h2>{t("media_trips")}</h2><div className="owner-photo-gallery">
+   {photos.flatMap(gallery=>gallery.assets.map(asset=><figure key={asset.id} lang={gallery.caption_locale} dir="auto"><img className="photo" src={asset.url} width={asset.width} height={asset.height} alt={gallery.title} loading="lazy"/><figcaption>{gallery.title}</figcaption></figure>))}
+  </div></section>}
+  {galleries.filter(gallery=>!gallery.trip_photo).map(gallery=><section key={gallery.id}><h2>{gallery.title}</h2><p>{gallery.description}</p><div className="editorial-gallery">{gallery.assets?.map(asset=>asset.mimeType==="video/mp4"?<TripVideo key={asset.id} src={asset.url} title={gallery.title} width={asset.width} height={asset.height}/>:<figure key={asset.id}><img className="photo" src={asset.url} width={asset.width??1200} height={asset.height??900} alt={gallery.title} loading="lazy"/></figure>)}</div></section>)}
+  {loadError&&<p role="alert">{t("error")}</p>}
+  {(cursor||loadError)&&<button className="button button-secondary" disabled={loadingMore} onClick={loadMore}>{t(loadingMore?"loading":loadError?"retry":"galleryMore")}</button>}
+  {showOwnerCollection&&<OwnerGallery/>}
+  {!showOwnerCollection&&!loaded&&<p role="status">{t("loading")}</p>}
+  {!showOwnerCollection&&loaded&&!loadError&&!galleries.length&&<p className="empty-state">{t("empty")}</p>}
+ </>;
 }

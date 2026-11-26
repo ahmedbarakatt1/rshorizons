@@ -5,7 +5,12 @@ CREATE SCHEMA IF NOT EXISTS app;
 REVOKE ALL ON SCHEMA app FROM PUBLIC;
 CREATE SCHEMA IF NOT EXISTS auth;
 -- Only the isolated PostgreSQL harness lacks Supabase Auth. No password identity is seeded.
-CREATE TABLE IF NOT EXISTS auth.users(id uuid PRIMARY KEY, email text, created_at timestamptz NOT NULL DEFAULT now());
+-- Supabase's migration operator cannot CREATE in its managed auth schema, even with IF NOT EXISTS.
+DO $auth_harness$ BEGIN
+ IF to_regclass('auth.users') IS NULL THEN
+  CREATE TABLE auth.users(id uuid PRIMARY KEY, email text, created_at timestamptz NOT NULL DEFAULT now());
+ END IF;
+END $auth_harness$;
 DO $$ BEGIN
  IF NOT EXISTS(SELECT FROM pg_roles WHERE rolname='anon') THEN CREATE ROLE anon NOLOGIN; END IF;
  IF NOT EXISTS(SELECT FROM pg_roles WHERE rolname='authenticated') THEN CREATE ROLE authenticated NOLOGIN; END IF;

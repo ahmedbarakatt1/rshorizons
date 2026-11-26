@@ -4,6 +4,10 @@ export function money(amount:string,currency:string,locale:string) {
  return new Intl.NumberFormat(locale,{style:"currency",currency,minimumFractionDigits:exponent,maximumFractionDigits:exponent}).formatToParts(whole).map(part=>part.type==="fraction"?cents:part.value).join("");
 }
 export function cairoDate(value:string,locale:string) {return new Intl.DateTimeFormat(locale,{dateStyle:"medium",timeStyle:"short",timeZone:"Africa/Cairo"}).format(new Date(value));}
+export function tripDuration(minutes:number,locale:string) {
+ const wholeHours=minutes>0&&minutes%60===0;
+ return new Intl.NumberFormat(locale,{style:"unit",unit:wholeHours?"hour":"minute",unitDisplay:"long"}).format(wholeHours?minutes/60:minutes);
+}
 export function cairoInstant(local:string) {
  const wanted=Date.parse(`${local}:00Z`);
  let instant=wanted;

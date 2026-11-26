@@ -5,6 +5,7 @@ import {useTranslations} from "next-intl";
 import type {ApartmentDetail,ServiceDetail} from "@/types/catalog";
 import {api,ApiError} from "./api";
 import {money,cairoDate,cairoInstant} from "./format";
+import {TeamWhatsAppLinks} from "./WhatsAppLinks";
 
 type QuoteItem={title?:string;titleSnapshot?:string;totalAmountMinor?:string;amountMinor?:string;quantity?:number;snapshot?:{nights?:{date:string;amountMinor:string}[];fees?:{kind:string;amountMinor:string;refundable?:boolean}[];cancellationPolicy?:{version:string;body:string}}};
 type Quote={id:string;totalAmountMinor:string;initialDueAmountMinor:string;currency:string;validUntil:string;items:QuoteItem[];policyVersions:{terms:string;privacy:string};paymentPolicy:string};
@@ -48,7 +49,7 @@ export function BookingForm({locale,service,apartment}:{locale:string;service?:S
    setReceipt(response);try{localStorage.removeItem(storageKey);}catch{/* Recovery data is optional. */}setTimeout(()=>resultRef.current?.focus(),0);
   }catch(cause){failure(cause);}finally{setBusy(false);}
  }
- if(receipt)return <div className="receipt-panel" ref={resultRef} tabIndex={-1}><span className="status status-pending_review">{t("pending_review")}</span><h2>{t("receivedRequest")}</h2><p className="lead" role="status">{t("pendingNotice")}</p><p>{t("reference")} <bdi className="reference">{receipt.reference}</bdi></p><p>{t("noPayment")}</p><Link href={`/${locale}/booking/${receipt.reference}`} className="button">{t("manage")}</Link></div>;
+ if(receipt)return <div className="receipt-panel" ref={resultRef} tabIndex={-1}><span className="status status-pending_review">{t("pending_review")}</span><h2>{t("receivedRequest")}</h2><p className="lead" role="status">{t("pendingNotice")}</p><p>{t("reference")} <bdi className="reference">{receipt.reference}</bdi></p><p>{t("noPayment")}</p><Link href={`/${locale}/booking/${receipt.reference}`} className="button">{t("manage")}</Link><TeamWhatsAppLinks reference={receipt.reference}/></div>;
  return <div className="booking-columns"><div className="booking-main">
   <div className="approval-notice"><p>{t("noPayment")}</p><p>{t("manualIntro")}</p></div>
   {error&&<div className="form-error" role="alert" id="booking-errors"><p>{error}</p>{Object.keys(fields).length>0&&<ul>{Object.keys(fields).map(key=><li key={key}>{key}</li>)}</ul>}</div>}

@@ -8,6 +8,8 @@ Withdraw public-media consent and unpublish affected derivatives promptly. Confi
 
 Approved retention runs in bounded daily batches. Active galleries/entitlements are excluded. Expired eligible media is tombstoned before deleting explicit storage keys; provider assets require the recorded environment and passthrough identity. Unknown upload outcomes stay flagged for provider reconciliation rather than guessing a target. A failed deletion remains retryable and is not reported as purged.
 
+Contact enquiries have a recorded 90-day deadline. The daily authenticated retention task reports eligible contacts in dry-run mode until `RETENTION_POLICY_APPROVED=true` is backed by owner approval. Approved runs delete at most25 expired enquiries per invocation, including name/contact/message/consent metadata, and preserve a PII-free audit event. Row-level security forbids runtime deletion of active enquiries. Staff lists/details exclude expired records even before physical cleanup. Bookings, financial records and their independent retention obligations are unaffected. Monitor the eligible count and approved policy before increasing batch capacity.
+
 Expired grant/session authentication hashes are erased while preserving their referenced identities and audit/download history. Financial, audit and consent evidence is not cascade-deleted by media cleanup. Any broader anonymization/legal-hold decision requires the owner-approved policy and a reviewed migration with recovery evidence.
 
 Do not put private tokens, health data, customer exports or production screenshots into Git, analytics, public pages or ordinary issue attachments. Local browser traces/profiles and source media remain ignored.

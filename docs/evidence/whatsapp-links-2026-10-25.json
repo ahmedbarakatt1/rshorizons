@@ -1,0 +1,91 @@
+{
+  "date": "2026-10-25",
+  "ownerDecision": "Replace OpenWA with manual WhatsApp links in both directions",
+  "teamNumbers": [
+    "+201099267451",
+    "+201220907478"
+  ],
+  "publicSurfaces": [
+    "contact",
+    "footer",
+    "booking receipt",
+    "private booking status"
+  ],
+  "staffDraft": "Saved guest phone, current bookings.read and all-item scope, latest WhatsApp consent; reference-only localized text",
+  "manualQueue": "Phone-only events retain suppressed state and expose reason/event plus an authorized reservation link",
+  "externalMessagesSent": 0,
+  "gatewayRemoval": {
+    "composeProject": "rsh-whatsapp",
+    "containerNetworkImageRemoved": true,
+    "unpairedVolumeRemoved": "rsh-whatsapp_gateway-data",
+    "port2786Listener": false,
+    "qrBrowserClosed": true,
+    "unrelatedGatewayUnchanged": true,
+    "remainingFiles": "Ignored .local/openwa folder; recursive deletion rejected by automatic approval review: blocked by policy"
+  },
+  "vercel": {
+    "project": "ahmedbarakatt1s-projects/rshorizons",
+    "productionWhatsAppProvider": "links",
+    "configUpdateSucceeded": true,
+    "gatewayCredentialsInstalled": false,
+    "liveDeployment": false
+  },
+  "verification": {
+    "testFirst": "Observed failures for obsolete provider requirements, gateway attempts, missing draft endpoint, missing manual-contact context and missing browser links/queue before implementation",
+    "domainTests": {
+      "passed": 209,
+      "files": 47
+    },
+    "targetedBrowserCases": {
+      "passed": 8,
+      "intentionalDuplicateSkips": 4,
+      "engines": [
+        "chromium",
+        "firefox",
+        "webkit"
+      ]
+    },
+    "browserExecution": "Seven cases passed in the three-engine run; the remaining Chromium workflow passed after selecting the exact event row when both request and change events were present. The corrected workflow was rerun for a readable viewport screenshot.",
+    "lint": "passed",
+    "typecheckAndProductionBuild": "passed",
+    "localeKeys": 218,
+    "locales": 10,
+    "schemaTypeDrift": "118 tables match",
+    "sourceArtifactScan": "Zero configured-credential/private-path findings; see source-artifact-scan.json",
+    "independentReview": "One P2 manual-contact visibility issue fixed and re-reviewed; no remaining Critical or Important findings in this scope"
+  },
+  "privateEvidence": [
+    ".local/evidence/ui/whatsapp-contact-en-chromium.png",
+    ".local/evidence/ui/whatsapp-contact-ar-chromium.png",
+    ".local/evidence/ui/whatsapp-booking-receipt.png",
+    ".local/evidence/ui/whatsapp-admin-draft.png",
+    ".local/evidence/ui/whatsapp-manual-contact-queue.png"
+  ],
+  "limitations": [
+    "No real WhatsApp message sent or number registration/availability asserted",
+    "Ten-locale wording requires human approval",
+    "Email still requires designated Resend credentials, sender-domain verification and provider evidence",
+    "Production remains blocked by existing hosting, staging, storage-capacity and business/provider/UAT approvals"
+  ],
+  "migrationsChanged": false,
+  "remoteVerification": {
+    "url": "https://github.com/ahmedbarakatt1/rshorizons/actions/runs/40218131276",
+    "sourceCommit": "35fc3c60651cb02caa65194ac6fa6cd37a504a50",
+    "conclusion": "success",
+    "domainTestsPassed": 209,
+    "browserTestsPassed": 55,
+    "intentionalBrowserSkips": 20,
+    "checks": [
+      "clean migrations",
+      "restricted runtime",
+      "118-table drift",
+      "lint",
+      "types",
+      "218-key locale parity",
+      "storage recovery",
+      "production build",
+      "source/artifact scan",
+      "three-engine browser/accessibility"
+    ]
+  }
+}

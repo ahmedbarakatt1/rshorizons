@@ -1,10 +1,20 @@
 import {test,expect} from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
+import en from "../../messages/en.json" with {type:"json"};
 
 const review={id:"60000000-0000-4000-8000-000000000001",rating:2,text:"Synthetic review fixture: the pickup was late. The reef was beautiful.",locale:"en",display_name:"J. S.",submitted_at:"2026-10-20T10:00:00Z",replies:[{body:"Synthetic staff reply: thank you for sharing your experience.",publishedAt:"2026-10-21T10:00:00Z"}]};
 const summary={total:13,average:4.2,ratings:{1:0,2:1,3:0,4:7,5:5}};
 
-test("reviews show original feedback, honest aggregate, rating filters and another page",async({page})=>{
+test("anonymous signatures use the page language and guest-written text stays in its original language",async({page})=>{
+ await page.route("**/api/v1/reviews?**",route=>route.fulfill({json:{data:{
+   items:[{...review,display_name:"Guest",anonymous:true}],summary,filteredTotal:1,nextCursor:null
+ }}}));
+ await page.goto("/fr/reviews");
+ await expect(page.locator(".review-entry h2")).toHaveText("Voyageur anonyme");
+ await expect(page.locator(".review-text")).toHaveText(review.text);
+});
+
+test("@public-release reviews show original feedback, honest aggregate, rating filters and another page",async({page})=>{
  await page.route("**/api/v1/reviews?**",async route=>{
   const url=new URL(route.request().url());
   const filtered=url.searchParams.get("rating")==="2";
@@ -18,12 +28,12 @@ test("reviews show original feedback, honest aggregate, rating filters and anoth
  await page.getByRole("button",{name:"Show more reviews"}).click();
  await expect(page.getByText("Synthetic review fixture: a second page.")).toBeVisible();
  await page.getByLabel("Filter by rating").selectOption("2");
- await expect(page.getByText("Showing 1 of 1 reviews")).toBeVisible();
+ await expect(page.locator(".reviews-pagination [role=status]")).toContainText("1 of 1");
  await expect(page.getByRole("button",{name:"Show more reviews"})).toHaveCount(0);
  await expect(page.getByText("13 published reviews",{exact:true})).toBeVisible();
 });
 
-test("reviews have an honest empty state and a recoverable loading error",async({page})=>{
+test("@public-release reviews have an honest empty state and a recoverable loading error",async({page})=>{
  let fail=true;
  await page.route("**/api/v1/reviews?**",async route=>{
   if(fail)await route.fulfill({status:503,json:{error:{code:"UNAVAILABLE"}}});
@@ -32,16 +42,16 @@ test("reviews have an honest empty state and a recoverable loading error",async(
  await page.goto("/en/reviews");
  await expect(page.locator("main").getByRole("alert")).toContainText("Reviews could not be loaded");
  fail=false;await page.getByRole("button",{name:"Try again"}).click();
- await expect(page.getByRole("heading",{name:"Your stories belong here"})).toBeVisible();
+ await expect(page.getByRole("heading",{name:en.review_emptyTitle})).toBeVisible();
  await expect(page.getByText("0.0")).toHaveCount(0);
  await expect(page.getByRole("link",{name:"Explore experiences"})).toBeVisible();
 });
 
-test("invited reviewer chooses an accessible rating and public display name and cannot submit twice",async({page})=>{
+test("@public-release invited reviewer chooses an accessible rating and public display name and cannot submit twice",async({page})=>{
  await page.route("**/api/v1/reviews**",async route=>{
   if(route.request().method()==="POST"){
    expect(route.request().postDataJSON()).toMatchObject({rating:2,displayName:"anonymous",text:"Synthetic invitation review for browser verification.",invitationId:review.id,locale:"en"});
-   await route.fulfill({status:201,json:{data:{id:review.id,state:"pending"}}});
+   await route.fulfill({status:201,json:{data:{id:review.id,state:"published"}}});
   }else await route.fulfill({json:{data:{items:[],summary:{total:0,average:null,ratings:{1:0,2:0,3:0,4:0,5:0}},filteredTotal:0,nextCursor:null}}});
  });
  await page.goto(`/en/reviews?invitation=${review.id}`);
@@ -51,10 +61,27 @@ test("invited reviewer chooses an accessible rating and public display name and 
  await page.getByRole("button",{name:"Submit review"}).click();
  await expect(page.getByRole("status").filter({hasText:"Thank you"})).toBeVisible();
  await expect(page.getByRole("button",{name:"Submit review"})).toHaveCount(0);
- await expect(page.getByText("Your review will appear after moderation.")).toBeVisible();
+ await expect(page.getByText("Your review is now published.")).toBeVisible();
 });
 
-test("@a11y reviews remain readable and accessible on mobile and Arabic RTL",async({page},info)=>{
+test("@public-release every visitor can publish a review immediately without a booking code",async({page})=>{
+ await page.route("**/api/v1/reviews**",async route=>{
+  if(route.request().method()==="POST"){
+   expect(route.request().postDataJSON()).toMatchObject({source:"public",name:"Open Reviewer",rating:5,text:"A public review visible immediately.",locale:"en",displayName:"first_name",consent:true});
+   await route.fulfill({status:201,json:{data:{id:review.id,state:"published"}}});
+  }else await route.fulfill({json:{data:{items:[],summary:{total:0,average:null,ratings:{1:0,2:0,3:0,4:0,5:0}},filteredTotal:0,nextCursor:null}}});
+ });
+ await page.goto("/en/reviews");
+ await page.getByRole("link",{name:"Share your experience"}).click();
+ await page.getByLabel("Full name").fill("Open Reviewer");
+ await page.getByRole("radio",{name:"5 out of 5 stars",exact:true}).check();
+ await page.getByLabel("Your review",{exact:true}).fill("A public review visible immediately.");
+ await page.getByLabel("I have read the privacy notice").check();
+ await page.getByRole("button",{name:"Submit review"}).click();
+ await expect(page.getByRole("status").filter({hasText:"Thank you"})).toBeVisible();
+});
+
+test("@public-release @a11y reviews remain readable and accessible on mobile and Arabic RTL",async({page},info)=>{
  await page.route("**/api/v1/reviews?**",route=>route.fulfill({json:{data:{items:[review],summary:{total:1,average:2,ratings:{1:0,2:1,3:0,4:0,5:0}},filteredTotal:1,nextCursor:null}}}));
  await page.setViewportSize({width:390,height:844});
  for(const locale of ["en","ar"]){
@@ -72,7 +99,7 @@ test("@a11y reviews remain readable and accessible on mobile and Arabic RTL",asy
  }
 });
 
-test("reviews are discoverable in navigation and long display names wrap on narrow screens",async({page})=>{
+test("@public-release reviews are discoverable in navigation and long display names wrap on narrow screens",async({page})=>{
  await page.route("**/api/v1/reviews?**",route=>route.fulfill({json:{data:{items:[{...review,display_name:"SyntheticGuestName".repeat(6).slice(0,100)}],summary:{total:1,average:2,ratings:{1:0,2:1,3:0,4:0,5:0}},filteredTotal:1,nextCursor:null}}}));
  await page.goto("/en/reviews");
  await expect(page.locator(".desktop-nav").getByRole("link",{name:"Guest reviews"})).toBeVisible();
@@ -81,4 +108,52 @@ test("reviews are discoverable in navigation and long display names wrap on narr
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
  await page.locator(".mobile-menu summary").click();
  await expect(page.locator(".mobile-menu").getByRole("link",{name:"Guest reviews"})).toBeVisible();
+});
+
+test("@public-release the published reviews view agrees with the real read API", async ({page}) => {
+  const loaded = page.waitForResponse(response => new URL(response.url()).pathname === "/api/v1/reviews" && response.request().method() === "GET");
+  await page.goto("/en/reviews");
+  const response = await loaded;
+  expect(response.ok()).toBe(true);
+  const {data} = await response.json() as {data:{summary:{total:number};items:{text:string}[]}};
+  if (data.summary.total === 0) {
+    await expect(page.locator(".review-empty")).toBeVisible();
+  } else {
+    expect(data.items.length).toBeGreaterThan(0);
+    await expect(page.locator(".review-entry")).toHaveCount(data.items.length);
+    await expect(page.locator(".review-text").first()).toHaveText(data.items[0].text);
+  }
+});
+
+test("@public-release Arabic mobile review submission preserves input on failure and publishes after retry", async ({page}) => {
+  const text = "تقييم تجريبي للاختبار داخل المتصفح فقط.";
+  let submissions = 0;
+  await page.route("**/api/v1/reviews**", async route => {
+    if (route.request().method() === "POST") {
+      submissions++;
+      expect(route.request().postDataJSON()).toMatchObject({source:"public", locale:"ar", rating:4, text, consent:true, displayName:"anonymous"});
+      if (submissions === 1) return route.fulfill({status:503,json:{error:{code:"UNAVAILABLE"}}});
+      return route.fulfill({status:201,json:{data:{id:review.id,state:"published"}}});
+    }
+    if (submissions === 2) return route.fulfill({json:{data:{items:[{...review,rating:4,text,locale:"ar",replies:[]}],summary:{total:1,average:4,ratings:{1:0,2:0,3:0,4:1,5:0}},filteredTotal:1,nextCursor:null}}});
+    await route.fulfill({json:{data:{items:[],summary:{total:0,average:null,ratings:{1:0,2:0,3:0,4:0,5:0}},filteredTotal:0,nextCursor:null}}});
+  });
+  await page.setViewportSize({width:390,height:844});
+  await page.goto("/ar/reviews");
+  const form = page.locator(".review-submit");
+  await form.locator('[name="name"]').fill("ضيف للاختبار");
+  await form.getByRole("radio").nth(3).check();
+  await form.locator("textarea").fill(text);
+  await form.getByRole("combobox").selectOption("anonymous");
+  await form.getByRole("button").click();
+  expect(submissions).toBe(0);
+  await form.getByRole("checkbox").check();
+  await form.getByRole("button").click();
+  await expect(form.getByRole("alert")).toBeVisible();
+  await expect(form.locator("textarea")).toHaveValue(text);
+  await form.getByRole("button").click();
+  await expect(page.locator(".review-success")).toBeVisible();
+  await expect(page.locator(".review-entry .review-text")).toHaveText(text);
+  await expect(page.locator(".review-entry .review-text")).toHaveAttribute("lang","ar");
+  expect(submissions).toBe(2);
 });

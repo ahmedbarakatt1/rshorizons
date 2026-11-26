@@ -1,9 +1,25 @@
-import { Pool, type PoolClient, type QueryResultRow } from "pg";
+import { Pool, type PoolClient, type PoolConfig, type QueryResultRow } from "pg";
 
 export type ActorContext = {type: "staff" | "guest" | "system"; id?: string; sessionHash?: string};
 export type Transaction = PoolClient;
 const globalDb = globalThis as typeof globalThis & {tourismPool?: Pool};
-export const pool = globalDb.tourismPool ?? new Pool({connectionString: process.env.DATABASE_URL, max: 10, idleTimeoutMillis: 30_000, connectionTimeoutMillis: 5_000});
+function poolConfiguration():PoolConfig {
+  const configuration:PoolConfig={connectionString:process.env.DATABASE_URL,max:10,idleTimeoutMillis:30_000,connectionTimeoutMillis:5_000};
+  const ca=process.env.DATABASE_SSL_CA?.trim();
+  if(!["staging","production"].includes(process.env.APP_ENV??"")&&!ca)return configuration;
+  if(configuration.connectionString){
+    let url:URL;
+    try{url=new URL(configuration.connectionString);}catch{throw new Error("DATABASE_URL_INVALID");}
+    // pg URL SSL parameters replace its entire ssl object, including the trusted CA.
+    for(const [key,value] of url.searchParams){
+      if((key.startsWith("ssl")||key==="uselibpqcompat")&&!(key==="sslmode"&&value==="verify-full"))throw new Error("DATABASE_TLS_OPTIONS_CONFLICT");
+    }
+    url.searchParams.delete("sslmode");configuration.connectionString=url.toString();
+  }
+  configuration.ssl={rejectUnauthorized:true,...(ca?{ca}: {})};
+  return configuration;
+}
+export const pool = globalDb.tourismPool ?? new Pool(poolConfiguration());
 if (process.env.NODE_ENV !== "production") globalDb.tourismPool = pool;
 export async function query<T extends QueryResultRow = QueryResultRow>(sql: string, values: unknown[] = []) {
   if (!process.env.DATABASE_URL) throw new Error("DATABASE_URL_REQUIRED");

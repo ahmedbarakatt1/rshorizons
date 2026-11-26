@@ -1,3 +1,4 @@
+import "../fixtures/legacy-service-mode";
 import {afterAll,beforeAll,expect,test,vi} from "vitest";
 import {randomUUID} from "node:crypto";
 import {readFile} from "node:fs/promises";

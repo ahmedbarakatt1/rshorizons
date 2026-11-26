@@ -1,0 +1,37 @@
+.uploader {
+ margin-block-end: 1.25rem;
+}
+.uploader > summary {
+ cursor: pointer;
+ font-size: 1.05rem;
+ font-weight: 650;
+}
+.uploader > form {
+ margin-block-start: 1.25rem;
+ max-inline-size: 46rem;
+}
+.uploader fieldset {
+ min-inline-size: 0;
+ gap: .85rem;
+ padding: 0;
+}
+.uploader fieldset legend {
+ margin-block-end: .75rem;
+}
+.uploader small {
+ margin-block-start: -.5rem;
+}
+.uploader label.attestation {
+ display: flex;
+ align-items: flex-start;
+ gap: .65rem;
+ line-height: 1.5;
+}
+.uploader label.attestation input {
+ flex: 0 0 auto;
+ inline-size: 1.15rem;
+ block-size: 1.15rem;
+ min-height: 0;
+ margin: .12rem 0 0;
+ padding: 0;
+}

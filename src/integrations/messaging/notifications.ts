@@ -1,10 +1,10 @@
-import {createHash,createHmac,timingSafeEqual} from "node:crypto";
+import {createHmac,timingSafeEqual} from "node:crypto";
+import {automatedEmailEnabled} from "@/config/customer-service";
 import {mkdir,writeFile} from "node:fs/promises";
 import {join} from "node:path";
 import {z} from "zod";
 import {query,withTransaction,type Transaction} from "@/server/db";
 import {digestSecret} from "@/server/security";
-import {openWaOrigin,openWaSession} from "./openwa-config";
 
 export class NotificationError extends Error {
   constructor(public code:string,public retryable=false,public ambiguous=false){super(code);}
@@ -13,17 +13,17 @@ type Job={id:string;attempts:number;event:{id:string;event_type:string;aggregate
 type Channel="email"|"whatsapp";
 type Template={id:string;channel:Channel;provider:string;provider_template_id:string|null;provider_language:string|null;category:string;subject_template:string|null;body_template:string;template_version:number};
 type Recipient={booking_id:string;reference:string;guest_id:string;email:string|null;phone_e164:string|null;locale:string;whatsapp_opt_in:boolean;marketing_opt_in:boolean;synthetic:boolean;gallery_id?:string;invitation_id?:string;target_expiry?:Date};
-export type NormalizedDeliveryEvent={provider:"resend"|"whatsapp"|"openwa";account:string;eventKey:string;messageId:string;status:"accepted"|"delivered"|"read"|"failed";occurredAt:Date};
+export type NormalizedDeliveryEvent={provider:"resend";account:string;eventKey:string;messageId:string;status:"accepted"|"delivered"|"read"|"failed";occurredAt:Date};
 const eventTemplates:Record<string,string>={
   request_received:"request_received",request_rejected:"request_rejected",approved_payment_required:"approved_payment_required",
   booking_confirmed:"booking_confirmed",payment_received:"payment_received",booking_changed:"booking_changed",pickup_reminder:"pickup_reminder",
   payment_reminder:"approved_payment_required",
   pickup_updated:"booking_changed",booking_expired:"cancellation_update",booking_completed:"booking_completed",cancellation_update:"cancellation_update",
   refund_update:"refund_update",refund_completed:"refund_update",refund_approved:"refund_approved",
-  gallery_ready:"gallery_ready",review_invitation:"review_invitation",contact_received:"contact_received"
+  gallery_ready:"gallery_ready",review_invitation:"review_invitation",contact_received:"contact_received",guest_access_requested:"guest_access_requested"
 };
+export const requiredGuestEmailTemplates=[...new Set(Object.values(eventTemplates))].filter(event=>!['contact_received','refund_approved'].includes(event));
 const emailSchema=z.email().max(254);
-const phoneSchema=z.string().regex(/^\+[1-9][0-9]{6,14}$/);
 function fail(code:string):never{throw new NotificationError(code);}
 const configured=(key:string)=>process.env[key]?.trim()||fail(`${key}_REQUIRED`);
 const environment=()=>process.env.APP_ENV==="production"?"production":process.env.APP_ENV==="staging"?"sandbox":"local";
@@ -44,6 +44,7 @@ export function renderTemplate(template:string,values:Record<string,string>){
   return rendered;
 }
 export async function sendEmail(message:{to:string;subject:string;text:string;idempotencyKey:string;synthetic?:boolean}){
+  if(!automatedEmailEnabled)fail("AUTOMATED_EMAIL_DISABLED");
   emailSchema.parse(message.to);
   if(/[\r\n]/.test(message.subject)||message.subject.length>500||message.text.length>20000)fail("EMAIL_CONTENT_INVALID");
   const provider=configured("EMAIL_PROVIDER");
@@ -71,48 +72,6 @@ export async function sendEmail(message:{to:string;subject:string;text:string;id
   const parsed=z.object({id:z.string().min(1).max(200)}).safeParse(await response.json().catch(()=>null));
   if(!parsed.success)throw new NotificationError("EMAIL_SEND_OUTCOME_UNKNOWN",false,true);
   return {provider,messageId:parsed.data.id,status:"accepted" as const,external:true};
-}
-async function sendWhatsApp(to:string,template:Template,values:Record<string,string>,idempotencyKey:string){
-  phoneSchema.parse(to);recipientGate(to);
-  if(template.provider==="openwa"){
-    const base=openWaOrigin(),session=openWaSession(),key=configured("OPENWA_API_KEY");
-    const text=renderTemplate(template.body_template,values);
-    if(!text.trim()||[...text].length>4096)fail("OPENWA_TEXT_INVALID");
-    let response:Response;
-    try{
-      response=await fetch(`${base}/api/sessions/${session}/messages/send-text`,{method:"POST",headers:{Authorization:`Bearer ${key}`,"Content-Type":"application/json","Idempotency-Key":createHash("sha256").update(idempotencyKey).digest("hex")},
-        // Link previews must never fetch or consume a private guest-access link.
-        body:JSON.stringify({chatId:`${to.slice(1)}@c.us`,text,linkPreview:false}),redirect:"error",signal:AbortSignal.timeout(20000)});
-    }catch{throw new NotificationError("OPENWA_SEND_OUTCOME_UNKNOWN",false,true);}
-    const body=await response.json().catch(()=>null);
-    if(!response.ok){
-      // Upstream rethrows the original engine error, including 4xx, even when a
-      // message may have left the session. HTTP status alone cannot prove refusal.
-      // Stop for reconciliation; a signed delivery failure can authorize fallback.
-      throw new NotificationError("OPENWA_SEND_OUTCOME_UNKNOWN",false,true);
-    }
-    const parsed=z.object({messageId:z.string().min(1).max(300),timestamp:z.number().finite().positive()}).safeParse(body);
-    if(!parsed.success)throw new NotificationError("OPENWA_SEND_OUTCOME_UNKNOWN",false,true);
-    return {provider:"openwa",messageId:`${session}:${parsed.data.messageId}`,status:"accepted" as const,external:true};
-  }
-  const version=configured("META_GRAPH_API_VERSION");
-  if(!/^v\d+\.\d+$/.test(version))fail("WHATSAPP_GRAPH_VERSION_INVALID");
-  const phoneId=configured("WHATSAPP_PHONE_NUMBER_ID");
-  if(!/^\d+$/.test(phoneId))fail("WHATSAPP_PHONE_NUMBER_ID_INVALID");
-  if(template.provider!=="meta"||!template.provider_template_id||!template.provider_language)fail("WHATSAPP_TEMPLATE_UNAVAILABLE");
-  // The approved template controls the positional parameter order. Only two safe variables are supported.
-  const keys=Array.from(template.body_template.matchAll(/\{\{\s*([a-z_]+)\s*\}\}/g),match=>match[1]);
-  renderTemplate(template.body_template,values);
-  let response:Response;
-  try{response=await fetch(`https://graph.facebook.com/${version}/${phoneId}/messages`,{method:"POST",headers:{Authorization:`Bearer ${configured("WHATSAPP_TOKEN")}`,"Content-Type":"application/json"},body:JSON.stringify({messaging_product:"whatsapp",to:to.slice(1),type:"template",template:{name:template.provider_template_id,language:{code:template.provider_language},components:keys.length?[{type:"body",parameters:keys.map(key=>({type:"text",text:values[key]}))}]:[]}}),redirect:"error",signal:AbortSignal.timeout(15000)});}
-  catch(error){if(error instanceof NotificationError)throw error;throw new NotificationError("WHATSAPP_SEND_OUTCOME_UNKNOWN",false,true);}
-  if(!response.ok){
-    if(response.status>=500)throw new NotificationError("WHATSAPP_SEND_OUTCOME_UNKNOWN",false,true);
-    throw new NotificationError(response.status===429?"WHATSAPP_RATE_LIMITED":"WHATSAPP_PROVIDER_REJECTED",response.status===429);
-  }
-  const parsed=z.object({messages:z.array(z.object({id:z.string().min(1).max(300)})).min(1)}).safeParse(await response.json().catch(()=>null));
-  if(!parsed.success)throw new NotificationError("WHATSAPP_SEND_OUTCOME_UNKNOWN",false,true);
-  return {provider:"meta",messageId:parsed.data.messages[0].id,status:"accepted" as const,external:true};
 }
 async function getRecipient(tx:Transaction,job:Job):Promise<Recipient>{
   const kind=job.event.event_type;
@@ -149,7 +108,7 @@ async function getRecipient(tx:Transaction,job:Job):Promise<Recipient>{
 async function selectTemplate(tx:Transaction,job:Job,channel:Channel,locale:string){
   // Pin retries to the originally approved version instead of silently changing the external payload.
   const prior=(await tx.query("SELECT template_id FROM app.notification_deliveries WHERE job_id=$1 AND channel=$2 AND template_id IS NOT NULL ORDER BY attempt LIMIT 1",[job.id,channel])).rows[0];
-  const provider=channel==="email"?process.env.EMAIL_PROVIDER:process.env.WHATSAPP_PROVIDER??"openwa";
+  const provider=process.env.EMAIL_PROVIDER;
   const result=await tx.query<Template>(`SELECT * FROM app.notification_templates WHERE event_type=$1 AND channel=$2 AND locale=$3 AND approval_status='approved' AND provider=$4
     AND ($5::uuid IS NULL OR id=$5) ORDER BY template_version DESC LIMIT 1`,[eventTemplates[job.event.event_type],channel,locale,provider,prior?.template_id??null]);
   return result.rows[0];
@@ -166,7 +125,7 @@ async function grantUrl(tx:Transaction,job:Job,recipient:Recipient){
   const secret=createHmac("sha256",configured("TOKEN_HASH_PEPPER")).update(`notification-access-v1:${job.event.id}:${recipient.booking_id}:${recipient.gallery_id??recipient.invitation_id??"booking"}`).digest("base64url");
   const hash=digestSecret(secret);
   const purpose=recipient.gallery_id?"gallery":recipient.invitation_id?"review":"booking";
-  const scope=purpose==="gallery"?["gallery:read"]:purpose==="review"?["review:submit"]:["booking:read","booking:request","gallery:read"];
+  const scope=purpose==="gallery"?["gallery:read"]:purpose==="review"?["review:submit"]:["booking:read","booking:request","payment:create","gallery:read"];
   const expires=new Date(Math.min(Date.now()+48*3600_000,recipient.target_expiry?.getTime()??Infinity));
   await tx.query(`INSERT INTO app.access_grants(token_hash,purpose,booking_id,gallery_id,review_invitation_id,scope,expires_at) VALUES($1,$2,$3,$4,$5,$6,$7) ON CONFLICT(token_hash) DO NOTHING`,[hash,purpose,recipient.booking_id,recipient.gallery_id??null,recipient.invitation_id??null,scope,expires]);
   const grant=(await tx.query("SELECT id FROM app.access_grants WHERE token_hash=$1 AND expires_at>now() AND revoked_at IS NULL AND used_at IS NULL",[hash])).rows[0];
@@ -190,6 +149,7 @@ export async function deliverNotification(job:Job):Promise<unknown>{
         VALUES($1,'email',$2,'internal','suppressed',$3) ON CONFLICT DO NOTHING`,[job.id,Math.max(1,job.attempts),reason]);
       return {alreadyProcessed:true as const,suppressionReason:reason};
     }
+    if(!automatedEmailEnabled)return suppress("AUTOMATED_EMAIL_DISABLED");
     if(job.event.event_type==="refund_approved"){
       if(!(await tx.query("SELECT 1 FROM app.refund_requests WHERE id=$1 AND approved_at IS NOT NULL",[job.event.aggregate_id])).rowCount)fail("REFUND_NOTIFICATION_INELIGIBLE");
       return suppress("INTERNAL_APPROVAL_NO_CUSTOMER_SEND");
@@ -214,16 +174,13 @@ export async function deliverNotification(job:Job):Promise<unknown>{
       if(!template)fail("NOTIFICATION_TEMPLATE_UNAVAILABLE");
       if(template.category!=="transactional")fail("CONTACT_TEMPLATE_CATEGORY_INVALID");
       // Staff alert contains only an opaque reference and authenticated admin URL, never form content/contact details.
-      const values={reference:job.event.aggregate_id,access_url:`${origin()}/admin/contact`};
+      const values={reference:job.event.aggregate_id,access_url:`${origin()}/admin/contact/${job.event.aggregate_id}`};
       return {alreadyProcessed:false as const,template,values,to:configured("STAFF_NOTIFICATION_EMAIL"),synthetic:false,recipient:null};
     }
     const recipient=await getRecipient(tx,job);
-    const whatsappFailed=(await tx.query("SELECT 1 FROM app.notification_deliveries WHERE job_id=$1 AND channel='whatsapp' AND status='failed' LIMIT 1",[job.id])).rowCount;
-    const forceEmail=String(live.job_key).endsWith(":email-fallback")||whatsappFailed;
-    let template=!forceEmail&&recipient.whatsapp_opt_in&&recipient.phone_e164?await selectTemplate(tx,job,"whatsapp",recipient.locale):undefined;
-    if(template?.category==="marketing"&&!recipient.marketing_opt_in)template=undefined;
-    if(job.event.event_type==="review_invitation"&&template&&template.category!=="marketing")template=undefined;
-    if(!template&&recipient.email)template=await selectTemplate(tx,job,"email",recipient.locale);
+    // WhatsApp is a manual click-to-chat action; only email is dispatched by jobs.
+    if(!recipient.email)return suppress("MANUAL_CONTACT_REQUIRED");
+    const template=await selectTemplate(tx,job,"email",recipient.locale);
     if(!template)fail("NOTIFICATION_TEMPLATE_UNAVAILABLE");
     if(template.category==="marketing"&&!recipient.marketing_opt_in)fail("MARKETING_CONSENT_REQUIRED");
     const values={reference:recipient.reference,access_url:await grantUrl(tx,job,recipient)};
@@ -237,45 +194,20 @@ export async function deliverNotification(job:Job):Promise<unknown>{
   const deliveryId=delivery.rows[0].id;
   let acceptedExternally=false;
   try{
-    // Re-read consent immediately before external WhatsApp submission.
-    if(template.channel==="whatsapp"&&prepared.recipient){
-      const current=await withTransaction({type:"system"},tx=>getRecipient(tx,job));
-      if(!current.whatsapp_opt_in||(template.category==="marketing"&&!current.marketing_opt_in))fail("WHATSAPP_CONSENT_WITHDRAWN");
-    }
-    const result=template.channel==="email"?await sendEmail({to,subject:renderTemplate(template.subject_template??"",values),text:renderTemplate(template.body_template,values),idempotencyKey,synthetic}):await sendWhatsApp(to,template,values,idempotencyKey);
+    const result=await sendEmail({to,subject:renderTemplate(template.subject_template??"",values),text:renderTemplate(template.body_template,values),idempotencyKey,synthetic});
     acceptedExternally=result.external;
     await query(`UPDATE app.notification_deliveries SET status='accepted',provider_message_id=$2,accepted_at=now(),updated_at=now(),version=version+1 WHERE id=$1`,[deliveryId,result.messageId]);
     if(prepared.recipient?.invitation_id)await query("UPDATE app.review_invitations SET sent_at=coalesce(sent_at,now()) WHERE id=$1",[prepared.recipient.invitation_id]);
     return {...result,channel:template.channel};
   }catch(error){
     const classified=await recordFailure(deliveryId,acceptedExternally?new NotificationError("NOTIFICATION_RECORD_OUTCOME_UNKNOWN",false,true):error);
-    // Definite failure falls back on the same leased job; a separate email row prevents duplicate WhatsApp sends.
-    if(template.channel==="whatsapp"&&!classified.ambiguous&&prepared.recipient?.email){
-      return deliverNotification(job);
-    }
     throw classified;
   }
 }
 
 const resendBody=z.object({type:z.string(),created_at:z.string().optional(),data:z.object({email_id:z.string().min(1).max(200)})});
-const metaBody=z.object({object:z.literal("whatsapp_business_account"),entry:z.array(z.object({id:z.string(),changes:z.array(z.object({field:z.string(),value:z.object({metadata:z.object({phone_number_id:z.string()}),statuses:z.array(z.object({id:z.string().max(300),status:z.enum(["sent","delivered","read","failed"]),timestamp:z.string().regex(/^\d+$/)})).optional()})}))}))});
-export function verifyMessagingWebhook(provider:"resend"|"whatsapp"|"openwa",rawBody:string,headers:Headers):NormalizedDeliveryEvent[]{
+export function verifyMessagingWebhook(provider:"resend",rawBody:string,headers:Headers):NormalizedDeliveryEvent[]{
   if(Buffer.byteLength(rawBody)>256*1024)fail("WEBHOOK_BODY_TOO_LARGE");
-  if(provider==="openwa"){
-    const secret=configured("OPENWA_WEBHOOK_SECRET");
-    if(secret.length<32)fail("OPENWA_WEBHOOK_SECRET_INVALID");
-    const expected=`sha256=${createHmac("sha256",secret).update(rawBody).digest("hex")}`;
-    if(!equal(expected,headers.get("x-openwa-signature")??""))fail("WEBHOOK_SIGNATURE_INVALID");
-    const body=z.object({event:z.string(),timestamp:z.iso.datetime({offset:true}),sessionId:z.string(),idempotencyKey:z.string().min(1).max(500),data:z.record(z.string(),z.unknown())}).parse(JSON.parse(rawBody));
-    if(body.sessionId!==openWaSession())fail("WEBHOOK_ACCOUNT_MISMATCH");
-    const occurredAt=new Date(body.timestamp);
-    // Durable gateway retries keep the original timestamp. Exact signed event IDs are deduped in PostgreSQL.
-    if(occurredAt.getTime()>Date.now()+300000)fail("WEBHOOK_TIMESTAMP_INVALID");
-    if(!["message.ack","message.failed"].includes(body.event))return [];
-    const data=z.object({messageId:z.string().min(1).max(300),status:z.enum(["pending","sent","delivered","read","failed"])}).parse(body.data);
-    if(data.status==="pending")return [];
-    return [{provider:"openwa",account:body.sessionId,eventKey:body.idempotencyKey,messageId:`${body.sessionId}:${data.messageId}`,status:data.status==="sent"?"accepted":data.status,occurredAt}];
-  }
   if(provider==="resend"){
     const id=headers.get("svix-id")??"",timestamp=headers.get("svix-timestamp")??"",signature=headers.get("svix-signature")??"";
     if(!id||!timestamp||!signature)fail("WEBHOOK_SIGNATURE_INVALID");
@@ -289,28 +221,13 @@ export function verifyMessagingWebhook(provider:"resend"|"whatsapp"|"openwa",raw
     if(!status[data.type])return [];
     return [{provider:"resend",account:configured("RESEND_ACCOUNT_ID"),eventKey:id,messageId:data.data.email_id,status:status[data.type],occurredAt:new Date(Number(timestamp)*1000)}];
   }
-  const signature=headers.get("x-hub-signature-256")??"";
-  const expected=`sha256=${createHmac("sha256",configured("META_APP_SECRET")).update(rawBody).digest("hex")}`;
-  if(!equal(expected,signature))fail("WEBHOOK_SIGNATURE_INVALID");
-  const body=metaBody.parse(JSON.parse(rawBody)),result:NormalizedDeliveryEvent[]=[];
-  for(const entry of body.entry){
-    if(entry.id!==configured("WHATSAPP_BUSINESS_ACCOUNT_ID"))fail("WEBHOOK_ACCOUNT_MISMATCH");
-    for(const change of entry.changes){
-      if(change.field!=="messages"||change.value.metadata.phone_number_id!==configured("WHATSAPP_PHONE_NUMBER_ID"))fail("WEBHOOK_ACCOUNT_MISMATCH");
-      for(const value of change.value.statuses??[]){
-        const at=Number(value.timestamp)*1000;
-        if(!Number.isFinite(at)||at>Date.now()+300000)fail("WEBHOOK_TIMESTAMP_INVALID");
-        result.push({provider:"whatsapp",account:entry.id,eventKey:`${value.id}:${value.status}:${value.timestamp}`,messageId:value.id,status:value.status==="sent"?"accepted":value.status,occurredAt:new Date(at)});
-      }
-    }
-  }
-  return result;
+  return [];
 }
 export async function applyMessagingWebhook(events:NormalizedDeliveryEvent[]){
   return withTransaction({type:"system"},async tx=>{
     let applied=0;
     for(const event of events){
-      const provider=event.provider==="whatsapp"?"meta":event.provider;
+      const provider=event.provider;
       const delivery=(await tx.query("SELECT id,status,job_id FROM app.notification_deliveries WHERE provider=$1 AND provider_message_id=$2 FOR UPDATE",[provider,event.messageId])).rows[0];
       // Do not acknowledge/discard a callback that races the accepted-row update; provider should retry.
       if(!delivery)fail("DELIVERY_NOT_YET_RECORDED");
@@ -320,7 +237,6 @@ export async function applyMessagingWebhook(events:NormalizedDeliveryEvent[]){
       if((ranks[event.status]??0)<(ranks[delivery.status]??0))continue;
       await tx.query(`UPDATE app.notification_deliveries SET status=$2,accepted_at=coalesce(accepted_at,$3),delivered_at=CASE WHEN $2 IN('delivered','read') THEN coalesce(delivered_at,$3) ELSE delivered_at END,
         read_at=CASE WHEN $2='read' THEN coalesce(read_at,$3) ELSE read_at END,failed_at=CASE WHEN $2='failed' THEN coalesce(failed_at,$3) ELSE failed_at END,updated_at=now(),version=version+1 WHERE id=$1`,[delivery.id,event.status,event.occurredAt]);
-      if(event.status==="failed"&&["whatsapp","openwa"].includes(event.provider))await tx.query(`INSERT INTO app.jobs(event_id,kind,job_key) SELECT event_id,'notification',event_id||':email-fallback' FROM app.jobs WHERE id=$1 ON CONFLICT DO NOTHING`,[delivery.job_id]);
       applied++;
     }
     return {applied};

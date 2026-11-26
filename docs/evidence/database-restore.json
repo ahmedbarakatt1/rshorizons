@@ -1,19 +1,19 @@
 {
-  "createdAt": "2026-10-20T17:27:02.234Z",
-  "database": "tourism_rehearsal_1792517211277",
-  "restoredDatabase": "tourism_rehearsal_1792517211277_restored",
+  "createdAt": "2026-10-25T18:18:38.523Z",
+  "database": "tourism_rehearsal_1792952300776",
+  "restoredDatabase": "tourism_rehearsal_1792952300776_restored",
   "checks": {
     "source": {
       "bookings": 44,
       "ledger": 20,
       "outbox": 116,
-      "tables": 117
+      "tables": 118
     },
     "destination": {
       "bookings": 44,
       "ledger": 20,
       "outbox": 116,
-      "tables": 117
+      "tables": 118
     },
     "postgres": "PostgreSQL 17.11 on x86_64-windows, compiled by msvc-19.44.35229, 64-bit"
   },

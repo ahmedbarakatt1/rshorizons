@@ -1,59 +1,88 @@
-import {test,expect} from "@playwright/test";
+import {test, expect} from "@playwright/test";
+import en from "../../messages/en.json" with {type:"json"};
+import ar from "../../messages/ar.json" with {type:"json"};
 
-for(const kind of ["stay","transfer","shared-transfer","photography","tour-addon"] as const){
-  test(`${kind} submits a complete request awaiting staff approval`,async({page},info)=>{
-    test.skip(info.project.name!=="chromium","Public checkout behavior is separately covered on all three engines.");
-    await page.goto(kind==="stay"?"/en/apartments/demo-1":`/en/experiences/${kind==="transfer"||kind==="shared-transfer"?"transportation":kind==="photography"?"photography":"boat-tours"}`);
-    await page.getByRole("link",{name:kind==="stay"?"Request this stay":"Request this experience"}).click();
-    if(kind==="stay"){
-      await page.getByLabel("Check-in",{exact:true}).fill("2027-07-01");
-      await page.getByLabel("Check-out",{exact:true}).fill("2027-07-04");
-    }else if(kind==="transfer"||kind==="shared-transfer"||kind==="photography"){
-      if(kind==="transfer")await page.getByLabel("Details",{exact:true}).selectOption("0356300f-fc64-0e75-5777-ae6ad03cb5d6");
-      if(kind==="shared-transfer"){
-        await page.getByLabel("Details",{exact:true}).selectOption({label:"Shared transfer — development fixture"});
-        await expect(page.getByLabel("Requested start (Africa/Cairo)",{exact:true})).toHaveCount(0);
-        await expect(page.getByLabel("Departure",{exact:true})).toBeVisible();
-      }else await page.getByLabel("Requested start (Africa/Cairo)",{exact:true}).fill("2027-07-01T09:00");
-      if(kind==="transfer"||kind==="shared-transfer"){
-        await page.getByLabel("Pickup address",{exact:true}).fill("Local test airport pickup");
-        await page.getByLabel("Destination address",{exact:true}).fill("Local test hotel destination");
-        await page.getByLabel("Luggage count").fill("1");
-      }
-    }else{
-      await page.locator('input[name^="addon-"]').first().check();
-    }
-    const selectedDeparture=kind==="shared-transfer"?await page.getByLabel("Departure",{exact:true}).inputValue():undefined;
-    const quoted=page.waitForResponse(response=>response.url().endsWith("/api/v1/quotes")&&response.request().method()==="POST");
-    await page.getByRole("button",{name:"Calculate my quote"}).click();
-    const quoteResponse=await quoted;
-    expect(quoteResponse.status()).toBe(201);
-    if(kind==="shared-transfer"){
-      const item=quoteResponse.request().postDataJSON().items[0];
-      expect(item.departureId).toBe("90ac23cb-7ba9-0560-e2e8-b1225af1612a");
-      expect(new Date(item.pickupAt).getTime()).toBeGreaterThan(Date.now());
-      expect(selectedDeparture).toBe(item.departureId);
-      // Cairo 09:00 is preserved across seasonal UTC offsets.
-      expect(new Intl.DateTimeFormat("en-GB",{timeZone:"Africa/Cairo",hour:"2-digit",minute:"2-digit",hour12:false}).format(new Date(item.pickupAt))).toBe("09:00");
-    }
-    await expect(page.getByRole("heading",{name:"Your quote"})).toBeVisible();
-    if(kind==="stay"){await expect(page.getByRole("heading",{name:"Nightly breakdown"})).toBeVisible();await expect(page.getByText("Cleaning fee",{exact:true})).toBeVisible();await expect(page.locator(".quote-breakdown summary")).toContainText("Cancellation policy");}
-    if(kind==="tour-addon")await expect(page.locator(".quote-panel .price-line").filter({has:page.locator("span")})).toHaveCount(3);
-    await page.getByLabel("Full name",{exact:true}).fill(`Local ${kind} browser test`);
-    await page.getByLabel("Email",{exact:true}).fill(`local-${kind}@example.test`);
-    await page.getByLabel("Participant 1",{exact:true}).fill("Local test participant");
-    await page.getByLabel("I accept the terms").check();
-    await page.getByLabel("I have read the privacy notice").check();
-    const submitted=page.waitForResponse(response=>response.url().endsWith("/api/v1/bookings")&&response.request().method()==="POST");
-    await page.getByRole("button",{name:"Send reservation request"}).click();
-    const response=await submitted;
-    expect(response.status()).toBe(201);
-    const result=await response.json();
-    expect(result.data.status).toBe("pending_review");
-    expect(result.data.paymentRequested).toBe(false);
-    await expect(page.getByText("Your reservation request has been received and is awaiting staff approval. It is not confirmed yet.")).toBeVisible();
-    await page.locator(".receipt-panel").getByRole("link",{name:"My reservation",exact:true}).click();
-    await expect(page.locator(".status-heading")).toContainText(result.data.reference);
-    await expect(page.locator(".status-heading")).toContainText("Awaiting staff approval");
+const cases = [
+  {locale:"en", mobile:false, payment:"instapay", phone:"+201099267451"},
+  {locale:"ar", mobile:true, payment:"wallet", phone:"+201220907478"},
+  {locale:"en", mobile:true, payment:"bank", phone:"+201220907478"},
+  {locale:"ar", mobile:false, payment:"discuss", phone:"+201099267451"},
+] as const;
+
+for (const {locale,mobile,payment,phone} of cases) {
+  test(`@public-release ${locale} ${mobile ? "mobile" : "desktop"} prepares and edits a ${payment} WhatsApp draft`, async ({page}) => {
+    const mutations: string[] = [], externalChats: string[] = [], scriptUrls: string[] = [];
+    await page.route("**/api/v1/**", async route => {
+      const request = route.request();
+      if (["GET","HEAD","OPTIONS"].includes(request.method())) return route.continue();
+      mutations.push(request.method() + " " + new URL(request.url()).pathname);
+      await route.abort();
+    });
+    await page.route("https://wa.me/**", async route => {
+      externalChats.push(route.request().url());
+      await route.abort();
+    });
+    page.on("request", request => {
+      if (request.resourceType() === "script") scriptUrls.push(request.url());
+    });
+    await page.setViewportSize(mobile ? {width:390,height:844} : {width:1440,height:900});
+    await page.goto(`/${locale}/experiences/transportation`);
+    const main = page.getByRole("main");
+    const service = await main.getByRole("heading", {level:1}).innerText();
+    await main.locator('a[href*="/booking/request?service="]').click();
+    const form = main.locator("form");
+    const name = form.locator('[name="name"]');
+    const submit = form.getByRole("button", {name:/./});
+    await submit.click();
+    await expect(name).toBeFocused();
+    const guest = locale === "ar" ? "ضيف للاختبار" : "QA Guest";
+    await name.fill(guest);
+    await name.press("Tab");
+    const date = form.locator('[name="date"]');
+    await expect(date).toBeFocused();
+    const preferredDate = new Date(Date.now() + 14 * 86400000).toISOString().slice(0,10);
+    await date.fill(preferredDate);
+    await form.locator('[name="time"]').fill("09:30");
+    await form.locator('[name="guests"]').fill("3");
+    await form.locator('[name="children"]').fill("2");
+    await form.locator('[name="pickup"]').fill("QA airport");
+    await form.locator('[name="dropoff"]').fill("QA hotel");
+    await form.locator('[name="flight"]').fill("QA123");
+    await form.locator('[name="luggage"]').fill("4");
+    const preferences = form.locator('select[name="payment"]');
+    await preferences.selectOption(payment);
+    const paymentLabel = await preferences.locator("option:checked").innerText();
+    await form.locator('select[dir="ltr"]').selectOption(phone);
+    const notes = "Pickup & luggage + 2 | البحر الأحمر";
+    await form.locator('[name="notes"]').fill(notes);
+    await submit.click();
+    const draft = main.locator(".whatsapp-draft");
+    await expect(draft).toBeFocused();
+    const editor = draft.getByRole("textbox"), outbound = draft.getByRole("link");
+    const message = await editor.inputValue();
+    const writtenDate=new Intl.DateTimeFormat(locale,{dateStyle:"long",timeZone:"UTC"}).format(new Date(`${preferredDate}T12:00:00Z`));
+    const writtenTime=new Intl.DateTimeFormat(locale,{timeStyle:"short",timeZone:"UTC"}).format(new Date("2000-01-01T09:30:00Z"));
+    for (const value of [service,guest,writtenDate,writtenTime,"QA airport","QA hotel","QA123",paymentLabel,notes]) expect(message).toContain(value);
+    for (const count of ["3","2","4"]) expect(message).toMatch(new RegExp(": " + count + "$", "m"));
+    await expect(draft).toContainText((locale==="ar"?ar:en).bookingNotConfirmed);
+    await expect(outbound).toHaveAttribute("target","_blank");
+    await expect(outbound).toHaveAttribute("rel",/noopener/);
+    await expect(outbound).toHaveAttribute("referrerpolicy","no-referrer");
+    const handoff = new URL((await outbound.getAttribute("href"))!);
+    expect(handoff.origin + handoff.pathname).toBe(`https://wa.me/${phone.slice(1)}`);
+    expect(handoff.searchParams.get("text")).toBe(message);
+    await editor.fill(" ");
+    await expect(outbound).toHaveCount(0);
+    const edited = `${guest} & revised + time?`;
+    await editor.fill(edited);
+    expect(new URL((await outbound.getAttribute("href"))!).searchParams.get("text")).toBe(edited);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    await draft.getByRole("button").click();
+    await expect(name).toBeFocused();
+    await expect(name).toHaveValue(guest);
+    await expect(preferences).toHaveValue(payment);
+    expect(mutations).toEqual([]);
+    expect(externalChats).toEqual([]);
+    expect(scriptUrls.filter(url => /three|camera-island/i.test(url))).toEqual([]);
   });
 }
