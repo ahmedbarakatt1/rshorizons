@@ -22,7 +22,7 @@ export async function SeaAtlasBanner({locale}: {locale: string}) {
       </div>
       <figure className={styles.map}>
         <div className={styles.terrain}>
-          <img src="/illustrations/red-sea-relief.webp" width="1106" height="1130" alt={t("redSeaRelief")} fetchPriority="high"/>
+          <img src="/illustrations/red-sea-relief-silhouette.webp" width="1150" height="887" alt={t("redSeaRelief")} fetchPriority="high"/>
           <span className={styles.pin}><span>{t("hurghadaMapLabel")}</span></span>
         </div>
         <figcaption dir="ltr"><a href="https://registry.opendata.aws/terrain-tiles/">Mapzen · NOAA · USGS</a></figcaption>

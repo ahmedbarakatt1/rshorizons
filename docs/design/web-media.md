@@ -2,7 +2,7 @@
 
 ## Red Sea relief banner
 
-The oblique relief illustration uses [Mapzen Terrain Tiles](https://registry.opendata.aws/terrain-tiles/) covering 31.05–45° E and 11.8–30.64° N. Global ETOPO1 terrain data are from NOAA. Global GMTED2010 and SRTM terrain data are courtesy of the U.S. Geological Survey. A local rendering combines exaggerated land elevation, hillshade and bathymetric color. The finished WebP is served with the app. The Hurghada marker is positioned using the same projection as the terrain. [Terrain tile source credits](https://github.com/tilezen/joerd/blob/master/docs/attribution.md)
+The freestanding relief follows the Red Sea coastline from the gulfs of Suez and Aqaba to Bab el-Mandeb. The water mask uses Natural Earth's 1:10m land and marine polygons. Bathymetric colors and shaded depth bands come from Mapzen Terrain Tiles. Global ETOPO1 data are from NOAA, and global GMTED2010 and SRTM data are courtesy of the U.S. Geological Survey. The transparent WebP includes the extruded coastline. Hurghada's marker uses the same projection and crop. [Natural Earth physical vectors](https://www.naturalearthdata.com/downloads/10m-physical-vectors/) · [Terrain tile source credits](https://github.com/tilezen/joerd/blob/master/docs/attribution.md)
 
 The wave and sun marks are extracted from the supplied Red Sea Horizons brand board. The two photographs link to the guest diving and boat trip pages.
 

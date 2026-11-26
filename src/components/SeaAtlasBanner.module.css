@@ -40,16 +40,25 @@
 :global([dir="rtl"]) :is(.explore, .photos) svg { transform: scaleX(-1); }
 .map { margin: 0; min-width: 0; }
 .terrain { position: relative; }
-.terrain > img { width: 100%; height: auto; filter: drop-shadow(3px 14px 9px rgb(0 22 43 / 42%)); }
+.terrain > img {
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(2px 5px 2px rgb(0 24 46 / 42%)) drop-shadow(8px 17px 9px rgb(0 20 42 / 58%));
+}
 .pin {
-  position: absolute; left: 18.42%; top: 27.07%; width: 9px; height: 9px;
-  border-radius: 50%; background: #072d43; border: 2px solid #fff4d8;
-  transform: translate(-50%, -50%); box-shadow: 0 0 0 1px #315864;
+  /* Hurghada in the relief's geographic projection, in either reading direction. */
+  position: absolute; left: 14.23%; top: 17.97%; width: 9px; height: 9px;
+  border-radius: 50%; background: #ffce75; border: 2px solid #10374c;
+  transform: translate(-50%, -50%); box-shadow: 0 0 0 1px #fff0c6;
+}
+.pin::before {
+  content: ""; position: absolute; left: 100%; bottom: 100%; width: clamp(14px, 2.5vw, 36px);
+  border-top: 1px solid #ffe7b7; transform: rotate(-40deg); transform-origin: left;
 }
 .pin > span {
-  position: absolute; bottom: 100%; left: 100%; padding: 1px 7px;
-  background: #073653; color: white; border-radius: 3px; white-space: nowrap;
-  font-size: clamp(.66rem, 1vw, .86rem); line-height: 1.6;
+  position: absolute; left: clamp(14px, 2vw, 30px); bottom: clamp(11px, 1.6vw, 24px);
+  padding-inline: 4px; color: #fff5dd; white-space: nowrap; text-shadow: 0 1px 3px #04314a;
+  font-size: clamp(.74rem, 1.15vw, .98rem); line-height: 1.45;
 }
 .map figcaption { text-align: end; margin-top: 6px; font: .67rem/1.4 Arial,sans-serif; color: #c7dfe9; }
 .map figcaption a { text-decoration: underline; }

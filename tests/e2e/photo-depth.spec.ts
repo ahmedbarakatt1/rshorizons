@@ -25,6 +25,26 @@ for (const [locale, width] of [["en", 1440], ["ar", 390]] as const) {
     const map = banner.locator('img[src*="red-sea-relief"]');
     await expect(map).toHaveAccessibleName(/\S/);
     expect(await map.evaluate(async (img: HTMLImageElement) => {await img.decode(); return img.naturalWidth;})).toBeGreaterThan(400);
+    // The water forms a freestanding silhouette. A land slab with clear corners
+    // still paints most of this box and would hide the blue banner behind it.
+    const coverage = await map.evaluate((img: HTMLImageElement) => {
+      const canvas = document.createElement("canvas");
+      canvas.width = 100;
+      canvas.height = 100;
+      const context = canvas.getContext("2d")!;
+      context.drawImage(img, 0, 0, 100, 100);
+      const pixels = context.getImageData(0, 0, 100, 100).data;
+      let opaque = 0;
+      for (let alpha = 3; alpha < pixels.length; alpha += 4) {
+        if (pixels[alpha] > 127) opaque++;
+      }
+      return opaque / 10000;
+    });
+    expect(coverage).toBeLessThan(.4);
+    expect(coverage).toBeGreaterThan(.1);
+    for (const route of ["diving", "boat-trips"]) {
+      await expect(banner.locator(`a[href="/${locale}/${route}"] img`)).toBeVisible();
+    }
     await expect(banner.locator('a[href$="/gallery"]')).toBeVisible();
     await expect(page.getByTestId("nautical-compass")).toHaveCount(0);
 
