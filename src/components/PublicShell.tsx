@@ -13,7 +13,7 @@ export function PublicShell({children,locale}:{children:React.ReactNode;locale:L
  const t=useTranslations(); const pathname=usePathname();
  const brandName=locale==="ar"?"ريد سي هورايزنز":"Red Sea Horizons";
  const regionName=locale==="ar"?"مصر · البحر الأحمر":"Egypt · Red Sea";
- const links=[["experiences","experiences"],["destinations","destinations"],["apartments","apartments"],["photography","photography"],["reviews","reviews"]] as const;
+ const links=[["experiences","experiences"],["destinations","destinations"],["gallery","gallery"],["reviews","reviews"]] as const;
  return <>
   <a tabIndex={0} className="skip-link" href="#main">{t("skipContent")}</a>
   <header className="site-header">
@@ -27,7 +27,7 @@ export function PublicShell({children,locale}:{children:React.ReactNode;locale:L
   {children}
   <footer className="site-footer">
    <ContactChannels compact/>
-   <div className="footer-top"><div><Mark/><p>{t("manualTitle")}</p><Link href={`/${locale}/contact`} className="text-link">{t("contact")} <Arrow/></Link></div><nav>{["experiences","destinations","apartments","gallery","reviews","about"].map(path=><Link key={path} href={`/${locale}/${path}`}>{t(path)}</Link>)}</nav><nav>{["privacy","terms","cancellation-policy","payment-options"].map((path,i)=><Link key={path} href={`/${locale}/${path}`}>{t(["privacy","terms","cancellation","paymentMethodsTitle"][i])}</Link>)}</nav></div>
+   <div className="footer-top"><div><Mark/><p>{t("manualTitle")}</p><Link href={`/${locale}/contact`} className="text-link">{t("contact")} <Arrow/></Link></div><nav>{["experiences","destinations","gallery","reviews","about"].map(path=><Link key={path} href={`/${locale}/${path}`}>{t(path)}</Link>)}</nav><nav>{["privacy","terms","cancellation-policy","payment-options"].map((path,i)=><Link key={path} href={`/${locale}/${path}`}>{t(["privacy","terms","cancellation","paymentMethodsTitle"][i])}</Link>)}</nav></div>
    <p className="footer-name">{brandName}</p><div className="footer-bottom"><span>© {new Date().getFullYear()} {brandName}</span><span>{regionName}</span><Link href="/admin">{t("staff")}</Link></div>
   </footer>
  </>;

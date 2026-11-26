@@ -6,7 +6,7 @@ import {AppError} from "@/server/http/errors";
 import {readJson,success,rateLimit,idempotencyKey} from "@/server/http/request";
 import {cookieValue,getGuest,issueGuestSession,redeemGuestGrant,sessionCookie} from "@/server/auth";
 import {newSecret,digestSecret} from "@/server/security";
-import {getApartment,getCatalog,getDepartures,getDestinations,getService,searchApartments,searchServices} from "@/modules/catalog";
+import {getCatalog,getDepartures,getDestinations,getService,searchServices} from "@/modules/catalog";
 import {catalogFiltersSchema} from "@/modules/catalog/contracts";
 import {bookingInputSchema,dateSchema,localeSchema,quoteInputSchema,uuidSchema} from "@/modules/bookings/contracts";
 import {bookingDetails,createBookingRequest,createQuote,submitBooking} from "@/modules/bookings/service";
@@ -34,10 +34,7 @@ export async function publicRoute(request:Request,parts:string[]):Promise<Respon
       return success(Object.fromEntries(rows.map(r=>[r.policy_type,r.version])));
     }
     if(resource==="destinations")return success({items:await getDestinations(locale)});
-    if(resource==="photo-packages"){
-      const result=await query(`SELECT p.id,p.code,t.title,t.description,p.price_amount::text AS "priceAmountMinor",p.currency,p.entitlement_rules AS "entitlementRules" FROM app.photo_packages p JOIN app.photo_package_translations t ON t.package_id=p.id AND t.locale=$1 WHERE p.active AND t.approved_at IS NOT NULL ORDER BY p.price_amount,p.code`,[locale]);
-      return success({items:result.rows});
-    }
+    if(resource==="photo-packages" || resource==="apartments")throw new AppError("NOT_FOUND",404);
     if(resource==="services") {
       if(id&&action==="departures") {
         const params=dateRangeSchema.parse({from:url.searchParams.get("from"),to:url.searchParams.get("to")});
@@ -48,18 +45,7 @@ export async function publicRoute(request:Request,parts:string[]):Promise<Respon
       const filters=catalogFiltersSchema.parse(Object.fromEntries(url.searchParams));
       return success(await searchServices(filters,locale));
     }
-    if(resource==="apartments") {
-      if(id&&action==="availability"){
-        const range=dateRangeSchema.parse({from:url.searchParams.get("from"),to:url.searchParams.get("to")});
-        await getApartment(id,locale);
-        const {rows}=await query(`SELECT lower(date_range) AS "from",upper(date_range) AS "to" FROM app.apartment_inventory WHERE apartment_id=$1 AND released_at IS NULL AND date_range && daterange($2,$3,'[)') ORDER BY lower(date_range)`,[uuidSchema.parse(id),range.from,range.to]);
-        return success({unavailable:rows,checkoutExclusive:true});
-      }
-      if(id)return success(await getApartment(id,locale));
-      const filter=z.object({locale:localeSchema.optional(),checkIn:dateSchema.optional(),checkOut:dateSchema.optional(),guests:z.coerce.number().int().min(1).max(30).optional()}).strict().parse(Object.fromEntries(url.searchParams));
-      if(!!filter.checkIn!==!!filter.checkOut || filter.checkIn&&filter.checkOut&&filter.checkOut<=filter.checkIn)throw new AppError("INVALID_STAY",422);
-      return success({items:await searchApartments(filter,locale)});
-    }
+
     if(resource==="bookings"&&id) {
       const guest=await getGuest(request,id);
       if(action==="payments"){const detail=await bookingDetails(guest.bookingId);return success({items:detail.payments});}
