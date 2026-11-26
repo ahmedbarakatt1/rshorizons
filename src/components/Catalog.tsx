@@ -5,7 +5,7 @@ import {useTranslations} from "next-intl";
 import type {ApartmentSummary,DestinationSummary,ServiceSummary} from "@/types/catalog";
 import {Arrow} from "./PublicShell";
 import {api} from "./api";
-import {money} from "./format";
+import {money,tripDuration} from "./format";
 import {resolveWebPhoto} from "./catalog-imagery";
 export function Photo({image,alt,priority=false,className="",sizes="(max-width:767px) 50vw, (max-width:1100px) 55vw, 40vw"}:{image:string;alt:string;priority?:boolean;className?:string;sizes?:string}) {
  const webPhoto=resolveWebPhoto(image);
@@ -21,7 +21,7 @@ export function ServiceCard({item,locale}:{item:ServiceSummary;locale:string}) {
   <Link href={`/${locale}/experiences/${item.slug}`}>
    <Photo image={item.image} alt={item.title}/>
    <div className="card-content">
-    <div className="card-meta"><span>{item.destination}</span><span>{item.durationMinutes} {t("minutes")}</span></div>
+    <div className="card-meta"><span>{item.destination}</span><span>{tripDuration(item.durationMinutes,locale)}</span></div>
     <h2 className="card-title">{item.title}</h2><p>{item.summary}</p>
     <div className="card-bottom"><span>{t("from")} <bdi className="money">{money(item.fromAmountMinor,item.currency,locale)}</bdi></span><Arrow/></div>
    </div>

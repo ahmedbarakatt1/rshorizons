@@ -1,19 +1,20 @@
 "use client";
 import {useState} from "react";
-import {useTranslations} from "next-intl";
+import {useLocale,useTranslations} from "next-intl";
 import photos from "@/content/owner-photos.json";
 import videos from "@/content/owner-videos.json";
 import {Photo} from "./Catalog";
 
 export function TripVideo({src,poster,title,width,height,duration}:{src:string;poster?:string;title:string;width?:number;height?:number;duration?:number}) {
  const translate=useTranslations(),t=(key:string)=>translate(`media_${key}`),[opened,setOpened]=useState(false);
+ const locale=useLocale();
  return <figure className="trip-video">
   <div className="trip-video-player">
    {opened?<video src={src} poster={poster} width={width} height={height} controls playsInline autoPlay muted preload="metadata" aria-label={title}/>:<button className="video-open" onClick={()=>setOpened(true)} aria-label={`${t("play")} — ${title}`}>
     {poster&&<img src={poster} width={width??960} height={height??540} alt="" loading="lazy"/>}<span className="video-play-label"><span aria-hidden="true">▶</span> {t("play")}</span>
    </button>}
   </div>
-  <figcaption><span>{title}</span>{duration!==undefined&&<span>{Math.round(duration)}s</span>}</figcaption>
+  <figcaption><span>{title}</span>{duration!==undefined&&<span>{new Intl.NumberFormat(locale,{style:"unit",unit:"second",unitDisplay:"short"}).format(Math.round(duration))}</span>}</figcaption>
  </figure>;
 }
 export function OwnerGallery() {

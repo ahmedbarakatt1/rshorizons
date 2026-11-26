@@ -12,7 +12,7 @@ import {ContactChannels,PaymentMethods} from "@/components/CustomerService";
 import {GuestAccess,PolicyContent,PrivateGallery,PublicGallery} from "@/components/GuestFlows";
 import {Reviews} from "@/components/ReviewsPage";
 import {activitySections} from "@/config/activity-sections";
-import {money} from "@/components/format";
+import {money,tripDuration} from "@/components/format";
 
 function detailFailure(error:unknown):never{if(typeof error==="object"&&error!==null&&"status" in error&&error.status===404)notFound();throw error;}
 type Props={params:Promise<{locale:string;path?:string[]}>;searchParams:Promise<Record<string,string|string[]|undefined>>};
@@ -34,7 +34,7 @@ export default async function PublicPage({params,searchParams}:Props) {
  if(section==="payment-options")return frame(t("paymentMethodsTitle"),<div className="contact-layout"><PaymentMethods/><ContactChannels/></div>);
  if(["privacy","terms","cancellation-policy"].includes(section))return frame(t(section==="cancellation-policy"?"cancellation":section),<PolicyContent slug={section} locale={locale}/>);
  if(section==="reviews")return <main tabIndex={-1} id="main" className="page-wrap reviews-page"><Reviews locale={locale}/></main>;
- if(section==="about")return frame(t("about"),<div className="about-layout"><Photo image="hero" alt="Red Sea" priority/><div><h2>{t("manualTitle")}</h2><p className="lead">{t("manualIntro")}</p><p>{t("noPayment")}</p><Link href={`/${locale}/contact`} className="button">{t("contact")}<Arrow/></Link></div></div>);
+ if(section==="about")return frame(t("about"),<div className="about-layout"><Photo image="hero" alt={t("media_diver")} priority/><div><h2>{t("manualTitle")}</h2><p className="lead">{t("manualIntro")}</p><p>{t("noPayment")}</p><Link href={`/${locale}/contact`} className="button">{t("contact")}<Arrow/></Link></div></div>);
  if(section==="apartments" || section==="photography" || (section==="booking" && query.apartment!==undefined))notFound();
  const activity=activitySections.find(item=>item.slug===section);
  const activityLinks=<nav className="activity-links" aria-label={t("experiences")}>
@@ -53,7 +53,16 @@ export default async function PublicPage({params,searchParams}:Props) {
  }
  if(section==="experiences"&&detail) {
   const item=await getService(detail,locale).catch(detailFailure);
-  return <main tabIndex={-1} id="main" className="page-wrap detail-page"><Link href={`/${locale}/experiences`} className="back-link">{t("back")} · {t("experiences")}</Link><header className="detail-heading"><div><h1>{item.title}</h1><p>{item.destination} · {item.durationMinutes} {t("minutes")}</p></div><p>{t("from")} <bdi className="detail-price">{money(item.fromAmountMinor,item.currency,locale)}</bdi></p></header><Photo image={item.image} alt={item.title} priority className="detail-hero"/><div className="detail-columns"><div><p className="lead">{item.summary}</p><section><h2>{t("itinerary")}</h2><ol className="itinerary">{item.itinerary.map((line,index)=><li key={index}>{line}</li>)}</ol></section><div className="split-content"><section><h2>{t("inclusions")}</h2><ul>{item.inclusions.map((line,index)=><li key={index}>{line}</li>)}</ul></section><section><h2>{t("exclusions")}</h2><ul>{item.exclusions.map((line,index)=><li key={index}>{line}</li>)}</ul></section></div><section><h2>{t("needKnow")}</h2>{Object.entries(item.restrictions).map(([key,value])=><p key={key}><strong>{key.replaceAll("_"," ")}:</strong> {typeof value==="string"?value:JSON.stringify(value)}</p>)}<p>{item.meetingNotes}</p><Link href={`/${locale}/cancellation-policy`}>{t("cancellation")}</Link></section></div><aside className="request-panel"><h2>{t("requestExperience")}</h2><p>{t("manualIntro")}</p><div className="price-line"><span>{t("from")}</span><bdi>{money(item.fromAmountMinor,item.currency,locale)}</bdi></div><Link href={`/${locale}/booking/request?service=${encodeURIComponent(item.id)}`} className="button">{t("requestExperience")}<Arrow/></Link><p className="small">{t("noPayment")}</p><Link href={`/${locale}/payment-options`} className="text-link">{t("paymentMethodsTitle")}</Link></aside></div></main>;
+  const conditions=Object.entries(item.restrictions).map(([key,value])=>{
+   if(key==="operatorApprovalRequired"&&typeof value==="boolean")
+    return <p key={key}>{value?t("clearanceRequired"):`${t("clearanceLabel")}: ${t("no")}`}</p>;
+   if(key==="minimumAge"&&typeof value==="number")
+    return <p key={key}>{t("minimumAgeNotice",{age:value})}</p>;
+   if(key==="notes"&&typeof value==="string")return <p key={key}>{value}</p>;
+   const display=typeof value==="boolean"?t(value?"yes":"no"):typeof value==="string"?value:JSON.stringify(value);
+   return <p key={key}><strong>{key.replaceAll("_"," ")}:</strong> {display}</p>;
+  });
+  return <main tabIndex={-1} id="main" className="page-wrap detail-page"><Link href={`/${locale}/experiences`} className="back-link">{t("back")} · {t("experiences")}</Link><header className="detail-heading"><div><h1>{item.title}</h1><p>{item.destination} · {tripDuration(item.durationMinutes,locale)}</p></div><p>{t("from")} <bdi className="detail-price">{money(item.fromAmountMinor,item.currency,locale)}</bdi></p></header><Photo image={item.image} alt={item.title} priority className="detail-hero"/><div className="detail-columns"><div><p className="lead">{item.summary}</p><section><h2>{t("itinerary")}</h2><ol className="itinerary">{item.itinerary.map((line,index)=><li key={index}>{line}</li>)}</ol></section><div className="split-content"><section><h2>{t("inclusions")}</h2><ul>{item.inclusions.map((line,index)=><li key={index}>{line}</li>)}</ul></section><section><h2>{t("exclusions")}</h2><ul>{item.exclusions.map((line,index)=><li key={index}>{line}</li>)}</ul></section></div><section><h2>{t("needKnow")}</h2>{conditions}<p>{item.meetingNotes}</p><Link href={`/${locale}/cancellation-policy`}>{t("cancellation")}</Link></section></div><aside className="request-panel"><h2>{t("requestExperience")}</h2><p>{t("manualIntro")}</p><div className="price-line"><span>{t("from")}</span><bdi>{money(item.fromAmountMinor,item.currency,locale)}</bdi></div><Link href={`/${locale}/booking/request?service=${encodeURIComponent(item.id)}`} className="button">{t("requestExperience")}<Arrow/></Link><p className="small">{t("noPayment")}</p><Link href={`/${locale}/payment-options`} className="text-link">{t("paymentMethodsTitle")}</Link></aside></div></main>;
  }
  const categories:Record<string,string>={safari:"desert-safari",transportation:"transportation"};
  if(section==="experiences"||section in categories)return frame(section==="experiences"?t("experiences"):section==="transportation"?t("pickup"):t("experiences"),<>{activityLinks}<Catalog services={data.services} destinations={data.destinations} locale={locale} initialGuests={Number(query.guests)||1} initialCategory={categories[section]??(typeof query.category==="string"?query.category:"")} initialDestination={typeof query.destination==="string"?query.destination:""}/></>,t("homeIntro"));
@@ -73,7 +82,9 @@ export default async function PublicPage({params,searchParams}:Props) {
    </div>
    <div className="hero-photos">
     <figure className="hero-primary">
-     <Photo image="hero" alt={t("media_diver")} sizes="(max-width:767px) 60vw, 36vw" priority/>
+     <div className="trip-photo-cutout trip-photo-diver">
+      <Photo image="hero" alt={t("media_diver")} sizes="(max-width:767px) calc(140vw - 67px), 72vw" priority/>
+     </div>
      <figcaption><Link href={`/${locale}/gallery`}>{t("previousTrips")}<Arrow/></Link></figcaption>
     </figure>
     <div className="hero-side">
@@ -88,7 +99,10 @@ export default async function PublicPage({params,searchParams}:Props) {
   <section className="frame section">
    <div className="section-heading"><h2>{t("experiences")}</h2><Link href={`/${locale}/experiences`} className="text-link">{t("seeAll")}<Arrow/></Link></div>
    <div className="activity-grid">{activitySections.map(activity=><Link href={`/${locale}/${activity.slug}`} key={activity.slug}>
-    <Photo image={activity.image} alt="" sizes="(max-width:767px) 45vw, 24vw"/><div className="activity-caption"><h3>{t(activity.label)}</h3><Arrow/></div>
+    {activity.image==="boat-day"
+      ? <div className="trip-photo-cutout trip-photo-boat"><Photo image={activity.image} alt="" sizes="(max-width:767px) 45vw, 24vw"/></div>
+      : <Photo image={activity.image} alt="" sizes="(max-width:767px) 45vw, 24vw"/>}
+    <div className="activity-caption"><h3>{t(activity.label)}</h3><Arrow/></div>
    </Link>)}</div>
   </section>
   <section className="destination-section section"><div className="frame">

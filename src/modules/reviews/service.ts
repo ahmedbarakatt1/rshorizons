@@ -98,7 +98,7 @@ export async function listReviewPage(input:z.input<typeof reviewPageInputSchema>
    (SELECT jsonb_object_agg(star,(SELECT count(*)::integer FROM published WHERE rating=star)) FROM generate_series(1,5) star) ratings,
    (SELECT count(*)::integer FROM filtered) filtered_total,
    COALESCE((SELECT jsonb_agg(jsonb_build_object('id',r.id,'rating',r.rating,'text',r.original_text,'locale',r.original_locale,
-    'display_name',r.public_display_name,'submitted_at',r.submitted_at,'verified',r.source='verified','replies',
+    'display_name',r.public_display_name,'anonymous',r.display_name_preference='anonymous','submitted_at',r.submitted_at,'verified',r.source='verified','replies',
     COALESCE((SELECT jsonb_agg(jsonb_build_object('body',reply.body,'publishedAt',reply.published_at) ORDER BY reply.published_at,reply.id)
      FROM app.review_replies reply WHERE reply.review_id=r.id AND reply.published_at IS NOT NULL AND reply.withdrawn_at IS NULL),'[]'::jsonb))
     ORDER BY r.submitted_at DESC,r.id DESC) FROM page r),'[]'::jsonb) items`,

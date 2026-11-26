@@ -1,4 +1,6 @@
 import {test, expect} from "@playwright/test";
+import en from "../../messages/en.json" with {type:"json"};
+import ar from "../../messages/ar.json" with {type:"json"};
 
 test("@public-release ten languages load and preserve the selected route when switching language", async ({page}) => {
   await page.goto("/en/boat-trips");
@@ -19,8 +21,9 @@ for (const locale of ["en","ar"]) {
     const main = page.getByRole("main"), methods = main.locator(".payment-methods");
     await expect(methods).toContainText("abdohassan8123@instapay");
     await expect(methods).toContainText("01201338200");
-    await expect(methods).toContainText(locale === "ar" ? "اطلب بيانات الحساب من خدمة العملاء" : "Ask customer service for the account details");
-    await expect(methods).toContainText(locale === "ar" ? "قبل تحويل أي أموال" : "before transferring money");
+    const copy=locale==="ar"?ar:en;
+    await expect(methods).toContainText(copy.detailsFromTeam);
+    await expect(methods).toContainText(copy.paymentConfirmFirst);
     await expect(methods.getByRole("link")).toHaveAttribute("href","https://ipn.eg/S/abdohassan8123/instapay/8Yhxaj");
     await page.goto(`/${locale}/contact`);
     for (const href of ["mailto:horizonsredsea@gmail.com","tel:+201099267451","tel:+201220907478","https://www.facebook.com/share/1CFka6exsG/","https://www.instagram.com/horizonsrs2026/","https://www.tiktok.com/@red.sea.horizons"]) {

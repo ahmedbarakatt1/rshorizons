@@ -26,7 +26,7 @@ export function PublicShell({children,locale}:{children:React.ReactNode;locale:L
   return ()=>document.removeEventListener("pointerdown",dismissOutside,true);
  },[]);
  const brandName=locale==="ar"?"ريد سي هورايزنز":"Red Sea Horizons";
- const regionName=locale==="ar"?"مصر · البحر الأحمر":"Egypt · Red Sea";
+ const regionName=t("regionName");
  const links=[["experiences","experiences"],["destinations","destinations"],["gallery","gallery"],["reviews","reviews"]] as const;
  const current=(path:string)=>pathname===`/${locale}/${path}`||pathname.startsWith(`/${locale}/${path}/`)||(path==="experiences"&&activitySections.some(activity=>pathname===`/${locale}/${activity.slug}`));
  function closeMenu(restoreFocus=false){

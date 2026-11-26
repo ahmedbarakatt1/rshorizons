@@ -1,8 +1,18 @@
 import {test,expect} from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
+import en from "../../messages/en.json" with {type:"json"};
 
 const review={id:"60000000-0000-4000-8000-000000000001",rating:2,text:"Synthetic review fixture: the pickup was late. The reef was beautiful.",locale:"en",display_name:"J. S.",submitted_at:"2026-10-20T10:00:00Z",replies:[{body:"Synthetic staff reply: thank you for sharing your experience.",publishedAt:"2026-10-21T10:00:00Z"}]};
 const summary={total:13,average:4.2,ratings:{1:0,2:1,3:0,4:7,5:5}};
+
+test("anonymous signatures use the page language and guest-written text stays in its original language",async({page})=>{
+ await page.route("**/api/v1/reviews?**",route=>route.fulfill({json:{data:{
+   items:[{...review,display_name:"Guest",anonymous:true}],summary,filteredTotal:1,nextCursor:null
+ }}}));
+ await page.goto("/fr/reviews");
+ await expect(page.locator(".review-entry h2")).toHaveText("Voyageur anonyme");
+ await expect(page.locator(".review-text")).toHaveText(review.text);
+});
 
 test("@public-release reviews show original feedback, honest aggregate, rating filters and another page",async({page})=>{
  await page.route("**/api/v1/reviews?**",async route=>{
@@ -18,7 +28,7 @@ test("@public-release reviews show original feedback, honest aggregate, rating f
  await page.getByRole("button",{name:"Show more reviews"}).click();
  await expect(page.getByText("Synthetic review fixture: a second page.")).toBeVisible();
  await page.getByLabel("Filter by rating").selectOption("2");
- await expect(page.getByText("Showing 1 of 1 reviews")).toBeVisible();
+ await expect(page.locator(".reviews-pagination [role=status]")).toContainText("1 of 1");
  await expect(page.getByRole("button",{name:"Show more reviews"})).toHaveCount(0);
  await expect(page.getByText("13 published reviews",{exact:true})).toBeVisible();
 });
@@ -32,7 +42,7 @@ test("@public-release reviews have an honest empty state and a recoverable loadi
  await page.goto("/en/reviews");
  await expect(page.locator("main").getByRole("alert")).toContainText("Reviews could not be loaded");
  fail=false;await page.getByRole("button",{name:"Try again"}).click();
- await expect(page.getByRole("heading",{name:"Your stories belong here"})).toBeVisible();
+ await expect(page.getByRole("heading",{name:en.review_emptyTitle})).toBeVisible();
  await expect(page.getByText("0.0")).toHaveCount(0);
  await expect(page.getByRole("link",{name:"Explore experiences"})).toBeVisible();
 });

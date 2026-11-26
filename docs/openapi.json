@@ -26789,6 +26789,10 @@
                 "display_name": {
                   "type": "string"
                 },
+                "anonymous": {
+                  "type": "boolean",
+                  "description": "Whether to show a localized anonymous signature."
+                },
                 "submitted_at": {
                   "type": "string",
                   "format": "date-time"

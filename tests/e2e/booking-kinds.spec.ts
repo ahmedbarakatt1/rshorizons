@@ -1,4 +1,6 @@
 import {test, expect} from "@playwright/test";
+import en from "../../messages/en.json" with {type:"json"};
+import ar from "../../messages/ar.json" with {type:"json"};
 
 const cases = [
   {locale:"en", mobile:false, payment:"instapay", phone:"+201099267451"},
@@ -58,9 +60,11 @@ for (const {locale,mobile,payment,phone} of cases) {
     await expect(draft).toBeFocused();
     const editor = draft.getByRole("textbox"), outbound = draft.getByRole("link");
     const message = await editor.inputValue();
-    for (const value of [service,guest,preferredDate,"09:30","QA airport","QA hotel","QA123",paymentLabel,notes]) expect(message).toContain(value);
+    const writtenDate=new Intl.DateTimeFormat(locale,{dateStyle:"long",timeZone:"UTC"}).format(new Date(`${preferredDate}T12:00:00Z`));
+    const writtenTime=new Intl.DateTimeFormat(locale,{timeStyle:"short",timeZone:"UTC"}).format(new Date("2000-01-01T09:30:00Z"));
+    for (const value of [service,guest,writtenDate,writtenTime,"QA airport","QA hotel","QA123",paymentLabel,notes]) expect(message).toContain(value);
     for (const count of ["3","2","4"]) expect(message).toMatch(new RegExp(": " + count + "$", "m"));
-    await expect(draft).toContainText(locale === "ar" ? "لا يؤكد الحجز" : "does not confirm your booking");
+    await expect(draft).toContainText((locale==="ar"?ar:en).bookingNotConfirmed);
     await expect(outbound).toHaveAttribute("target","_blank");
     await expect(outbound).toHaveAttribute("rel",/noopener/);
     await expect(outbound).toHaveAttribute("referrerpolicy","no-referrer");

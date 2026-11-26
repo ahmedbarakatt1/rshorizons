@@ -20,10 +20,13 @@ export function WhatsAppBookingForm({locale,service,apartment}:{locale:string;se
   event.preventDefault();setError("");
   const data=new FormData(event.currentTarget),value=(key:string)=>String(data.get(key)??"").trim();
   const checkIn=value("checkIn"),checkOut=value("checkOut");
+  const formatDay=(day:string)=>new Intl.DateTimeFormat(locale,{dateStyle:"long",timeZone:"UTC"}).format(new Date(`${day}T12:00:00Z`));
+  const time=value("time");
   if(apartment&&(checkOut<=checkIn||(Date.parse(checkOut)-Date.parse(checkIn))/86400000<apartment.minNights)){setError(t("stayDatesError",{nights:apartment.minNights}));return;}
   const variant=service?.variants.find(item=>item.id===value("variant"));
   const rows=[t("bookingChatIntro"),`${t("selection")}: ${title}`,variant?`${t("details")}: ${variant.title}`:"",`${t("fullName")}: ${value("name")}`,
-   apartment?`${t("checkIn")}: ${checkIn}\n${t("checkOut")}: ${checkOut}`:`${t("preferredDate")}: ${value("date")}${value("time")?` ${value("time")} (Africa/Cairo)`:""}`,
+   apartment?`${t("checkIn")}: ${formatDay(checkIn)}\n${t("checkOut")}: ${formatDay(checkOut)}`:`${t("preferredDate")}: ${formatDay(value("date"))}`,
+   time?`${t("cairoTime")}: ${new Intl.DateTimeFormat(locale,{timeStyle:"short",timeZone:"UTC"}).format(new Date(`2000-01-01T${time}Z`))}`:"",
    `${t(apartment?"guests":"adults")}: ${value("guests")}`,!apartment?`${t("children")}: ${value("children")||"0"}`:"",
    value("pickup")?`${t("pickup")}: ${value("pickup")}`:"",value("dropoff")?`${t("dropoff")}: ${value("dropoff")}`:"",
    value("flight")?`${t("flight")}: ${value("flight")}`:"",value("luggage")?`${t("luggage")}: ${value("luggage")}`:"",

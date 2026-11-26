@@ -103,7 +103,7 @@ export function PolicyContent({slug,locale}:{slug:string;locale:string}) {
 
  useEffect(()=>{api<{body?:string|{type:string;text:string}[];content?:string}>(`/pages/${slug}?locale=${locale}`).then(result=>setBody(typeof result.body==="string"?result.body:Array.isArray(result.body)?result.body.map(block=>block.text).join("\n\n"):typeof result.content==="string"?result.content:null)).catch(()=>{}).finally(()=>setLoaded(true));},[slug,locale]);
 
- return <div className="prose">{!loaded?<p>{t("loading")}</p>:body?<div className="preserve-lines">{body}</div>:<><p className="approval-notice">{t("demo")}</p><p>{t("noPayment")}</p><p>{t("pendingNotice")}</p><Link href={`/${locale}/contact`}>{t("contact")}</Link></>}</div>;
+ return <div className="prose">{!loaded?<p>{t("loading")}</p>:body?<div className="preserve-lines">{body}</div>:<><p>{t("policyContact")}</p><Link href={`/${locale}/contact`}>{t("contact")}</Link></>}</div>;
 
 }
 
