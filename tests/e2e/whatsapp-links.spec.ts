@@ -2,9 +2,9 @@ import {test,expect} from "@playwright/test";
 import {readFileSync} from "node:fs";
 import {spawnSync} from "node:child_process";
 import {randomUUID} from "node:crypto";
-import pg from "pg";
+import {admin,makeBooking,makeDeparture,tourItem} from "../database/helpers";
 
-test("team WhatsApp contacts are correct on desktop and Arabic mobile",async({page},info)=>{
+test("@public-release team WhatsApp contacts are correct on desktop and Arabic mobile",async({page},info)=>{
   for(const locale of ["en","ar"]){
     if(locale==="ar")await page.setViewportSize({width:390,height:844});
     await page.goto(`/${locale}/contact`);
@@ -19,21 +19,23 @@ test("team WhatsApp contacts are correct on desktop and Arabic mobile",async({pa
   }
 });
 
-test("a reservation gives guest-to-team and authorized staff-to-guest drafts without sending",async({page},info)=>{
+test("authorized staff can prepare a consenting historical guest draft and follow a manual-contact queue item",async({page},info)=>{
   test.skip(info.project.name!=="chromium"||process.env.E2E_LOCAL_STAFF!=="1","Authenticated local fixture runs once.");
-  await page.goto("/en/experiences/boat-tours");await page.getByRole("link",{name:"Request this experience",exact:true}).click();
-  await page.getByRole("button",{name:"Calculate my quote",exact:true}).click();
-  await page.getByLabel("Full name",{exact:true}).fill("Synthetic WhatsApp link guest");
-  await page.getByLabel("Email",{exact:true}).fill("whatsapp-link@example.invalid");
-  await page.locator('input[name="phoneE164"]').fill("+201000000001");
-  await page.getByLabel("Participant 1",{exact:true}).fill("Synthetic WhatsApp link guest");
-  await page.getByLabel("I accept the terms").check();await page.getByLabel("I have read the privacy notice").check();await page.locator('input[name="whatsapp"]').check();
-  const created=page.waitForResponse(response=>response.url().endsWith("/api/v1/bookings")&&response.request().method()==="POST");
-  await page.getByRole("button",{name:"Send reservation request",exact:true}).click();
-  const response=await created;expect(response.status()).toBe(201);const reference=(await response.json()).data.reference;
-  const teamLink=page.locator('.receipt-panel a[href^="https://wa.me/"]').first();await expect(teamLink).toBeVisible();
-  expect(new URL((await teamLink.getAttribute("href"))!).searchParams.get("text")).toContain(reference);
-  await page.screenshot({path:".local/evidence/ui/whatsapp-booking-receipt.png",fullPage:true});
+  const db=admin();
+  await db.connect();
+  let bookingId:string, reference:string;
+  try {
+    const departure=await makeDeparture(db,8);
+    const {booking}=await makeBooking(db,[await tourItem(db,departure.id)]);
+    bookingId=booking.id;
+    reference=booking.reference;
+    const guest=await db.query("UPDATE app.guests SET email=NULL,phone_e164='+201000000001' WHERE id=(SELECT primary_guest_id FROM app.bookings WHERE id=$1) RETURNING id",[bookingId]);
+    await db.query("INSERT INTO app.guest_consents(guest_id,type,granted,policy_version,collection_source) VALUES($1,'whatsapp_booking',true,'test','test')",[guest.rows[0].id]);
+    // Historical queue entries remain actionable after automated email was retired.
+    const event=await db.query("INSERT INTO app.outbox_events(aggregate_type,aggregate_id,aggregate_version,event_type,event_key) VALUES('booking',$1,1,'booking_changed',$2) RETURNING id",[bookingId,randomUUID()]);
+    const job=await db.query("INSERT INTO app.jobs(event_id,kind,job_key) VALUES($1,'notification',$2) RETURNING id",[event.rows[0].id,randomUUID()]);
+    await db.query("INSERT INTO app.notification_deliveries(job_id,channel,attempt,provider,status,error_class) VALUES($1,'email',1,'internal','suppressed','MANUAL_CONTACT_REQUIRED')",[job.rows[0].id]);
+  } finally { await db.end(); }
   const bootstrap=spawnSync(process.execPath,["scripts/bootstrap-local-operator.mjs"],{encoding:"utf8",env:{...process.env,APP_ENV:"development",DEMO_MODE:"true"},windowsHide:true});
   expect(bootstrap.status,bootstrap.stderr).toBe(0);
   const grant=JSON.parse(readFileSync(".local/operator-access.json","utf8")) as {token:string};
@@ -45,16 +47,6 @@ test("a reservation gives guest-to-team and authorized staff-to-guest drafts wit
   const url=new URL((await link.getAttribute("href"))!);expect(url.origin+url.pathname).toBe("https://wa.me/201000000001");expect(url.searchParams.get("text")).toContain(reference);expect(url.href).not.toContain("token");
   await expect(page.locator(".admin-title-row .status")).toHaveText("pending review");
   await page.screenshot({path:".local/evidence/ui/whatsapp-admin-draft.png",fullPage:true});
-  // Existing phone-only bookings still need an actionable staff queue when an event occurs.
-  const bookingId=new URL(page.url()).pathname.split("/").at(-1)!;
-  const db=new pg.Client({connectionString:process.env.MIGRATION_DATABASE_URL});await db.connect();
-  try{
-    await db.query("UPDATE app.guests SET email=NULL WHERE id=(SELECT primary_guest_id FROM app.bookings WHERE id=$1)",[bookingId]);
-    const event=(await db.query("INSERT INTO app.outbox_events(aggregate_type,aggregate_id,aggregate_version,event_type,event_key) VALUES('booking',$1,1,'booking_changed',$2) RETURNING id",[bookingId,randomUUID()])).rows[0];
-    await db.query("INSERT INTO app.jobs(event_id,kind,job_key) VALUES($1,'notification',$2)",[event.id,randomUUID()]);
-    const dispatch=spawnSync(process.execPath,["--import","tsx","scripts/run-worker.ts","50"],{encoding:"utf8",env:{...process.env,APP_ENV:"development",DEMO_MODE:"true",EMAIL_PROVIDER:"local",VIDEO_PROVIDER:"local",PAYMOB_MODE:"local",WHATSAPP_PROVIDER:"links"},windowsHide:true});
-    expect(dispatch.status,dispatch.stderr).toBe(0);
-  }finally{await db.end();}
   await page.goto("/admin/notifications");
   const manual=page.locator(".admin-table tbody tr").filter({hasText:reference}).filter({has:page.getByRole("cell",{name:"booking changed",exact:true})}).filter({hasText:"Manual contact required"});
   await expect(manual).toContainText("booking changed");await expect(manual).toContainText("suppressed");

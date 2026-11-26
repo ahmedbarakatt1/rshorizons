@@ -1,3 +1,4 @@
+import "../fixtures/legacy-service-mode";
 import {describe, expect, it} from "vitest";
 import {readEnvironment} from "../../src/server/env";
 

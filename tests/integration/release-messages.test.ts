@@ -1,3 +1,4 @@
+import "../fixtures/legacy-service-mode";
 import {afterAll,beforeAll,expect,test,vi} from "vitest";
 import {admin} from "../database/helpers";
 import {productionDataProblems} from "@/server/env/release-data";

@@ -1,1 +1,0 @@
-export default function Loading(){return <main tabIndex={-1} id="main" className="page-wrap loading-page" aria-busy="true"><div className="skeleton skeleton-heading"/><div className="skeleton skeleton-media"/></main>;}

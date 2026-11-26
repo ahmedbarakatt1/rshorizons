@@ -17,7 +17,16 @@ export function Photo({image,alt,priority=false,className="",sizes="(max-width:7
 }
 export function ServiceCard({item,locale}:{item:ServiceSummary;locale:string}) {
  const t=useTranslations();
- return <article className="catalog-card"><Link href={`/${locale}/experiences/${item.slug}`}><Photo image={item.image} alt={item.title}/><div className="card-meta"><span>{item.destination}</span><span>{item.durationMinutes} {t("minutes")}</span></div><h3>{item.title}</h3><p>{item.summary}</p><div className="card-bottom"><span>{t("from")} <bdi className="money">{money(item.fromAmountMinor,item.currency,locale)}</bdi></span><Arrow/></div></Link></article>;
+ return <article className="catalog-card">
+  <Link href={`/${locale}/experiences/${item.slug}`}>
+   <Photo image={item.image} alt={item.title}/>
+   <div className="card-content">
+    <div className="card-meta"><span>{item.destination}</span><span>{item.durationMinutes} {t("minutes")}</span></div>
+    <h2 className="card-title">{item.title}</h2><p>{item.summary}</p>
+    <div className="card-bottom"><span>{t("from")} <bdi className="money">{money(item.fromAmountMinor,item.currency,locale)}</bdi></span><Arrow/></div>
+   </div>
+  </Link>
+ </article>;
 }
 export function ApartmentCard({item,locale}:{item:ApartmentSummary;locale:string}) {
  const t=useTranslations();

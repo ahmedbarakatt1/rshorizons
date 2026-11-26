@@ -1,5 +1,11 @@
 # Red Sea Horizons — execution status
 
+## November 26, 2026 — interface, owner gallery and regression testing
+
+The guest interface, activity listings, gallery, booking draft and staff presentation have been revised. Admin → Galleries → Add a trip photo publishes an owner-authorized image to the public gallery. A private source is validated and re-encoded. The owner records the caption language, source rights, applicable subject or guardian consent and a retention review period. A signed-out visitor can view the eligible WebP and existing trip videos.
+
+Local browser checks exercised a real owner password, price edit, photo publication, private-source denial, public Arabic rendering, staff operations and contact history. The November 26 additive gallery migration was applied to the designated production Supabase project. The release matrix and evidence are recorded in [the QA plan](docs/launch/public-qa-plan.md). Next task is final cross-engine verification and verification of the Vercel production release.
+
 2026-11-26 owner catalog update. The public site features four dedicated activity pages for snorkeling, diving, boat trips and beach buggy rides. Each links to its catalog offers, current prices and WhatsApp booking flow. Apartment and photography sales pages, public offers, add-ons and booking entry points were removed. Previous-trip media and historical operational data are retained. The optimized build and the Arabic browser journey through all four booking pages passed locally. Production promotion requires renewed Vercel authentication.
 
 2026-10-29 QR cache correction: production and local decoding confirmed the updated banner targets `/en/reviews`, but the unchanged legacy filename allowed a previously cached homepage QR to remain visible on a device. The verified review QR is therefore also published at the cache-distinct path `/marketing/red-sea-horizons-reviews-qr-banner.png` (and WebP equivalent). Use the new filename for downloads and printing.

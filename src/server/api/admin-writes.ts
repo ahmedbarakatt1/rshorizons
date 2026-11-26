@@ -6,7 +6,8 @@ import {AppError} from "@/server/http/errors";
 import {uuidSchema,localeSchema,dateSchema} from "@/modules/bookings/contracts";
 import {approveBooking,decideBooking} from "@/modules/bookings/service";
 import {createUploadIntent,receiveUpload,finalizeUpload,publishGallery,createApprovedPublicDerivative} from "@/modules/photography/service";
-import {MAX_VIDEO_BYTES} from "@/modules/photography/validation";
+import {startTripPhoto,storeTripPhoto,publishTripPhoto} from "@/modules/photography/trip-photos";
+import {MAX_IMAGE_BYTES,MAX_VIDEO_BYTES} from "@/modules/photography/validation";
 import {moderateReview,replyToReview} from "@/modules/reviews/service";
 import {reconcileAttempt} from "@/modules/payments/service";
 import {inviteStaff} from "@/modules/staff/invitations";
@@ -46,11 +47,11 @@ permissions["pickup-locations"]="catalog.write";permissions["variant-pickups"]="
 async function routine(actor:StaffActor,sql:string,values:unknown[]) {
   return withTransaction(actor,async tx=>(await tx.query(sql,values)).rows[0]?.result);
 }
-async function readBytes(request:Request) {
-  if(Number(request.headers.get("content-length")??0)>MAX_VIDEO_BYTES)throw new AppError("BODY_TOO_LARGE",413);
+async function readBytes(request:Request,limit=MAX_VIDEO_BYTES) {
+  if(Number(request.headers.get("content-length")??0)>limit)throw new AppError("BODY_TOO_LARGE",413);
   const reader=request.body?.getReader();if(!reader)throw new AppError("EMPTY_UPLOAD",400);
   const chunks:Uint8Array[]=[];let size=0;
-  for(;;){const part=await reader.read();if(part.done)break;size+=part.value.byteLength;if(size>MAX_VIDEO_BYTES){await reader.cancel();throw new AppError("BODY_TOO_LARGE",413);}chunks.push(part.value);}
+  for(;;){const part=await reader.read();if(part.done)break;size+=part.value.byteLength;if(size>limit){await reader.cancel();throw new AppError("BODY_TOO_LARGE",413);}chunks.push(part.value);}
   return Buffer.concat(chunks);
 }
 export async function adminWrites(request:Request,parts:string[]) {
@@ -149,6 +150,12 @@ export async function adminWrites(request:Request,parts:string[]) {
   if(id&&operation) {
     const actor=await getStaff(request,operation.permission),body=operation.schema.parse(await readJson(request)) as Record<string,unknown>;
     return success(await routine(actor,"SELECT app.staff_edit($1,$2,$3,$4,$5) AS result",[operation.kind,uuidSchema.parse(id),body.expectedVersion??null,JSON.stringify(body),actor.id]));
+  }
+  if(resource==="trip-photos"){
+    const actor=await getStaff(request,"media.upload");
+    if(!id&&request.method==="POST")return success(await startTripPhoto(actor,await readJson(request)),201);
+    if(id&&action==="bytes"&&request.method==="PUT")return success(await storeTripPhoto(actor,uuidSchema.parse(id),await readBytes(request,MAX_IMAGE_BYTES)));
+    if(id&&action==="publish"&&request.method==="POST")return success(await publishTripPhoto(actor,uuidSchema.parse(id),await readJson(request)));
   }
   if(resource==="media"){
     const actor=await getStaff(request,"media.upload");

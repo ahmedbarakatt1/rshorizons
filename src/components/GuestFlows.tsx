@@ -1,5 +1,7 @@
 "use client";
 
+import {useHydrated} from "./use-hydrated";
+
 import {useEffect,useState} from "react";
 
 import Link from "next/link";
@@ -17,6 +19,7 @@ import {ContactChannels} from "./CustomerService";
 
 export function GuestAccess({locale,inline=false}:{locale:string;reference?:string;inline?:boolean}) {
 
+ const hydrated=useHydrated();
  const t=useTranslations();const [busy,setBusy]=useState(false);const [message,setMessage]=useState("");const [token,setToken]=useState("");
 
  useEffect(()=>{const url=new URL(window.location.href);const secret=url.searchParams.get("token")??new URLSearchParams(url.hash.slice(1)).get("token")??"";if(secret){setToken(secret);url.searchParams.delete("token");url.hash="";history.replaceState(null,"",url.pathname+url.search);}},[]);
@@ -24,7 +27,7 @@ export function GuestAccess({locale,inline=false}:{locale:string;reference?:stri
 
  async function redeem(event:React.FormEvent<HTMLFormElement>) {event.preventDefault();setBusy(true);setMessage("");try{const result=await api<{reference?:string;redirectTo?:string;purpose?:string;galleryId?:string;invitationId?:string}>("/guest-access/redeem",{token});history.replaceState(null,"",`/${locale}/guest-access`);setToken("");window.location.assign(result.purpose==="gallery"&&result.galleryId?`/${locale}/my-gallery/${result.galleryId}`:result.purpose==="review"&&result.invitationId?`/${locale}/reviews?invitation=${result.invitationId}`:result.reference?`/${locale}/booking/${result.reference}`:`/${locale}/guest-access`);}catch{setMessage(t("error"));}finally{setBusy(false);}}
 
- const form=<form className="form-stack review-access-form" onSubmit={redeem}><label>{t("token")}<input name="token" type="password" value={token} onChange={event=>setToken(event.target.value)} required autoComplete="off" dir="ltr"/></label><button className="button button-secondary" disabled={busy}>{busy?t("loading"):t("redeem")}</button>{message&&<p role="alert" className="form-error">{message}</p>}</form>;
+ const form=<form method="post" className="form-stack review-access-form" onSubmit={redeem}><label>{t("token")}<input name="token" type="password" value={token} onChange={event=>setToken(event.target.value)} required autoComplete="off" dir="ltr"/></label><button className="button button-secondary" disabled={!hydrated||busy}>{busy?t("loading"):t("redeem")}</button>{message&&<p role="alert" className="form-error">{message}</p>}</form>;
  if(inline)return form;
  return <div className="access-columns"><div><ContactChannels/></div><div><h2>{t("redeem")}</h2>{form}</div></div>;
 
@@ -106,12 +109,35 @@ export function PolicyContent({slug,locale}:{slug:string;locale:string}) {
 
 
 
-export function PublicGallery({locale,demo}:{locale:string;demo:boolean}) {
+export function PublicGallery({locale,showOwnerCollection}:{locale:string;showOwnerCollection:boolean}) {
 
- const t=useTranslations();const [galleries,setGalleries]=useState<{id:string;title:string;description?:string;assets:{id:string;url:string;width?:number;height?:number;mimeType?:string}[]}[]>([]);const [loaded,setLoaded]=useState(false);
-
- useEffect(()=>{api<{items:typeof galleries}>(`/galleries/public?locale=${locale}`).then(result=>setGalleries(result.items)).catch(()=>{}).finally(()=>setLoaded(true));},[locale]);
-
- return <>{!loaded?<p role="status">{t("loading")}</p>:galleries.length?galleries.map(gallery=><section key={gallery.id}><h2>{gallery.title}</h2><p>{gallery.description}</p><div className="editorial-gallery">{gallery.assets?.map(asset=>asset.mimeType==="video/mp4"?<TripVideo key={asset.id} src={asset.url} title={gallery.title} width={asset.width} height={asset.height}/>:<figure key={asset.id}><img className="photo" src={asset.url} width={asset.width??1200} height={asset.height??900} alt={gallery.title} loading="lazy"/></figure>)}</div></section>):demo?<OwnerGallery/>:<p className="empty-state">{t("empty")}</p>}</>;
-
+ const t=useTranslations();
+ type Gallery={id:string;title:string;description?:string;trip_photo:boolean;caption_locale:string;assets:{id:string;url:string;width?:number;height?:number;mimeType?:string}[]};
+ type GalleryPage={items:Gallery[];nextCursor:string|null};
+ const [galleries,setGalleries]=useState<Gallery[]>([]),[loaded,setLoaded]=useState(false),[cursor,setCursor]=useState<string|null>(null);
+ const [loadingMore,setLoadingMore]=useState(false),[loadError,setLoadError]=useState(false);
+ useEffect(()=>{
+  let active=true;
+  api<GalleryPage>(`/galleries/public?locale=${locale}`).then(result=>{if(active){setGalleries(result.items);setCursor(result.nextCursor);}}).catch(()=>{if(active)setLoadError(true);}).finally(()=>{if(active)setLoaded(true);});
+  return ()=>{active=false;};
+ },[locale]);
+ async function loadMore(){
+  setLoadingMore(true);setLoadError(false);
+  try{
+   const result=await api<GalleryPage>(`/galleries/public?locale=${locale}${cursor?`&cursor=${cursor}`:""}`);
+   setGalleries(current=>cursor?[...current,...result.items]:result.items);setCursor(result.nextCursor);
+  }catch{setLoadError(true);}finally{setLoadingMore(false);}
+ }
+ const photos=galleries.filter(gallery=>gallery.trip_photo);
+ return <>
+  {photos.length>0&&<section className="owner-photo-section"><h2>{t("media_trips")}</h2><div className="owner-photo-gallery">
+   {photos.flatMap(gallery=>gallery.assets.map(asset=><figure key={asset.id} lang={gallery.caption_locale} dir="auto"><img className="photo" src={asset.url} width={asset.width} height={asset.height} alt={gallery.title} loading="lazy"/><figcaption>{gallery.title}</figcaption></figure>))}
+  </div></section>}
+  {galleries.filter(gallery=>!gallery.trip_photo).map(gallery=><section key={gallery.id}><h2>{gallery.title}</h2><p>{gallery.description}</p><div className="editorial-gallery">{gallery.assets?.map(asset=>asset.mimeType==="video/mp4"?<TripVideo key={asset.id} src={asset.url} title={gallery.title} width={asset.width} height={asset.height}/>:<figure key={asset.id}><img className="photo" src={asset.url} width={asset.width??1200} height={asset.height??900} alt={gallery.title} loading="lazy"/></figure>)}</div></section>)}
+  {loadError&&<p role="alert">{t("error")}</p>}
+  {(cursor||loadError)&&<button className="button button-secondary" disabled={loadingMore} onClick={loadMore}>{t(loadingMore?"loading":loadError?"retry":"galleryMore")}</button>}
+  {showOwnerCollection&&<OwnerGallery/>}
+  {!showOwnerCollection&&!loaded&&<p role="status">{t("loading")}</p>}
+  {!showOwnerCollection&&loaded&&!loadError&&!galleries.length&&<p className="empty-state">{t("empty")}</p>}
+ </>;
 }

@@ -1,24 +1,20 @@
 import {test, expect} from "@playwright/test";
 import {readFileSync} from "node:fs";
 import {spawnSync} from "node:child_process";
+import {admin,makeBooking,makeDeparture,tourItem} from "../database/helpers";
 
 test("staff operates a real resource and reviews a pending request", async ({page},info) => {
   test.skip(info.project.name!=="chromium" || process.env.E2E_LOCAL_STAFF!=="1","Local operator grant is an explicit development-only fixture.");
   const bootstrap=spawnSync(process.execPath,["scripts/bootstrap-local-operator.mjs"],{encoding:"utf8",env:process.env,windowsHide:true});
   expect(bootstrap.status,bootstrap.stderr).toBe(0);
-  // Create this journey's own plain tour request. An unrelated photography
-  // request legitimately needs a staffed photographer before approval.
-  await page.goto("/en/experiences/boat-tours");
-  await page.getByRole("link",{name:"Request this experience",exact:true}).click();
-  await page.getByRole("button",{name:"Calculate my quote",exact:true}).click();
-  await page.getByLabel("Full name",{exact:true}).fill("Local staff journey guest");
-  await page.getByLabel("Email",{exact:true}).fill("staff-journey@example.test");
-  await page.getByLabel("Participant 1",{exact:true}).fill("Local staff journey guest");
-  await page.getByLabel("I accept the terms").check();await page.getByLabel("I have read the privacy notice").check();
-  const created=page.waitForResponse(response=>response.url().endsWith("/api/v1/bookings")&&response.request().method()==="POST");
-  await page.getByRole("button",{name:"Send reservation request",exact:true}).click();
-  const reservation=await created;expect(reservation.status()).toBe(201);
-  const reference=(await reservation.json()).data.reference;
+  const db=admin();
+  await db.connect();
+  let reference:string;
+  try {
+    const departure=await makeDeparture(db,8);
+    const result=await makeBooking(db,[await tourItem(db,departure.id)]);
+    reference=result.booking.reference;
+  } finally {await db.end();}
   const grant=JSON.parse(readFileSync(".local/operator-access.json","utf8")) as {token:string};
   await page.goto("/admin");
   await page.getByText("Local operator access",{exact:true}).click();
@@ -76,22 +72,19 @@ test("staff operates a real resource and reviews a pending request", async ({pag
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
 });
 
-test("apartment dates and transfer requests quote on the server",async({page})=>{
-  await page.goto("/en/apartments");
-  await page.getByLabel("Check-in",{exact:true}).fill("2027-06-01");
-  await page.getByLabel("Check-out",{exact:true}).fill("2027-06-05");
-  const availability=page.waitForResponse(response=>response.url().includes("/api/v1/apartments?"));
-  await page.getByRole("button",{name:"Check availability"}).click();
-  expect((await availability).status()).toBe(200);
-  await page.locator(".catalog-card a").filter({has:page.getByRole("heading",{name:"Marina studio",exact:true})}).click();
-  await page.getByRole("link",{name:"Request this stay"}).click();
-  await page.getByLabel("Check-in",{exact:true}).fill("2027-06-01");
-  await page.getByLabel("Check-out",{exact:true}).fill("2027-06-05");
-  await page.getByRole("button",{name:"Calculate my quote"}).click();
-  await expect(page.getByRole("heading",{name:"Your quote"})).toBeVisible();
+test("a transfer enquiry includes pickup and dropoff in a manual WhatsApp draft",async({page})=>{
   await page.goto("/en/transportation");
   await page.locator(".catalog-card a").first().click();
-  await page.getByRole("link",{name:"Request this experience"}).click();
-  await expect(page.getByLabel("Pickup address",{exact:true})).toBeVisible();
-  await expect(page.getByLabel("Destination address",{exact:true})).toBeVisible();
+  await page.locator('a[href*="/booking/request?service="]').click();
+  const form=page.locator(".whatsapp-booking form");
+  await form.locator('[name="name"]').fill("Synthetic transport guest");
+  await form.locator('[name="date"]').fill(new Date(Date.now()+14*86400000).toISOString().slice(0,10));
+  await form.locator('[name="pickup"]').fill("Airport");
+  await form.locator('[name="dropoff"]').fill("Hotel");
+  await form.getByRole("button").click();
+  const link=page.locator('.whatsapp-draft a[href^="https://wa.me/"]');
+  await expect(link).toBeVisible();
+  const draft=new URL((await link.getAttribute("href"))!).searchParams.get("text");
+  expect(draft).toContain("Airport");
+  expect(draft).toContain("Hotel");
 });

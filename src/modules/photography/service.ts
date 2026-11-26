@@ -172,14 +172,19 @@ export async function servePrivateAsset(request:Request,actor:ActorContext,input
   const asset=await authorizedPrivateAsset(actor,input);
   return storage().serve(request,asset.storageKey,asset.mimeType,asset.headers);
 }
-export async function listPublicGalleries(locale:string){
-  const result=await query(`SELECT g.id,t.title,t.description,
+export async function listPublicGalleries(locale:string,cursor:string|null=null,limit=50){
+  const result=await query(`SELECT g.id,t.title,t.description,t.locale AS caption_locale,trip.locale IS NOT NULL AS trip_photo,
     (SELECT jsonb_agg(jsonb_build_object('id',d.id,'url','/api/v1/galleries/public/assets/'||d.id::text,'width',d.width,'height',d.height,'mimeType',d.mime_type) ORDER BY ga.display_order) FROM app.gallery_assets ga JOIN app.media_derivatives d ON d.id=ga.public_derivative_id WHERE ga.gallery_id=g.id AND d.visibility='public' AND d.state='ready' AND d.approved_at IS NOT NULL AND app.asset_publication_eligible(ga.asset_id)) assets
-    FROM app.galleries g JOIN app.public_gallery_translations t ON t.gallery_id=g.id AND t.locale=$1
+    FROM app.galleries g
+    LEFT JOIN LATERAL (SELECT a.trip_photo_locale AS locale FROM app.media_assets a JOIN app.gallery_assets ga ON ga.asset_id=a.id
+      WHERE ga.gallery_id=g.id AND a.trip_photo_locale IS NOT NULL LIMIT 1) trip ON true
+    JOIN LATERAL (SELECT tr.* FROM app.public_gallery_translations tr WHERE tr.gallery_id=g.id AND tr.approved_at IS NOT NULL
+      AND tr.locale IN ($1,trip.locale) ORDER BY (tr.locale=$1) DESC LIMIT 1) t ON true
     WHERE g.kind='public' AND g.visibility_state='published' AND t.approved_at IS NOT NULL AND (g.expires_at IS NULL OR g.expires_at>now())
     AND EXISTS(SELECT 1 FROM app.gallery_assets ga WHERE ga.gallery_id=g.id)
     AND NOT EXISTS(SELECT 1 FROM app.gallery_assets ga LEFT JOIN app.media_derivatives d ON d.id=ga.public_derivative_id WHERE ga.gallery_id=g.id AND (d.id IS NULL OR NOT app.asset_publication_eligible(ga.asset_id) OR d.state<>'ready' OR d.visibility<>'public'))
-    ORDER BY g.published_at DESC LIMIT 50`,[locale]);
+    AND ($2::uuid IS NULL OR (g.published_at,g.id)<(SELECT published_at,id FROM app.galleries WHERE id=$2))
+    ORDER BY g.published_at DESC,g.id DESC LIMIT $3`,[locale,cursor,limit]);
   return result.rows;
 }
 async function authorizedPublicDerivative(derivativeId:string){

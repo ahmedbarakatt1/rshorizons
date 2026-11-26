@@ -1,4 +1,6 @@
 "use client";
+
+import {useHydrated} from "./use-hydrated";
 import {useRef,useState} from "react";
 import Link from "next/link";
 import {useTranslations} from "next-intl";
@@ -8,6 +10,7 @@ import {PaymentMethods} from "./CustomerService";
 import {money} from "./format";
 
 export function WhatsAppBookingForm({locale,service,apartment}:{locale:string;service?:ServiceDetail;apartment?:ApartmentDetail}){
+ const hydrated=useHydrated();
  const t=useTranslations(),formRef=useRef<HTMLFormElement>(null),reviewRef=useRef<HTMLDivElement>(null);
  const [draft,setDraft]=useState(""),[reviewing,setReviewing]=useState(false),[phone,setPhone]=useState<string>(teamWhatsAppNumbers[0]),[error,setError]=useState("");
  const transfer=service?.category==="transportation"||service?.category==="transfer";
@@ -33,7 +36,7 @@ export function WhatsAppBookingForm({locale,service,apartment}:{locale:string;se
  }
  return <div className="booking-columns whatsapp-booking"><div className="booking-main">
   <p className="lead">{t("bookingChatDescription")}</p>
-  <div hidden={reviewing}><form ref={formRef} className="form-stack" onSubmit={prepare}>
+  <div hidden={reviewing}><form method="post" ref={formRef} className="form-stack" onSubmit={prepare}>
    <h2>{title}</h2><p className="small">{t("priceConfirmedByTeam")}</p>
    {service&&service.variants.length>1&&<label>{t("details")}<select name="variant">{service.variants.map(item=><option key={item.id} value={item.id}>{item.title}</option>)}</select></label>}
    {service&&service.variants.length===1&&<input type="hidden" name="variant" value={service.variants[0].id}/>}
@@ -48,7 +51,7 @@ export function WhatsAppBookingForm({locale,service,apartment}:{locale:string;se
    <label>{t("customerService")}<select value={phone} onChange={event=>setPhone(event.target.value)} dir="ltr">{teamWhatsAppNumbers.map(number=><option key={number} value={number}>{locale==="ar"?"واتساب":"WhatsApp"} {number}</option>)}</select></label>
    <p className="small">{t("whatsappShareNotice")} <Link href={`/${locale}/privacy`}>{t("privacy")}</Link></p>
    {error&&<p role="alert" className="form-error">{error}</p>}
-   <button className="button" type="submit">{t("prepareBookingMessage")}</button>
+   <button className="button" type="submit" disabled={!hydrated}>{t("prepareBookingMessage")}</button>
   </form></div>
   {reviewing&&<div ref={reviewRef} tabIndex={-1} className="whatsapp-draft"><h2>{t("reviewBookingMessage")}</h2><p>{t("whatsappManual")}</p>
    <label>{t("message")}<textarea rows={12} value={draft} onChange={event=>setDraft(event.target.value)} maxLength={5000}/></label>

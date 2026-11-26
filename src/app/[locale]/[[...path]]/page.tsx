@@ -6,6 +6,7 @@ import {getCatalog,getService,searchServices} from "@/modules/catalog";
 import {isLocale,locales} from "@/i18n/locales";
 import {Catalog,Photo,Search,ServiceCard} from "@/components/Catalog";
 import {Arrow} from "@/components/PublicShell";
+import {BookingStatement} from "@/components/BookingStatement";
 import {WhatsAppBookingForm as BookingForm} from "@/components/WhatsAppBookingForm";
 import {ContactChannels,PaymentMethods} from "@/components/CustomerService";
 import {GuestAccess,PolicyContent,PrivateGallery,PublicGallery} from "@/components/GuestFlows";
@@ -36,11 +37,13 @@ export default async function PublicPage({params,searchParams}:Props) {
  if(section==="about")return frame(t("about"),<div className="about-layout"><Photo image="hero" alt="Red Sea" priority/><div><h2>{t("manualTitle")}</h2><p className="lead">{t("manualIntro")}</p><p>{t("noPayment")}</p><Link href={`/${locale}/contact`} className="button">{t("contact")}<Arrow/></Link></div></div>);
  if(section==="apartments" || section==="photography" || (section==="booking" && query.apartment!==undefined))notFound();
  const activity=activitySections.find(item=>item.slug===section);
+ const activityLinks=<nav className="activity-links" aria-label={t("experiences")}>
+  {activitySections.map(item=><Link key={item.slug} href={`/${locale}/${item.slug}`} aria-current={item.slug===section?"page":undefined}>{t(item.label)}</Link>)}
+ </nav>;
  if(activity && !detail){
   const {items}=await searchServices({category:activity.category},locale);
-  return frame(t(activity.label),items.length?<div className="catalog-grid">{items.map(item=><ServiceCard item={item} locale={locale} key={item.id}/>)}</div>:<p>{t("empty")}</p>);
+  return frame(t(activity.label),<>{activityLinks}{items.length?<div className="catalog-grid activity-results">{items.map(item=><ServiceCard item={item} locale={locale} key={item.id}/>)}</div>:<p className="empty-state">{t("empty")}</p>}</>);
  }
- const activityLinks=<nav className="activity-links" aria-label={t("experiences")}>{activitySections.map(item=><Link key={item.slug} href={`/${locale}/${item.slug}`}>{t(item.label)}</Link>)}</nav>;
  const data=await getCatalog(locale);
  if(section==="booking"&&detail==="request") {
   const serviceKey=typeof query.service==="string"?query.service:null;
@@ -59,7 +62,46 @@ export default async function PublicPage({params,searchParams}:Props) {
   return frame(destination.title,<><Photo image={destination.image} alt={destination.title} priority className="destination-hero"/><p className="lead">{destination.summary}</p><Catalog services={data.services} destinations={data.destinations} locale={locale} initialDestination={destination.slug}/></>);
  }
  if(section==="destinations")return frame(t("destinations"),<div className="destination-list">{data.destinations.map(item=><Link href={`/${locale}/destinations/${item.slug}`} key={item.id}><Photo image={item.image} alt={item.title}/><div><h2>{item.title}</h2><p>{item.summary}</p><span className="text-link">{t("explore")}<Arrow/></span></div></Link>)}</div>,t("homeIntro"));
- if(section==="gallery")return frame(t("previousTrips"),<><PublicGallery locale={locale} demo={demo}/><Link href={`/${locale}/contact`} className="button">{t("customerService")}</Link></>,t("galleryIntro"));
+ if(section==="gallery")return frame(t("previousTrips"),<><PublicGallery locale={locale} showOwnerCollection={demo||process.env.MEDIA_PUBLICATION_APPROVED==="true"}/><Link href={`/${locale}/contact`} className="button">{t("customerService")}</Link></>,t("galleryIntro"));
  if(section)notFound();
- return <main tabIndex={-1} id="main"><section className="hero-editorial frame"><div className="hero-note"><Photo image="reef" alt="" sizes="(max-width:767px) 28vw, 20vw" priority/><h1>{t("homeTitle")}</h1><p>{t("homeIntro")}</p><Link href={`/${locale}/experiences`} className="text-link">{t("explore")}<Arrow/></Link></div><figure className="hero-primary"><Photo image="hero" alt={t("experiences")} priority/><figcaption>{t("previousTrips")}</figcaption></figure><figure className="hero-secondary"><Photo image="diving" alt="" priority/><figcaption><Link href={`/${locale}/diving`}>{t("catDive")}</Link></figcaption></figure></section><div className="frame search-wrap"><Search locale={locale} destinations={data.destinations}/></div><section className="frame section"><div className="section-heading"><h2>{t("experiences")}</h2><Link href={`/${locale}/experiences`} className="text-link">{t("seeAll")}<Arrow/></Link></div><div className="activity-grid">{activitySections.map(activity=><Link href={`/${locale}/${activity.slug}`} key={activity.slug}><Photo image={activity.image} alt=""/><h3>{t(activity.label)}</h3></Link>)}</div></section><section className="destination-section section"><div className="frame"><div className="section-heading"><h2>{t("destinations")}</h2><Link href={`/${locale}/destinations`} className="button button-secondary">{t("seeAll")}<Arrow/></Link></div><div className="destination-index">{data.destinations.map(item=><Link href={`/${locale}/destinations/${item.slug}`} key={item.id}><h3>{item.title}</h3><p>{item.summary}</p><Arrow/></Link>)}</div></div></section><section className="frame section"><div className="section-heading"><h2>{t("previousTrips")}</h2><Link href={`/${locale}/gallery`} className="text-link">{t("gallery")}<Arrow/></Link></div>{demo?<div className="trip-strip">{["surface-swim","reef-pause","underwater-heart","open-water"].map(key=><Link href={`/${locale}/gallery`} key={key}><Photo image={key} alt=""/></Link>)}</div>:<Link href={`/${locale}/gallery`} className="button">{t("gallery")}</Link>}</section><section className="manual-section frame section"><div><h2>{t("manualTitle")}</h2><p>{t("manualIntro")}</p></div><div><p className="lead">{t("noPayment")}</p><Link href={`/${locale}/contact`} className="button">{t("contact")}<Arrow/></Link></div></section></main>;
+ return <main tabIndex={-1} id="main">
+  <section className="home-hero frame">
+   <div className="hero-note">
+    <h1>{t("homeTitle")}</h1>
+    <p>{t("homeIntro")}</p>
+    <Link href={`/${locale}/experiences`} className="button">{t("explore")}<Arrow/></Link>
+   </div>
+   <div className="hero-photos">
+    <figure className="hero-primary">
+     <Photo image="hero" alt={t("media_diver")} sizes="(max-width:767px) 60vw, 36vw" priority/>
+     <figcaption><Link href={`/${locale}/gallery`}>{t("previousTrips")}<Arrow/></Link></figcaption>
+    </figure>
+    <div className="hero-side">
+     {activitySections.filter(item=>item.slug==="diving"||item.slug==="boat-trips").map(item=><Link key={item.slug} href={`/${locale}/${item.slug}`}>
+      <Photo image={item.image} alt="" sizes="(max-width:767px) 28vw, 18vw"/>
+      <span>{t(item.label)}<Arrow/></span>
+     </Link>)}
+    </div>
+   </div>
+  </section>
+  <div className="frame search-wrap"><Search locale={locale} destinations={data.destinations}/></div>
+  <section className="frame section">
+   <div className="section-heading"><h2>{t("experiences")}</h2><Link href={`/${locale}/experiences`} className="text-link">{t("seeAll")}<Arrow/></Link></div>
+   <div className="activity-grid">{activitySections.map(activity=><Link href={`/${locale}/${activity.slug}`} key={activity.slug}>
+    <Photo image={activity.image} alt="" sizes="(max-width:767px) 45vw, 24vw"/><div className="activity-caption"><h3>{t(activity.label)}</h3><Arrow/></div>
+   </Link>)}</div>
+  </section>
+  <section className="destination-section section"><div className="frame">
+   <div className="section-heading"><h2>{t("destinations")}</h2><Link href={`/${locale}/destinations`} className="text-link">{t("seeAll")}<Arrow/></Link></div>
+   <div className="destination-index">{data.destinations.map(item=><Link href={`/${locale}/destinations/${item.slug}`} key={item.id}><h3>{item.title}</h3><p>{item.summary}</p><Arrow/></Link>)}</div>
+  </div></section>
+  <section className="frame section">
+   <div className="section-heading"><h2>{t("previousTrips")}</h2><Link href={`/${locale}/gallery`} className="text-link">{t("gallery")}<Arrow/></Link></div>
+   {demo?<div className="trip-strip">{["surface-swim","reef-pause","underwater-heart","open-water"].map(key=><Link href={`/${locale}/gallery`} key={key} aria-label={t("gallery")}><Photo image={key} alt=""/></Link>)}</div>:<Link href={`/${locale}/gallery`} className="button">{t("gallery")}</Link>}
+  </section>
+  <section className="manual-section frame section">
+   <BookingStatement text={t("manualIntro")}/>
+   <div><h2>{t("manualTitle")}</h2><p>{t("noPayment")}</p><Link href={`/${locale}/contact`} className="button">{t("contact")}<Arrow/></Link></div>
+  </section>
+ </main>;
 }

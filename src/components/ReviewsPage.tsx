@@ -1,5 +1,7 @@
 "use client";
 
+import {useHydrated} from "./use-hydrated";
+
 import {useEffect,useRef,useState} from "react";
 import Link from "next/link";
 import {useTranslations} from "next-intl";
@@ -17,6 +19,7 @@ function Stars({rating,label}:{rating:number;label:string}){
 }
 
 export function Reviews({locale}:{locale:string}){
+ const hydrated=useHydrated();
  const t=useTranslations();
  const [page,setPage]=useState<ReviewPage|null>(null),[rating,setRating]=useState(""),[loading,setLoading]=useState(true),[failed,setFailed]=useState(false),[reload,setReload]=useState(0),[moreBusy,setMoreBusy]=useState(false),[moreFailed,setMoreFailed]=useState(false);
  const [invitation,setInvitation]=useState(""),[accessNeeded,setAccessNeeded]=useState(false),[chosenRating,setChosenRating]=useState(0),[busy,setBusy]=useState(false),[submitted,setSubmitted]=useState(false),[formError,setFormError]=useState("");
@@ -78,7 +81,7 @@ export function Reviews({locale}:{locale:string}){
    </section>
   </div>
   <section className="review-share" id="share-review" aria-labelledby="review-share-title"><div><h2 id="review-share-title">{t("review_write")}</h2><p>{t("review_invitationIntro")}</p><p className="review-privacy">{t("review_privacy")}</p><Link className="text-link" href={`/${locale}/contact`}>{t("review_contact")}</Link></div><div>
-   {accessNeeded?<GuestAccess locale={locale} inline/>:submitted?<div className="review-success" role="status"><h3>{t("review_thanks")}</h3><p>{t("review_submitted")}</p></div>:<form className="form-stack review-submit" onSubmit={submit}>
+   {accessNeeded?<GuestAccess locale={locale} inline/>:submitted?<div className="review-success" role="status"><h3>{t("review_thanks")}</h3><p>{t("review_submitted")}</p></div>:<form method="post" className="form-stack review-submit" onSubmit={submit}>
     {!invitation&&<label htmlFor="review-name">{t("fullName")}<input id="review-name" name="name" autoComplete="name" minLength={2} maxLength={150} required/></label>}
     <fieldset className="review-rating"><legend>{t("review_yourRating")}</legend><div>{[1,2,3,4,5].map(value=><label key={value} className={value<=chosenRating?"is-selected":""}><input type="radio" name="rating" value={value} checked={chosenRating===value} onChange={()=>setChosenRating(value)} required aria-label={t("review_stars",{count:value})}/><Star filled={value<=chosenRating}/><span aria-hidden="true">{number(value)}</span></label>)}</div></fieldset>
     <label htmlFor="review-body">{t("review_yourReview")}<textarea id="review-body" name="text" minLength={10} maxLength={4000} required rows={6} aria-describedby="review-immutable"/></label>
@@ -86,7 +89,7 @@ export function Reviews({locale}:{locale:string}){
     {!invitation&&<><label className="check-label"><input name="consent" type="checkbox" required/><span>{t("privacyConsent")} · <Link href={`/${locale}/privacy`}>{t("privacy")}</Link></span></label><label className="review-honeypot" aria-hidden="true">Website<input name="website" tabIndex={-1} autoComplete="off"/></label></>}
     <p id="review-immutable" className="review-form-help">{t("review_immutable")}</p>
     {formError&&<p role="alert" className="form-error">{t(formError)}</p>}
-    <button className="button" disabled={busy}>{busy?t("loading"):t("review_submit")}</button>
+    <button className="button" disabled={!hydrated||busy}>{busy?t("loading"):t("review_submit")}</button>
    </form>}
   </div></section>
  </>;

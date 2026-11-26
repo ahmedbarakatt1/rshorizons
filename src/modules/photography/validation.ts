@@ -29,9 +29,9 @@ export async function validateUploadBytes(bytes:Buffer,declared:UploadDeclaratio
     const metadata=await decoder.metadata();
     if(!metadata.width||!metadata.height||(metadata.pages??1)>1)throw new Error("unsupported dimensions/pages");
     // Full decode and re-encode discards source EXIF, scripts and trailing chunks.
-    const web=await decoder.rotate().resize({width:1920,height:1920,fit:"inside",withoutEnlargement:true}).webp({quality:84}).toBuffer();
+    const {data:web,info}=await decoder.rotate().resize({width:1920,height:1920,fit:"inside",withoutEnlargement:true}).webp({quality:84}).toBuffer({resolveWithObject:true});
     const preview=await sharp(web).resize({width:960,height:960,fit:"inside",withoutEnlargement:true}).webp({quality:72}).toBuffer();
     const thumb=await sharp(web).resize({width:320,height:320,fit:"inside",withoutEnlargement:true}).webp({quality:68}).toBuffer();
-    return {kind:"image" as const,width:metadata.width,height:metadata.height,web,preview,thumbnail:thumb};
+    return {kind:"image" as const,width:metadata.width,height:metadata.height,webWidth:info.width,webHeight:info.height,web,preview,thumbnail:thumb};
   }catch{throw new MediaError("MEDIA_DECODE_FAILED");}
 }

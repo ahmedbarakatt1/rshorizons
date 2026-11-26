@@ -34,9 +34,12 @@ test("fresh migrations preserve managed Auth without CREATE privileges on its sc
     expect((await fixture.query("SELECT count(*)::integer AS n FROM app.locales")).rows[0].n).toBe(10);
     expect((await fixture.query("SELECT code FROM app.currencies WHERE enabled_for_charge")).rows).toEqual([{code:"EGP"}]);
     expect((await fixture.query("SELECT booking_enabled,content_approved_at FROM app.agency_settings")).rows).toEqual([{booking_enabled:false,content_approved_at:null}]);
-    for(const table of ["services","apartments","guests","price_rules","policy_versions","staff_profiles"]){
+    // The owner-approved showcase migration includes catalog and policy rows.
+    // A fresh deployment must still contain no customers, staff or financial history.
+    for(const table of ["guests","staff_profiles","bookings","cash_ledger"]){
       expect((await fixture.query(`SELECT count(*)::integer AS n FROM app.${table}`)).rows[0].n).toBe(0);
     }
+    expect((await fixture.query("SELECT count(*)::int AS n FROM app.services WHERE NOT synthetic")).rows[0].n).toBe(0);
     expect((await fixture.query("SELECT relname FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='app' AND c.relkind='r' AND NOT c.relrowsecurity")).rows).toEqual([]);
   }finally{
     await fixture?.end();

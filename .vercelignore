@@ -3,6 +3,11 @@ media/
 .tooling/
 .agents/
 .playwright-cli/
+.playwright/
+playwright-report/
+test-results/
+.next-release/
+.env*
 docs/
 tests/
 supabase/tests/

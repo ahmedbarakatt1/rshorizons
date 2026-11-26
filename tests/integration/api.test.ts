@@ -1,3 +1,4 @@
+import "../fixtures/legacy-service-mode";
 import {randomUUID} from "node:crypto";
 import {beforeAll,afterAll,test,expect} from "vitest";
 import {route} from "@/server/api/router";

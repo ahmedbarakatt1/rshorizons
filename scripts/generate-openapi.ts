@@ -3,6 +3,7 @@ import {z} from "zod";
 import {bookingInputSchema,quoteInputSchema} from "../src/modules/bookings/contracts";
 import {attemptInput} from "../src/modules/payments/service";
 import {uploadInputSchema} from "../src/modules/photography/validation";
+import {tripPhotoIntentSchema,tripPhotoPublicationSchema} from "../src/modules/photography/trip-photos";
 import {downloadInputSchema} from "../src/modules/photography/service";
 import {reviewInputSchema,moderationInputSchema} from "../src/modules/reviews/service";
 import {contactInputSchema} from "../src/modules/content/contact";
@@ -46,6 +47,7 @@ function add(path:string,method:string,summary:string,options:{security?:"staff"
   (paths[full]??={})[method]=entry;
 }
 for(const path of ["/health/live","/health/ready","/catalog","/destinations","/services","/services/{id}","/apartments","/apartments/{id}","/policies/current","/galleries/public","/reviews","/social-links","/pages/{slug}"])add(path,"get",`Read ${path}`,{query:["locale",...path==="/services"?["destination","category","date","guests","cursor"]:[]]});
+add("/galleries/public","get","Read a page of approved public galleries",{query:["locale","cursor"]});
 add("/reviews","get","Read published verified reviews and rating summary",{query:["locale","serviceId","rating","cursor","limit"],response:"ReviewPage",description:"Published originals and non-withdrawn public agency replies only. Optional rating 1–5 and serviceId UUID filters. Cursor is a review UUID; limit defaults to 12, maximum 24. Aggregate includes all published reviews in the service scope regardless of rating filter or page."});
 add("/services/{id}/departures","get","Available departures",{query:["from","to","guests"]});
 add("/apartments/{id}/availability","get","Unavailable half-open date ranges",{query:["from","to"]});
@@ -84,6 +86,9 @@ for(const action of ["approve","reject","cancel"])add(`/admin/bookings/{id}/${ac
 for(const action of ["offline-receipts","revisions","apply-revision","fulfilment","pickup"])add(`/admin/bookings/{id}/${action}`,"post",`Record ${action}`,{security:"staff",body:{type:"object"},idempotent:action==="offline-receipts"});
 for(const [path,summary] of Object.entries({"/admin/apartments/{id}/blocks":"Create inventory block","/admin/resources/{id}/blocks":"Block resource","/admin/resources/{id}/assignments":"Assign resource","/admin/departures/{id}/assignments":"Assign shared departure resource","/admin/stays/{id}/events":"Record stay operation","/admin/refunds":"Request source-bound partial refund","/admin/refunds/{id}/approve":"Authorize refund","/admin/refunds/{id}/complete-offline":"Record offline refund","/admin/financial-exceptions/{id}/resolve":"Resolve financial exception with audit","/admin/payments/{id}/reconcile":"Authenticated provider inquiry","/admin/jobs/{id}/retry":"Retry eligible failed job"}))add(path,"post",summary,{security:"staff",body:{type:"object"}});
 add("/admin/staff/{id}/access","patch","Change current roles/scopes or revoke",{security:"staff",body:{type:"object",required:["roles","active","scopes","expectedVersion"]}});
+add("/admin/trip-photos","post","Create owner trip photo upload intent",{security:"staff",body:z.toJSONSchema(tripPhotoIntentSchema),created:true});
+add("/admin/trip-photos/{id}/bytes","put","Receive trip photo in isolated local storage",{security:"staff"});
+add("/admin/trip-photos/{id}/publish","post","Publish a verified trip photo with owner rights and consent records",{security:"staff",body:z.toJSONSchema(tripPhotoPublicationSchema)});
 add("/admin/media/upload-intents","post","Declare quarantined media upload",{security:"staff",body:"UploadIntent",created:true});
 add("/admin/media/{id}/bytes","put","Upload bounded bytes; declared MIME is not trusted",{security:"staff",description:"Binary upload, maximum20MiB images/64MiB videos, actual MIME/hash/decode checks, no public bucket."});
 for(const action of ["finalize","complete","public-derivative"])add(`/admin/media/{id}/${action}`,"post",`Media ${action}`,{security:"staff",body:{type:"object"}});
@@ -138,6 +143,7 @@ for(const path of ["/galleries/{id}/assets/{derivativeId}","/galleries/public/as
  responses["200"]={description:"Authorized media bytes, never a public storage URL. Current entitlement and consent rechecked on every request.",content:{"application/octet-stream":{schema:{type:"string",format:"binary"}}},headers:{"Cache-Control":{schema:{const:"private, no-store"}}}};
 }
 (op("/galleries/{id}/assets/{derivativeId}","get").parameters as unknown[]).push({name:"x-download-token",in:"header",required:false,schema:{type:"string",writeOnly:true},description:"Required for original; scoped to this live guest session and derivative. Never send in URL."});
+op("/admin/trip-photos/{id}/bytes","put").requestBody={required:true,content:{"application/octet-stream":{schema:{type:"string",format:"binary",description:"JPEG, PNG or WebP. Maximum 20 MiB. Hosted uploads use the signed private storage URL."}}}};
 op("/admin/media/{id}/bytes","put").requestBody={required:true,content:{"application/octet-stream":{schema:{type:"string",format:"binary",description:"Bounded original bytes, maximum20MiB images/64MiB video; signature, full decode, hash and declared size checked."}}}};
 const webhookSignatures:Record<string,string[]>={resend:["svix-id","svix-timestamp","svix-signature"],mux:["mux-signature"]};
 for(const [provider,headers] of Object.entries(webhookSignatures)){

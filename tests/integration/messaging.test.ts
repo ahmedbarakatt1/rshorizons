@@ -1,3 +1,4 @@
+import "../fixtures/legacy-service-mode";
 import {afterEach,describe,expect,it,vi} from "vitest";
 import {createHmac,randomUUID} from "node:crypto";
 import {applyMessagingWebhook,deliverNotification,renderTemplate,sendEmail,verifyMessagingWebhook} from "@/integrations/messaging/notifications";

@@ -60,7 +60,9 @@ export async function publicRoute(request:Request,parts:string[]):Promise<Respon
     if(resource==="galleries") {
       if(id==="public"){
         if(action)throw new AppError("NOT_FOUND",404);
-        return success({items:await listPublicGalleries(locale)});
+        const cursor=uuidSchema.nullable().parse(url.searchParams.get("cursor"));
+        const rows=await listPublicGalleries(locale,cursor,51);
+        return success({items:rows.slice(0,50),nextCursor:rows.length>50?rows[49].id:null});
       }
       if(id) {
         const actor=await getGuest(request);

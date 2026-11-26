@@ -1,6 +1,6 @@
 import {test,expect} from "@playwright/test";
 
-test("@a11y responsive reading, image loading and keyboard navigation",async({page,context})=>{
+test("@public-release @a11y responsive reading, image loading and keyboard navigation",async({page,context})=>{
   // Each viewport is an independent visit. Repeated full-document navigation
   // aborts Next prefetch requests in WebKit and contaminates the next viewport.
   for(const width of [360,768,1440,1920]){
@@ -21,8 +21,8 @@ test("@a11y responsive reading, image loading and keyboard navigation",async({pa
   const errors:string[]=[];
   page.on("pageerror",error=>errors.push(error.message));
   await page.goto("/en/gallery");
-  await expect(page.locator(".owner-photo-gallery img")).toHaveCount(12);
-  for(const image of await page.locator(".owner-photo-gallery img").all()){
+  await expect(page.locator(".owner-gallery .owner-photo-gallery img")).toHaveCount(12);
+  for(const image of await page.locator(".owner-gallery .owner-photo-gallery img").all()){
     await image.scrollIntoViewIfNeeded();
     // Firefox may defer the lazy image request until after scrolling returns.
     // Require a successfully loaded image before asking its decoder to settle.
@@ -33,14 +33,17 @@ test("@a11y responsive reading, image loading and keyboard navigation",async({pa
   expect(errors).toEqual([]);
 });
 
-test("@a11y private fragments require deliberate redemption and leave the address bar",async({page})=>{
+test("@public-release @a11y private fragments require deliberate redemption and leave the address bar",async({page})=>{
   let redemptions=0;
-  page.on("request",request=>{if(request.url().includes("/guest-access/redeem"))redemptions++;});
+  await page.route("**/guest-access/redeem", async route => {
+    redemptions++;
+    await route.fulfill({status:403,json:{error:{code:"FORBIDDEN"}}});
+  });
   await page.goto("/en/my-booking#token=synthetic-invalid-test-token");
   await expect(page.getByLabel("Access token")).toHaveValue("synthetic-invalid-test-token");
   expect(new URL(page.url()).hash).toBe("");
   expect(redemptions).toBe(0);
   await page.getByRole("button",{name:"Open secure access"}).click();
-  await expect(page.getByRole("status")).toBeVisible();
+  await expect(page.getByRole("main").getByRole("alert")).toBeVisible();
   expect(redemptions).toBe(1);
 });

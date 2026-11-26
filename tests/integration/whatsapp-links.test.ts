@@ -1,3 +1,4 @@
+import "../fixtures/legacy-service-mode";
 import {afterEach,describe,expect,it,vi} from "vitest";
 import {randomUUID} from "node:crypto";
 import {deliverNotification} from "@/integrations/messaging/notifications";

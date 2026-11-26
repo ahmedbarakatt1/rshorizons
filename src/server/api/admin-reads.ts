@@ -1,4 +1,5 @@
-import {query} from "@/server/db";
+import {query,withTransaction} from "@/server/db";
+import {isActiveOwner} from "@/modules/photography/trip-photos";
 import {getStaff,type StaffActor} from "@/server/auth";
 import {success} from "@/server/http/request";
 import {AppError} from "@/server/http/errors";
@@ -39,7 +40,8 @@ export async function adminReads(request:Request,parts:string[]) {
   if(resource==="session") {
     const actor=await getStaff(request);
     const {rows}=await query(`SELECT p.code FROM app.permissions p WHERE app.has_permission($1,p.code)`,[actor.id]);
-    return success({name:actor.name,permissions:rows.map(r=>r.code),demo:process.env.DEMO_MODE==="true"});
+    const owner=await withTransaction(actor,tx=>isActiveOwner(tx,actor));
+    return success({name:actor.name,owner,permissions:rows.map(r=>r.code),demo:process.env.DEMO_MODE==="true"});
   }
   if(resource==="summary") {
     const actor=await getStaff(request,"bookings.read");

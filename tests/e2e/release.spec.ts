@@ -2,7 +2,7 @@ import {test,expect} from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import {mkdirSync,writeFileSync} from "node:fs";
 
-test("@a11y release pages have no automated WCAG A/AA violations and private responses reject caching",async({page},info)=>{
+test("@public-release @a11y release pages have no automated WCAG A/AA violations and private responses reject caching",async({page},info)=>{
  test.skip(info.project.name!=="chromium","Structural automated scan runs once; keyboard and locale journeys cover all three engines.");
  const measurements:unknown[]=[];
  for(const path of ["/en","/ar/contact","/en/experiences/boat-tours","/en/booking/request?service=boat-tours"]){
@@ -25,11 +25,11 @@ test("@a11y release pages have no automated WCAG A/AA violations and private res
  await page.evaluate(()=>window.scrollTo({top:0,behavior:"instant"}));
  await page.screenshot({path:".local/evidence/ui/release-public-desktop.png",fullPage:true,animations:"disabled"});
  await page.setViewportSize({width:390,height:844});await page.goto("/en/gallery");
- await expect(page.locator(".owner-photo-gallery img")).toHaveCount(12);
- for(const image of await page.locator(".owner-photo-gallery img").all()){await image.scrollIntoViewIfNeeded();await image.evaluate((node:HTMLImageElement)=>node.decode());}
+ await expect(page.locator(".owner-gallery .owner-photo-gallery img")).toHaveCount(12);
+ for(const image of await page.locator(".owner-gallery .owner-photo-gallery img").all()){await image.scrollIntoViewIfNeeded();await image.evaluate((node:HTMLImageElement)=>node.decode());}
  await page.evaluate(()=>window.scrollTo({top:0,behavior:"instant"}));
  await page.screenshot({path:".local/evidence/ui/release-gallery-mobile.png",fullPage:true});
- await page.goto("/ar/contact");await expect(page.getByRole("heading",{level:1})).toBeVisible();await expect(page.getByRole("button",{name:"أرسل الرسالة"})).toBeEnabled();await page.screenshot({path:".local/evidence/ui/release-arabic-mobile.png",fullPage:true});
- mkdirSync("docs/evidence",{recursive:true});
- writeFileSync("docs/evidence/browser-lab.json",JSON.stringify({at:new Date().toISOString(),environment:"Local production build, Chromium, no CPU/network throttle; lab diagnostics only, not field Core Web Vitals.",measurements},null,2));
+ await page.goto("/ar/contact");await expect(page.getByRole("heading",{level:1})).toBeVisible();await expect(page.locator('main a[href^="https://wa.me/"]')).toHaveCount(2);await page.screenshot({path:".local/evidence/ui/release-arabic-mobile.png",fullPage:true});
+ mkdirSync(".local/evidence",{recursive:true});
+ writeFileSync(".local/evidence/browser-lab.json",JSON.stringify({at:new Date().toISOString(),environment:"Chromium browser lab without CPU or network throttling",baseURL:info.project.use.baseURL,measurements},null,2));
 });
