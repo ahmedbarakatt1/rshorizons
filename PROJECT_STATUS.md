@@ -1,5 +1,11 @@
 # Red Sea Horizons — execution status
 
+## November 26, 2026 — restored diver photograph, Arabic type and contact icons
+
+Revision `765adaa` is live on [Red Sea Horizons](https://red-sea-horizons.vercel.app/ar) as deployment `dpl_49d5kcyAZmbp5V8ziv4EmbJu4Uee`. The homepage displays the original diver photograph with a separate CSS brass compass beside the Explore link. Arabic guest and staff pages use self-hosted Cairo. The language selectors and guest contact channels have labeled icons.
+
+Lint and the production build passed. Twenty-four targeted layout, font, language-switch and contact tests passed across Chromium, Firefox and WebKit. Five additional Chromium checks covered booking drafts and team numbers. After promotion, signed-out browser visits verified the Arabic and English homepage photographs, compass, contact icons and language switch at mobile and desktop widths. The Arabic mobile wallet booking flow also produced the expected editable WhatsApp draft. Live screenshots are in `.local/evidence/compass-live`.
+
 ## November 26, 2026 — photo cutouts and guest language
 
 Application revision `1d4b4bf` is live on [Red Sea Horizons](https://red-sea-horizons.vercel.app/ar) as deployment `dpl_GT7ndaEicTfNLQa8QxjsGkMQrQ38`. The diver in the main photograph and the boat on the activity card extend beyond the frame using the original responsive images. Both effects work without motion or a second image download.
