@@ -1,5 +1,11 @@
 # Red Sea Horizons — execution status
 
+## November 26, 2026 — contact and payment buttons
+
+Revision `2e0158c` is live as `dpl_FFz2hFswzWKtRdZpT1WtV7YHo3FP`. WhatsApp, phone, email, social profiles and InstaPay use labeled, channel-colored buttons with native link destinations. The footer and booking handoff share the same controls.
+
+Twenty-one targeted browser tests passed across Chromium, Firefox and WebKit. All ten guest locales fit a 320px phone with visible keyboard focus. Live browser checks covered four viewports, including automated accessibility checks on the Arabic and English contact controls. The Arabic mobile wallet booking produced its editable WhatsApp draft. Production screenshots are in `.local/evidence/buttons-live`.
+
 ## November 26, 2026 — freestanding Red Sea silhouette
 
 Revision `374597e` is live as `dpl_8q2CDbueCi5LodYs3C7DMZ9cfAST`. The banner now exposes its blue background around the extruded water silhouette. The 84,960-byte transparent illustration uses coastline geometry and bathymetry. The Hurghada callout, trip photos and activity links were checked at five live viewport sizes. The Arabic boat-trip link opened its listing. Screenshots are in `.local/evidence/water-live`.
