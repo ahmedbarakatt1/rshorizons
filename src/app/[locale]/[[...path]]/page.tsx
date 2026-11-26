@@ -7,7 +7,7 @@ import {isLocale,locales} from "@/i18n/locales";
 import {Catalog,Photo,Search,ServiceCard} from "@/components/Catalog";
 import {Arrow} from "@/components/PublicShell";
 import {BookingStatement} from "@/components/BookingStatement";
-import {CompassActions} from "@/components/NauticalCompass";
+import {SeaAtlasBanner} from "@/components/SeaAtlasBanner";
 import {WhatsAppBookingForm as BookingForm} from "@/components/WhatsAppBookingForm";
 import {ContactChannels,PaymentMethods} from "@/components/CustomerService";
 import {GuestAccess,PolicyContent,PrivateGallery,PublicGallery} from "@/components/GuestFlows";
@@ -75,25 +75,7 @@ export default async function PublicPage({params,searchParams}:Props) {
  if(section==="gallery")return frame(t("previousTrips"),<><PublicGallery locale={locale} showOwnerCollection={demo||process.env.MEDIA_PUBLICATION_APPROVED==="true"}/><Link href={`/${locale}/contact`} className="button">{t("customerService")}</Link></>,t("galleryIntro"));
  if(section)notFound();
  return <main tabIndex={-1} id="main">
-  <section className="home-hero frame">
-   <div className="hero-note">
-    <h1>{t("homeTitle")}</h1>
-    <p>{t("homeIntro")}</p>
-    <CompassActions><Link href={`/${locale}/experiences`} className="button">{t("explore")}<Arrow/></Link></CompassActions>
-   </div>
-   <div className="hero-photos">
-    <figure className="hero-primary">
-     <Photo image="hero" alt={t("media_diver")} sizes="(max-width:767px) 60vw, 36vw" priority/>
-     <figcaption><Link href={`/${locale}/gallery`}>{t("previousTrips")}<Arrow/></Link></figcaption>
-    </figure>
-    <div className="hero-side">
-     {activitySections.filter(item=>item.slug==="diving"||item.slug==="boat-trips").map(item=><Link key={item.slug} href={`/${locale}/${item.slug}`}>
-      <Photo image={item.image} alt="" sizes="(max-width:767px) 28vw, 18vw"/>
-      <span>{t(item.label)}<Arrow/></span>
-     </Link>)}
-    </div>
-   </div>
-  </section>
+  <SeaAtlasBanner locale={locale}/>
   <div className="frame search-wrap"><Search locale={locale} destinations={data.destinations}/></div>
   <section className="frame section">
    <div className="section-heading"><h2>{t("experiences")}</h2><Link href={`/${locale}/experiences`} className="text-link">{t("seeAll")}<Arrow/></Link></div>

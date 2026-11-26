@@ -1,5 +1,13 @@
 # Web-sourced catalog photography
 
+## Red Sea relief banner
+
+The oblique relief illustration uses [Mapzen Terrain Tiles](https://registry.opendata.aws/terrain-tiles/) covering 31.05–45° E and 11.8–30.64° N. Global ETOPO1 terrain data are from NOAA. Global GMTED2010 and SRTM terrain data are courtesy of the U.S. Geological Survey. A local rendering combines exaggerated land elevation, hillshade and bathymetric color. The finished WebP is served with the app. The Hurghada marker is positioned using the same projection as the terrain. [Terrain tile source credits](https://github.com/tilezen/joerd/blob/master/docs/attribution.md)
+
+The wave and sun marks are extracted from the supplied Red Sea Horizons brand board. The two photographs link to the guest diving and boat trip pages.
+
+## Catalog photographs
+
 The catalog uses local, optimized WebP derivatives so the public site does not depend on third-party hotlinks. The derivatives were resized, compressed and stripped of metadata on 2026-10-27. Source records and licenses:
 
 - `luxor-*`: “Luxor-temple.jpg” by Ghada abd Elmohsen, [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Luxor-temple.jpg), CC BY-SA 4.0.

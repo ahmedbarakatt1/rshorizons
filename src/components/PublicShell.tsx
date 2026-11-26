@@ -12,7 +12,9 @@ import {ChannelIcon} from "./ChannelIcon";
 import {ContactChannels} from "./CustomerService";
 import {activitySections} from "@/config/activity-sections";
 
-export function Mark() {return <svg viewBox="0 0 48 48" className="brand-mark" aria-hidden="true"><path d="M3 29c7-16 18-19 26-9-13-4-12 17 14 15-18 13-36 4-32-4-4 0-6 0-8-2Z" fill="currentColor"/><path d="M7 15c11-13 31-6 31 7-6-8-16-10-31-7Z" fill="#15b1bc"/><circle cx="38" cy="12" r="5" fill="#ecc471"/></svg>;}
+export function Mark({light=false}:{light?:boolean}) {
+ return <img className="brand-mark" width="48" height="48" alt="" src={light?"/illustrations/horizons-wave.webp":"/illustrations/horizons-wave-day.webp"}/>;
+}
 export function Arrow() {return <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg>;}
 export function PublicShell({children,locale}:{children:React.ReactNode;locale:Locale}) {
  const t=useTranslations(); const pathname=usePathname();
@@ -54,7 +56,7 @@ export function PublicShell({children,locale}:{children:React.ReactNode;locale:L
   {children}
   <footer className="site-footer">
    <ContactChannels compact/>
-   <div className="footer-top"><div><Mark/><p>{t("manualTitle")}</p><Link href={`/${locale}/contact`} className="text-link">{t("contact")} <Arrow/></Link></div><nav>{["experiences","destinations","gallery","reviews","about"].map(path=><Link key={path} href={`/${locale}/${path}`}>{t(path)}</Link>)}</nav><nav>{["privacy","terms","cancellation-policy","payment-options"].map((path,i)=><Link key={path} href={`/${locale}/${path}`}>{t(["privacy","terms","cancellation","paymentMethodsTitle"][i])}</Link>)}</nav></div>
+   <div className="footer-top"><div><Mark light/><p>{t("manualTitle")}</p><Link href={`/${locale}/contact`} className="text-link">{t("contact")} <Arrow/></Link></div><nav>{["experiences","destinations","gallery","reviews","about"].map(path=><Link key={path} href={`/${locale}/${path}`}>{t(path)}</Link>)}</nav><nav>{["privacy","terms","cancellation-policy","payment-options"].map((path,i)=><Link key={path} href={`/${locale}/${path}`}>{t(["privacy","terms","cancellation","paymentMethodsTitle"][i])}</Link>)}</nav></div>
    <p className="footer-name">{brandName}</p><div className="footer-bottom"><span>© {new Date().getFullYear()} {brandName}</span><span>{regionName}</span><Link href="/admin">{t("staff")}</Link></div>
   </footer>
  </>;

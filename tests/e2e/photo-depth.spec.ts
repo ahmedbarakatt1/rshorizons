@@ -1,7 +1,7 @@
 import {expect, test} from "@playwright/test";
 
 for (const [locale, width] of [["en", 1440], ["ar", 390]] as const) {
-  test(`@public-release ${locale} keeps the full diver photo, a separate compass and the raised boat`, async ({page}) => {
+  test(`@public-release ${locale} shows the full-width branded Red Sea relief banner, trip photos and raised boat`, async ({page}) => {
     await page.setViewportSize({width, height: 900});
     await page.emulateMedia({reducedMotion: "reduce"});
     await page.goto(`/${locale}`);
@@ -16,21 +16,17 @@ for (const [locale, width] of [["en", 1440], ["ar", 390]] as const) {
     });
     expect(corners).toEqual([true, true, true, true]);
 
-    const compass = page.getByTestId("nautical-compass");
-    await expect(compass).toBeVisible();
-    await expect(compass).toHaveAttribute("aria-hidden", "true");
-    const compassBox = await compass.boundingBox();
-    const photoBox = await diver.boundingBox();
-    expect(compassBox && photoBox && (
-      compassBox.x + compassBox.width <= photoBox.x || photoBox.x + photoBox.width <= compassBox.x ||
-      compassBox.y + compassBox.height <= photoBox.y || photoBox.y + photoBox.height <= compassBox.y
-    )).toBe(true);
-    const dial = compass.locator("[data-part=dial]");
-    const needle = compass.locator("[data-part=needle]");
-    await expect(dial).toBeVisible();
-    await expect(needle).toBeVisible();
-    expect(await needle.evaluate(element => new DOMMatrix(getComputedStyle(element).transform).m43))
-      .toBeGreaterThan(await dial.evaluate(element => new DOMMatrix(getComputedStyle(element).transform).m43));
+    const banner = page.locator(".home-hero");
+    const edges = await banner.evaluate(el => [el.getBoundingClientRect().left, el.getBoundingClientRect().right, document.documentElement.clientWidth]);
+    expect(edges[0]).toBe(0);
+    expect(edges[1]).toBe(edges[2]);
+    await expect(banner.getByRole("heading", {level: 1})).toBeVisible();
+    await expect(banner.locator('img[src*="horizons-wave"]')).toBeVisible();
+    const map = banner.locator('img[src*="red-sea-relief"]');
+    await expect(map).toHaveAccessibleName(/\S/);
+    expect(await map.evaluate(async (img: HTMLImageElement) => {await img.decode(); return img.naturalWidth;})).toBeGreaterThan(400);
+    await expect(banner.locator('a[href$="/gallery"]')).toBeVisible();
+    await expect(page.getByTestId("nautical-compass")).toHaveCount(0);
 
     const boat = page.locator('.activity-grid img[src$="/boat-day"]');
     const boatPixels = await boat.evaluate(async (image: HTMLImageElement) => {

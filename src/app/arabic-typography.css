@@ -43,13 +43,6 @@ html[lang="ar"] body,
   line-height: 1.4;
 }
 
-html[lang="ar"] .hero-note h1 {
-  max-width: 16ch;
-  font-weight: 600;
-  letter-spacing: normal;
-  line-height: 1.35;
-}
-
 html[lang="ar"] .footer-name {
   direction: rtl;
   letter-spacing: normal;
