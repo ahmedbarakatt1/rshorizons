@@ -1,5 +1,13 @@
 # Red Sea Horizons — execution status
 
+## November 26, 2026 — photo cutouts and guest language
+
+Application revision `1d4b4bf` is live on [Red Sea Horizons](https://red-sea-horizons.vercel.app/ar) as deployment `dpl_GT7ndaEicTfNLQa8QxjsGkMQrQ38`. The diver in the main photograph and the boat on the activity card extend beyond the frame using the original responsive images. Both effects work without motion or a second image download.
+
+The ten guest languages have revised browsing, gallery, booking, WhatsApp, payment and review copy. The Egyptian Arabic edition uses a conversational voice. Migration `20261126090001_localize_guest_catalog.sql` is applied to the designated Supabase project. It replaces known showcase text while preserving owner edits, prices, availability and approval records. Guest reviews retain their original language.
+
+Verification passed for the production build, lint, types, 246 application/database tests and 86 browser checks. Signed-out production checks followed a boat trip from the homepage through the detail page and editable WhatsApp draft in all ten languages. The language-by-language observations and live screenshots are in `.local/evidence/native-live`. Independent native-speaker editorial review remains available as the next content acceptance step.
+
 ## November 26, 2026 — interface, owner gallery and regression testing
 
 The guest interface, activity listings, gallery, booking draft and staff presentation have been revised. Admin → Galleries → Add a trip photo publishes an owner-authorized image to the public gallery. A private source is validated and re-encoded. The owner records the caption language, source rights, applicable subject or guardian consent and a retention review period. A signed-out visitor can view the eligible WebP and existing trip videos.
