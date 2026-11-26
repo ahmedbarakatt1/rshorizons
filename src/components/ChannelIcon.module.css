@@ -14,13 +14,3 @@
   width: 1.05rem;
   height: 1.05rem;
 }
-
-:global(.direct-contact-links a > span):has(> .icon) {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-:global(.direct-contact-links a):has(.icon) {
-  align-items: flex-start;
-}

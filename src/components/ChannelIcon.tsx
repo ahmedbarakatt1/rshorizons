@@ -2,6 +2,7 @@ import type {ReactNode} from "react";
 import styles from "./ChannelIcon.module.css";
 
 const symbols: Record<string, ReactNode> = {
+  instapay: <><path d="M3 8h15l-4-4m7 12H6l4 4"/></>,
   globe: <><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/></>,
   email: <><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="m4 6 8 6 8-6"/></>,
   phone: <path d="m8.7 3.8 1.4 3.5c.2.5 0 1-.4 1.4L8 10.1a13.6 13.6 0 0 0 5.9 5.9l1.4-1.7c.4-.4.9-.6 1.4-.4l3.5 1.4c.6.3.9.9.8 1.5l-.4 2.5c-.1.9-.9 1.6-1.8 1.6C10.1 20.9 3.1 13.9 3.1 5.2c0-.9.7-1.7 1.6-1.8L7.2 3c.6-.1 1.2.2 1.5.8Z"/>,

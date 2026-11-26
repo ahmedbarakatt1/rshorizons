@@ -2,7 +2,7 @@
 import {useState} from "react";
 import {useLocale,useTranslations} from "next-intl";
 import {teamWhatsAppNumbers,whatsappLink} from "@/modules/content/whatsapp";
-import {ChannelIcon} from "./ChannelIcon";
+import {ChannelLink} from "./ChannelLink";
 import {api} from "./api";
 
 export function TeamWhatsAppLinks({reference,compact=false}:{reference?:string;compact?:boolean}){
@@ -10,7 +10,9 @@ export function TeamWhatsAppLinks({reference,compact=false}:{reference?:string;c
   const draft=reference?t("whatsappBookingDraft",{reference}):t("whatsappDraft");
   return <section className={compact?"whatsapp-contacts compact":"whatsapp-contacts"} aria-label={t("whatsappTitle")}>
     {!compact&&<><h2>{t("whatsappTitle")}</h2><p className="small">{t("whatsappManual")}</p></>}
-    <div className="whatsapp-contact-links">{teamWhatsAppNumbers.map(phone=><a key={phone} href={whatsappLink(phone,draft)!} className={compact?"text-link":"button button-secondary"} target="_blank" rel="noopener noreferrer" referrerPolicy="no-referrer"><ChannelIcon name="whatsapp"/>{whatsappName} <bdi>{phone}</bdi></a>)}</div>
+    <div className="whatsapp-contact-links">{teamWhatsAppNumbers.map(phone=>
+      <ChannelLink key={phone} channel="whatsapp" href={whatsappLink(phone,draft)!} label={whatsappName} detail={phone}/>
+    )}</div>
   </section>;
 }
 
@@ -25,6 +27,6 @@ export function GuestWhatsAppLink({bookingId}:{bookingId:string}){
   return <section className="whatsapp-contacts"><h2>WhatsApp guest</h2><p>Prepare a draft for the saved guest number. Review it and press Send in WhatsApp. Opening a chat does not record delivery or approve the reservation.</p>
     <button type="button" className="button button-secondary" onClick={prepare} disabled={busy}>{busy?"Preparing…":"Prepare WhatsApp message"}</button>
     {error&&<p role="alert" className="admin-error">{error}</p>}
-    {url&&<p role="status"><a className="text-link" href={url} target="_blank" rel="noopener noreferrer" referrerPolicy="no-referrer"><ChannelIcon name="whatsapp"/>Open WhatsApp draft</a></p>}
+    {url&&<p role="status"><ChannelLink channel="whatsapp" href={url} label="Open WhatsApp draft"/></p>}
   </section>;
 }

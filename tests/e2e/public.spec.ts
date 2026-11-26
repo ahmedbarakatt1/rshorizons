@@ -25,6 +25,7 @@ for (const locale of ["en","ar"]) {
     await expect(methods).toContainText(copy.detailsFromTeam);
     await expect(methods).toContainText(copy.paymentConfirmFirst);
     await expect(methods.getByRole("link")).toHaveAttribute("href","https://ipn.eg/S/abdohassan8123/instapay/8Yhxaj");
+    await expect(methods.getByRole("link").locator("svg")).toBeVisible();
     await page.goto(`/${locale}/contact`);
     await expect(page.locator("header .locale-control svg[aria-hidden=true]")).toBeVisible();
     for (const href of ["mailto:horizonsredsea@gmail.com","tel:+201099267451","tel:+201220907478","https://www.facebook.com/share/1CFka6exsG/","https://www.instagram.com/horizonsrs2026/","https://www.tiktok.com/@red.sea.horizons"]) {
@@ -33,6 +34,15 @@ for (const locale of ["en","ar"]) {
     }
     for(const link of await main.locator('.whatsapp-contact-links a').all())
       await expect(link.locator("svg[aria-hidden=true]")).toBeVisible();
+    for (const button of await page.locator(".contact-channels a").all()) {
+      const appearance = await button.evaluate(node => {
+        const style = getComputedStyle(node);
+        return {height: node.getBoundingClientRect().height, fill: style.backgroundColor, decoration: style.textDecorationLine};
+      });
+      expect(appearance.height).toBeGreaterThanOrEqual(44);
+      expect(appearance.fill).not.toBe("rgba(0, 0, 0, 0)");
+      expect(appearance.decoration).toBe("none");
+    }
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   });
 

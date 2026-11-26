@@ -1,0 +1,61 @@
+.action {
+  --ink: #12455a;
+  --fill: #e4eff4;
+  --edge: #afc7d3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .65rem;
+  min-height: 46px;
+  min-width: 0;
+  max-width: 100%;
+  padding: .62rem .95rem;
+  border: 1px solid var(--edge);
+  border-radius: .55rem;
+  background-color: var(--fill);
+  color: var(--ink);
+  text-decoration: none;
+  font-size: .95rem;
+  font-weight: 650;
+  line-height: 1.4;
+  transition: background-color .15s ease, box-shadow .15s ease;
+}
+.action[data-channel="whatsapp"] { --fill: #116644; --ink: #fff; --edge: #38875f; }
+.action[data-channel="email"] { --fill: #fbedd2; --ink: #69450c; --edge: #d9bc89; }
+.action[data-channel="facebook"] { --fill: #e7efff; --ink: #184ba5; --edge: #b4c9ed; }
+.action[data-channel="instagram"] { --fill: #fbe7ef; --ink: #91325c; --edge: #dfb3c7; }
+.action[data-channel="tiktok"] { --fill: #252731; --ink: #fff; --edge: #626774; }
+.action[data-channel="instapay"] { --fill: #543081; --ink: #fff; --edge: #79579f; }
+.action[data-channel]:hover {
+  color: var(--ink);
+  background-color: color-mix(in srgb, var(--fill) 92%, var(--ink));
+  box-shadow: inset 0 0 0 1px var(--ink);
+}
+.action:active { transform: translateY(1px); }
+.action:focus-visible { outline: 3px solid #008292; outline-offset: 3px; box-shadow: 0 0 0 3px white; }
+.caption { display: grid; min-width: 0; gap: .06rem; text-align: start; overflow-wrap: anywhere; }
+.detail { font-size: .86rem; font-weight: 500; text-align: match-parent; font-variant-numeric: tabular-nums; }
+.action:has(.detail) { justify-content: flex-start; }
+:global(.whatsapp-draft) .action { margin-block-start: 8px; }
+@media (max-width: 480px) {
+  :global(.direct-contact-links):has(> .action), :global(.whatsapp-contact-links):has(> .action) {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+  :global(.social-links):has(> .action) {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 5.45rem), 1fr));
+  }
+  :global(.social-links) .action { padding-inline: .45rem; gap: .35rem; }
+  .action[data-channel="email"] { grid-column: 1/-1; }
+  .action:is([data-channel="phone"], [data-channel="whatsapp"]):has(.detail) {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: .2rem .42rem;
+    padding-inline: .7rem;
+  }
+  .action:is([data-channel="phone"], [data-channel="whatsapp"]) .caption:has(.detail) { display: contents; }
+  .action .detail { grid-column: 1/-1; justify-self: start; }
+  :global(.whatsapp-draft) .action { width: 100%; }
+}
