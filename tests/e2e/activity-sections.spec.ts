@@ -18,10 +18,10 @@ for (const locale of ["en", "ar"]) {
       expect(price).toMatch(/\p{Number}/u);
       await offer.getByRole("link").click();
       await expect(main.getByRole("heading", {level:1})).toHaveText(title);
-      await expect(main.locator(".detail-price")).toHaveText(price);
+      await expect(main.locator(".detail-price")).toHaveText(price, {useInnerText:true});
       await main.locator('a[href*="/booking/request?service="]').click();
       await expect(main.getByRole("heading", {name:title,exact:true})).toBeVisible();
-      await expect(main.locator(".detail-price")).toHaveText(price);
+      await expect(main.locator(".detail-price")).toHaveText(price, {useInnerText:true});
       await expect(main.locator('input[name="name"]')).toBeVisible();
       await expect(page.locator('a[href*="/apartments"], a[href*="/photography"], a[href*="apartment="]')).toHaveCount(0);
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
