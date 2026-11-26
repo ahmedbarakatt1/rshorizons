@@ -31,7 +31,7 @@ export default async function PublicPage({params,searchParams}:Props) {
  if(section==="guest-access"||section==="my-booking"||section==="my-gallery"&&!detail)return frame(t("secureAccess"),<GuestAccess locale={locale}/>);
  if(section==="booking"&&detail&&detail!=="request")return frame(t("customerService"),<ContactChannels/>);
  if(section==="my-gallery"&&detail)return frame(t("privateGallery"),<PrivateGallery id={detail} locale={locale}/>);
- if(section==="contact")return frame(t("contact"),<div className="contact-layout"><ContactChannels/><PaymentMethods/></div>);
+ if(section==="contact")return frame(t("contact"),<div className="contact-layout"><ContactChannels introduction={false}/><PaymentMethods/></div>,t("contactDirect"));
  if(section==="payment-options")return frame(t("paymentMethodsTitle"),<div className="contact-layout"><PaymentMethods/><ContactChannels/></div>);
  if(["privacy","terms","cancellation-policy"].includes(section))return frame(t(section==="cancellation-policy"?"cancellation":section),<PolicyContent slug={section} locale={locale}/>);
  if(section==="reviews")return <main tabIndex={-1} id="main" className="page-wrap reviews-page"><Reviews locale={locale}/></main>;

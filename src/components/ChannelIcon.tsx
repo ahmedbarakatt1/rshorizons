@@ -2,6 +2,8 @@ import type {ReactNode} from "react";
 import styles from "./ChannelIcon.module.css";
 
 const symbols: Record<string, ReactNode> = {
+  bank: <><path d="m3 8 9-5 9 5H3Zm1 12h16M7 10.5v6.7m5-6.7v6.7m5-6.7v6.7"/></>,
+  wallet: <><path d="M19.5 8V5.5a1 1 0 0 0-1.2-1L5.6 7"/><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M21 12h-4a2 2 0 0 0 0 4h4"/></>,
   instapay: <><path d="M3 8h15l-4-4m7 12H6l4 4"/></>,
   globe: <><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/></>,
   email: <><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="m4 6 8 6 8-6"/></>,

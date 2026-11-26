@@ -3,13 +3,15 @@ import {useState} from "react";
 import {useLocale,useTranslations} from "next-intl";
 import {teamWhatsAppNumbers,whatsappLink} from "@/modules/content/whatsapp";
 import {ChannelLink} from "./ChannelLink";
+import panel from "./ContactPanel.module.css";
 import {api} from "./api";
 
-export function TeamWhatsAppLinks({reference,compact=false}:{reference?:string;compact?:boolean}){
+export function TeamWhatsAppLinks({reference,compact=false,featured=false}:{reference?:string;compact?:boolean;featured?:boolean}){
   const t=useTranslations(),locale=useLocale(),whatsappName=locale==="ar"?"واتساب":"WhatsApp";
   const draft=reference?t("whatsappBookingDraft",{reference}):t("whatsappDraft");
-  return <section className={compact?"whatsapp-contacts compact":"whatsapp-contacts"} aria-label={t("whatsappTitle")}>
-    {!compact&&<><h2>{t("whatsappTitle")}</h2><p className="small">{t("whatsappManual")}</p></>}
+  return <section className={`whatsapp-contacts ${compact?"compact":""} ${featured?panel.feature:""}`} aria-label={t("whatsappTitle")}>
+    {featured&&<img className={panel.reef} src="/api/v1/demo-media/reef-480" width="480" height="420" alt="" loading="lazy"/>}
+    {(!compact||featured)&&<div className={featured?panel.intro:undefined}><h2>{t("whatsappTitle")}</h2>{!compact&&<p className="small">{t("whatsappManual")}</p>}</div>}
     <div className="whatsapp-contact-links">{teamWhatsAppNumbers.map(phone=>
       <ChannelLink key={phone} channel="whatsapp" href={whatsappLink(phone,draft)!} label={whatsappName} detail={phone}/>
     )}</div>

@@ -8,6 +8,11 @@ test("@public-release team WhatsApp contacts are correct on desktop and Arabic m
   for(const locale of ["en","ar"]){
     if(locale==="ar")await page.setViewportSize({width:390,height:844});
     await page.goto(`/${locale}/contact`);
+    const feature = page.locator("main .contact-channels .whatsapp-contacts");
+    const photo = feature.locator('img[alt=""]');
+    await expect(photo).toBeVisible();
+    expect(await photo.evaluate(async (img:HTMLImageElement)=>{await img.decode();return img.naturalWidth;})).toBeGreaterThan(0);
+    await expect(page.locator("footer .whatsapp-contacts").getByRole("heading")).toBeVisible();
     const links=page.locator('main .whatsapp-contact-links a');await expect(links).toHaveCount(2);
     for(const [index,number] of ["201099267451","201220907478"].entries()){
       const url=new URL((await links.nth(index).getAttribute("href"))!);
