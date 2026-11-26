@@ -4,7 +4,7 @@ import {useHydrated} from "./use-hydrated";
 
 
 import Link from "next/link";
-import {useRef} from "react";
+import {useEffect,useRef} from "react";
 import {usePathname} from "next/navigation";
 import {useTranslations} from "next-intl";
 import {localeNames,locales,type Locale} from "@/i18n/locales";
@@ -17,6 +17,14 @@ export function PublicShell({children,locale}:{children:React.ReactNode;locale:L
  const t=useTranslations(); const pathname=usePathname();
  const hydrated=useHydrated();
  const menuRef=useRef<HTMLDetailsElement>(null);
+ useEffect(()=>{
+  const menu=menuRef.current;
+  function dismissOutside(event:PointerEvent){
+   if(menu?.open && event.target instanceof Node && !menu.contains(event.target))menu.open=false;
+  }
+  document.addEventListener("pointerdown",dismissOutside,true);
+  return ()=>document.removeEventListener("pointerdown",dismissOutside,true);
+ },[]);
  const brandName=locale==="ar"?"ريد سي هورايزنز":"Red Sea Horizons";
  const regionName=locale==="ar"?"مصر · البحر الأحمر":"Egypt · Red Sea";
  const links=[["experiences","experiences"],["destinations","destinations"],["gallery","gallery"],["reviews","reviews"]] as const;
@@ -36,7 +44,7 @@ export function PublicShell({children,locale}:{children:React.ReactNode;locale:L
     const target=event.target.value; document.cookie=`NEXT_LOCALE=${target}; path=/; max-age=31536000; SameSite=Lax`;window.location.assign(pathname.replace(/^\/[^/]+/,`/${target}`)+window.location.search);
    }}>{locales.map(code=><option key={code} value={code}>{localeNames[code]}</option>)}</select></label><Link prefetch={false} href={`/${locale}/contact`} className="manage-link" aria-current={current("contact")?"page":undefined}>{t("contact")}</Link></div>
    <details className="mobile-menu" ref={menuRef}
-    onBlur={event=>{if(!event.currentTarget.contains(event.relatedTarget))closeMenu();}}
+    onBlur={event=>{if(event.relatedTarget && !event.currentTarget.contains(event.relatedTarget))closeMenu();}}
     onKeyDown={event=>{if(event.key==="Escape"){event.preventDefault();closeMenu(true);}}}>
     <summary><span className="menu-lines" aria-hidden="true"/>{t("menu")}</summary>
     <nav aria-label={t("menu")}>{[...links,["contact","contact"]].map(([path,label])=><Link key={path} href={`/${locale}/${path}`} aria-current={current(path)?"page":undefined} onClick={()=>closeMenu()}>{t(label)}<Arrow/></Link>)}</nav>
