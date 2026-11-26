@@ -1,5 +1,11 @@
 # Red Sea Horizons — execution status
 
+## November 26, 2026 — freestanding Red Sea silhouette
+
+Revision `374597e` is live as `dpl_8q2CDbueCi5LodYs3C7DMZ9cfAST`. The banner now exposes its blue background around the extruded water silhouette. The 84,960-byte transparent illustration uses coastline geometry and bathymetry. The Hurghada callout, trip photos and activity links were checked at five live viewport sizes. The Arabic boat-trip link opened its listing. Screenshots are in `.local/evidence/water-live`.
+
+The silhouette regression reproduced against the previous artwork, then passed all six Arabic and English cases across Chromium, Firefox and WebKit. Lint and the production build passed. The previous compatible deployment is `dpl_GXZ34LTaFp5NSAQYsUmqaYpJ2htK`.
+
 ## November 26, 2026 — Red Sea relief banner
 
 Application revision `d7c9eff` is live on [Red Sea Horizons](https://red-sea-horizons.vercel.app/ar) as deployment `dpl_GXZ34LTaFp5NSAQYsUmqaYpJ2htK`. The blue homepage banner uses the supplied brand mark, a prerendered relief of the Red Sea with Hurghada marked, and direct links from trip photographs to diving and boat trips. Static artwork keeps terrain rendering off the guest device.
